@@ -1,0 +1,76 @@
+(function(){
+// Estructura base para la vista de Proveedores
+document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Proveedores - Remates El Paísa</title>
+	<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+	<div class="dashboard-container">
+		<aside class="sidebar">
+			<div class="logo">
+				<h1>Remates El Paísa</h1>
+			</div>
+			<nav class="main-nav">
+				<ul>
+					<li><a href="../Index.html">Inicio</a></li>
+					<li><a href="Catalogo.html">Catálogo</a></li>
+					<li><a href="inventario.html">Inventario</a></li>
+					<li><a href="Pedidos.html">Pedidos</a></li>
+					<li><a href="Usuarios.html">Usuarios</a></li>
+					<li><a href="Reporter.html">Reportes</a></li>
+					<li><a href="Cliente.html">Clientes</a></li>
+					<li><a href="Repartidores.html">Repartidores</a></li>
+					<li><a href="Proveedores.html" class="active">Proveedores</a></li>
+				</ul>
+			</nav>
+			<div class="user-section">
+				<div class="user-info">
+					<p><strong>Conectado como: Admin General</strong></p>
+				</div>
+				<nav class="secondary-nav">
+					<ul>
+						<li><a href="#">Ayuda y Contacto</a></li>
+						<li><a href="#">Cerrar Sesión</a></li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+		<main class="main-content">
+			<header class="content-header">
+				<h2>Gestión de Proveedores</h2>
+				<p>Administra la información de tus proveedores aquí.</p>
+			</header>
+			<div class="table-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Email</th>
+							<th>Teléfono</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Ejemplo Proveedor</td>
+							<td>proveedor@ejemplo.com</td>
+							<td>3023456789</td>
+							<td>Activo</td>
+							<td>
+								<button class="btn btn-sm">Editar</button>
+								<button class="btn btn-sm btn-danger">Eliminar</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</main>
+	</div>
+</body>
+</html>`);
+})();

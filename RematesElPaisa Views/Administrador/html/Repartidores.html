@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repartidores - Remates El Paísa</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Remates El Paísa</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../Index.html">Inicio</a></li>
+                    <li><a href="Catalogo.html">Catálogo</a></li>
+                    <li><a href="inventario.html">Inventario</a></li>
+                    <li><a href="Pedidos.html">Pedidos</a></li>
+                    <li><a href="Usuarios.html">Usuarios</a></li>
+                    <li><a href="Reporter.html">Reportes</a></li>
+                    <li><a href="Cliente.html">Clientes</a></li>
+                    <li><a href="Repartidores.html" class="active">Repartidores</a></li>
+                    <li><a href="Proveedores.html">Proveedores</a></li>
+                </ul>
+            </nav>
+            <div class="user-section">
+                <div class="user-info">
+                    <p><strong>Conectado como: Admin General</strong></p>
+                </div>
+                <nav class="secondary-nav">
+                    <ul>
+                        <li><a href="#">Ayuda y Contacto</a></li>
+                        <li><a href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Gestión de Repartidores</h2>
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar por nombre, ID, email o teléfono">
+                        <button class="btn">Buscar</button>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select>
+                            <option>Todos</option>
+                            <option>Activos</option>
+                            <option>Inactivos</option>
+                        </select>
+                        <span>Mostrar</span>
+                        <select style="width: 70px;">
+                            <option>8</option>
+                            <option>15</option>
+                            <option>30</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success">+ Nuevo Repartidor</button>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Vehículo</th>
+                            <th>Estado</th>
+                            <th>Entregas</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>D002</strong></td>
+                            <td>
+                                <strong>Pedro Ramírez</strong>
+                                <div class="product-category">pedro.r@remates.com</div>
+                            </td>
+                            <td>Bicicleta</td>
+                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>1</td>
+                            <td>3109876543</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Desactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>D003</strong></td>
+                            <td>
+                                <strong>Sofía Castro</strong>
+                                <div class="product-category">sofia.c@remates.com</div>
+                            </td>
+                            <td>Moto XYZ789</td>
+                            <td><span class="badge badge-danger">Inactivo</span></td>
+                            <td>0</td>
+                            <td>3158765432</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-success">Activar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>D005</strong></td>
+                            <td>
+                                <strong>Juan Pérez</strong>
+                                <div class="product-category">repartidor@remates.com</div>
+                            </td>
+                            <td>Moto ABC123</td>
+                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>2</td>
+                            <td>3007654321</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Desactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>D007</strong></td>
+                            <td>
+                                <strong>Miguel Ángel Torres</strong>
+                                <div class="product-category">miguel.t@remates.com</div>
+                            </td>
+                            <td>Carro 456XYZ</td>
+                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>3</td>
+                            <td>3198765432</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Desactivar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>D008</strong></td>
+                            <td>
+                                <strong>Carolina Rojas</strong>
+                                <div class="product-category">carolina.r@remates.com</div>
+                            </td>
+                            <td>Moto 789LMN</td>
+                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>2</td>
+                            <td>3127654321</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Desactivar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button>&laquo; Anterior</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Siguiente &raquo;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

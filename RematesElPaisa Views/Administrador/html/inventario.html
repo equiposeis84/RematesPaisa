@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Remates El Paísa</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Remates El Paísa</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../Index.html">Inicio</a></li>
+                    <li><a href="Catalogo.html">Catálogo</a></li>
+                    <li><a href="inventario.html" class="active">Inventario</a></li>
+                    <li><a href="Pedidos.html">Pedidos</a></li>
+                    <li><a href="Usuarios.html">Usuarios</a></li>
+                    <li><a href="Reporter.html">Reportes</a></li>
+                    <li><a href="Cliente.html">Clientes</a></li>
+                    <li><a href="Repartidores.html">Repartidores</a></li>
+                    <li><a href="Proveedores.html">Proveedores</a></li>
+                </ul>
+            </nav>
+            <div class="user-section">
+                <div class="user-info">
+                    <p><strong>Conectado como: Admin General</strong></p>
+                </div>
+                <nav class="secondary-nav">
+                    <ul>
+                        <li><a href="#">Ayuda y Contacto</a></li>
+                        <li><a href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Gestión de Inventario</h2>
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar producto...">
+                        <button class="btn">Buscar</button>
+                    </div>
+                    <button class="btn">+ Agregar Producto</button>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limpiador Multiusos Floral</td>
+                            <td>Limpieza</td>
+                            <td>150</td>
+                            <td>$12.500</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Detergente Líquido para Ropa</td>
+                            <td>Ropa</td>
+                            <td>85</td>
+                            <td>$28.000</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lavalozas Líquido Limón</td>
+                            <td>Cocina</td>
+                            <td>210</td>
+                            <td>$8.900</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Paño de Microfibra (Paquete x3)</td>
+                            <td>Accesorios</td>
+                            <td>60</td>
+                            <td>$15.000</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn btn-sm">Editar</button>
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button>&laquo; Anterior</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Siguiente &raquo;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
