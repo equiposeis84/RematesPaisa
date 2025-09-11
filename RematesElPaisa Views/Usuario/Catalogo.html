@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Remates El Paísa</title>
+    <link rel="stylesheet" href="StiyleBase.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Remates El Paísa</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="Catalogo.html" class="active">Catálogo</a></li>
+                   <li><a href="CarritoCompras.html">Carrito</a></li>
+                   <li><a href="Pedidos.html">Pedidos</a></li>
+                   
+
+                </ul>
+            </nav>
+            <div class="user-section">
+                <div class="user-info">
+                    <p><strong>Conectado como: Invitado</strong></p>
+                </div>
+                <nav class="secondary-nav">
+                    <ul>
+                        <li><a href="#">Ayuda y Contacto</a></li>
+                        <li><a href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Catálogo de Productos</h2>
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar productos...">
+                        <button class="btn">Buscar</button>
+                    </div>
+                    <div>
+                        <select>
+                            <option>Todas las categorías</option>
+                            <option>Limpieza</option>
+                            <option>Ropa</option>
+                            <option>Cocina</option>
+                            <option>Accesorios</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <div class="product-grid">
+                <!-- Producto 1 -->
+                <div class="product-card">
+                    <div class="product-image">Imagen del producto</div>
+                    <div class="product-info">
+                        <div class="product-title">Limpiador Multiusos Floral</div>
+                        <div class="product-category">Limpieza • Botella de 1L</div>
+                        <div class="product-price">$12.500</div>
+                        <div class="product-stock">150 en stock</div>
+                        <p>Aroma fresco y duradero que perfuma todo tu hogar.</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm">Agregar al carrito</button>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="product-card">
+                    <div class="product-image">Imagen del producto</div>
+                    <div class="product-info">
+                        <div class="product-title">Detergente Líquido para Ropa</div>
+                        <div class="product-category">Ropa • 1.5L</div>
+                        <div class="product-price">$28.000</div>
+                        <div class="product-stock">85 en stock</div>
+                        <p>Rinde hasta 50 lavadas. Su fórmula avanzada cuida los colores y elimina manchas.</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm">Agregar al carrito</button>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-card">
+                    <div class="product-image">Imagen del producto</div>
+                    <div class="product-info">
+                        <div class="product-title">Lavalozas Líquido Limón</div>
+                        <div class="product-category">Cocina • 750mL</div>
+                        <div class="product-price">$8.900</div>
+                        <div class="product-stock">210 en stock</div>
+                        <p>Arranca la grasa más difícil con su poder corta grasa.</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm">Agregar al carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="product-card">
+                    <div class="product-image">Imagen del producto</div>
+                    <div class="product-info">
+                        <div class="product-title">Paño de Microfibra (Paquete x3)</div>
+                        <div class="product-category">Accesorios</div>
+                        <div class="product-price">$15.000</div>
+                        <div class="product-stock">60 en stock</div>
+                        <p>Paquete de 3 paños ultra absorbentes para limpieza general.</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm">Agregar al carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="product-card">
+                    <div class="product-image">Imagen del producto</div>
+                    <div class="product-info">
+                        <div class="product-title">Bolsas de Basura (Rollo x30)</div>
+                        <div class="product-category">Hogar</div>
+                        <div class="product-price">$12.000</div>
+                        <div class="product-stock">75 en stock</div>
+                        <p>Bolsas resistentes de 50x60 cm con capacidad de 30 litros.</p>
+                        <div class="product-actions">
+                            <button class="btn btn-sm">Agregar al carrito</button>  
+                        </div>
+                    </div>
+                </div>
+
+              
+            </div>
+
+            <div class="pagination">
+                <button>&laquo; Anterior</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Siguiente &raquo;</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
