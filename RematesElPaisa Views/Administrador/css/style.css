@@ -268,6 +268,20 @@ body {
   box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
 }
 
+/* Botón Editar con color distintivo */
+.btn-edit {
+  background-color: #f59e0b; /* amarillo/ naranja */
+  color: #08233a;
+  box-shadow: 0 2px 6px rgba(245,158,11,0.15);
+}
+.btn-edit:hover {
+  background-color: #f97316;
+  transform: translateY(-2px);
+}
+
+/* Evitar que el click borre o reemplace el contenido del botón */
+/* Nota: no bloquear pointer-events en los hijos para preservar accesibilidad */
+
 .btn-success {
   background-color: var(--color-success);
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);

@@ -1,13 +1,19 @@
 // Funcionalidad básica para el dashboard de administración
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Activar elementos del menú según la página actual
-    const currentPage = window.location.pathname.split('/').pop();
+    // Activar elementos del menú según la página actual (soporta rutas relativas)
+    const currentPath = window.location.pathname;
+    const currentFile = currentPath.split('/').pop() || 'Index.html';
     const menuLinks = document.querySelectorAll('.main-nav a');
-    
+
     menuLinks.forEach(link => {
-        const linkPage = link.getAttribute('href');
-        if (linkPage === currentPage) {
+        const href = link.getAttribute('href') || '';
+        // extraer sólo el nombre de archivo del href
+        const hrefFile = href.split('/').pop();
+        if (!hrefFile) return;
+        if (hrefFile.toLowerCase() === currentFile.toLowerCase()) {
+            link.classList.add('active');
+        } else if (href.endsWith(currentFile)) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
