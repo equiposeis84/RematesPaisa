@@ -41,6 +41,13 @@ body {
 /* Barra lateral con estilo mejorado */
 .sidebar {
   width: var(--sidebar-width);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1000;
   background: #172027; /* color oscuro uniforme */
   color: var(--color-light);
   display: flex;
@@ -111,6 +118,65 @@ body {
   color: var(--color-light);
 }
 
+/* Compact look and submenu styles for the sidebar */
+.main-nav li.has-submenu {
+  margin: 6px 12px;
+}
+.submenu-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  color: #d1dbe6;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 10px;
+}
+.submenu-toggle:hover {
+  background-color: rgba(255,255,255,0.03);
+  transform: translateX(6px);
+}
+.submenu-toggle .caret {
+  margin-left: auto;
+  transition: transform 0.18s ease;
+  color: #b9c4d6;
+}
+.main-nav ul.submenu {
+  list-style: none;
+  margin: 6px 0 12px 0;
+  padding-left: 8px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 260ms ease, opacity 200ms ease;
+  opacity: 0;
+}
+.main-nav ul.submenu li a {
+  padding: 10px 18px;
+  display: flex;
+  gap: 10px;
+  color: #c7d2e6;
+  border-radius: 8px;
+}
+.main-nav ul.submenu li a:hover {
+  background-color: rgba(59,130,246,0.06);
+  color: #fff;
+  transform: translateX(6px);
+}
+.has-submenu.open .submenu-toggle .caret {
+  transform: rotate(180deg);
+}
+.has-submenu .submenu[hidden] {
+  max-height: 0;
+  opacity: 0;
+}
+.has-submenu .submenu:not([hidden]) {
+  opacity: 1;
+  max-height: 420px; /* enough to show items without causing layout thrash */
+}
+
 /* Sección de usuario */
 .user-section {
   padding: 18px 20px 28px 20px;
@@ -143,16 +209,37 @@ body {
 /* Contenido principal */
 .main-content {
   flex: 1;
+  margin-left: var(--sidebar-width);
   padding: 30px 40px;
   overflow-y: auto;
   background-color: var(--color-bg);
+}
+
+/* Responsive: make sidebar static on smaller screens */
+@media (max-width: 900px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .dashboard-container {
+    display: block;
+  }
+  /* Collapse dashboard cards to single column on medium-small screens */
+  .content-cards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 /* Encabezado del contenido */
 .content-header {
   margin-bottom: 30px;
   background: linear-gradient(180deg, #fbfdff, #f6f9fb);
-  padding: 26px 24px;
+  padding: 34px 28px;
   border-radius: calc(var(--border-radius) + 4px);
   box-shadow: 0 6px 20px rgba(8, 24, 44, 0.06);
   display: flex;
@@ -161,16 +248,17 @@ body {
 }
 
 .content-header h2 {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: var(--color-text);
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 2.25rem; /* larger title */
+  font-weight: 700;
 }
 
 .content-header p {
-  color: var(--color-secondary);
-  font-size: 1rem;
-  max-width: 900px;
+  color: #6b7280; /* softer gray */
+  font-size: 1.05rem;
+  max-width: 980px;
+  margin: 0;
 }
 
 .welcome-badge {
@@ -185,14 +273,15 @@ body {
 /* Tarjetas de contenido con diseño mejorado */
 .content-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  align-items: stretch;
 }
 
 .card {
   background: var(--color-light);
-  padding: 22px 20px;
-  border-radius: var(--border-radius);
+  padding: 26px 22px;
+  border-radius: calc(var(--border-radius) + 4px);
   box-shadow: var(--card-shadow);
   transition: var(--transition);
   display: flex;
@@ -206,14 +295,15 @@ body {
 }
 
 .card-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(59,130,246,0.08), rgba(59,130,246,0.04));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(59,130,246,0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 22px;
+  color: var(--color-primary);
 }
 
 .card h3 {
@@ -290,6 +380,13 @@ body {
 .btn-success:hover {
   background-color: #059669;
   box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Make CTA buttons inside cards span full width for clear emphasis */
+.card .btn {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
 }
 
 /* Tablas con diseño mejorado */
