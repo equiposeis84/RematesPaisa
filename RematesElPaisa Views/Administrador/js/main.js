@@ -78,20 +78,27 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // btn-danger (eliminar)
-        const del = e.target.closest && e.target.closest('.btn-danger');
+        // Anchors styled as .btn: let natural navigation happen (early)
+        const aBtn = e.target.closest && e.target.closest('a.btn');
+        if (aBtn) return;
+
+        // Delete action: prefer explicit data-action="delete" or a .btn-danger with a valid target
+        const del = e.target.closest && e.target.closest('[data-action="delete"], button.btn-danger');
         if (del) {
-            e.preventDefault();
+            // only proceed if there's a clear item to remove (table row or product card)
             const row = del.closest('tr');
             const card = del.closest('.product-card');
             const item = row || card;
-            const itemType = row ? 'elemento' : (card ? 'producto' : 'registro');
+            if (!item) {
+                // nothing to delete - ignore the click
+                return;
+            }
+            e.preventDefault();
+            const itemType = row ? 'elemento' : 'producto';
             if (confirm(`¿Estás seguro de que deseas eliminar este ${itemType}?`)) {
-                if (item) {
-                    item.style.opacity = '0';
-                    item.style.transition = 'opacity 0.25s ease';
-                    setTimeout(() => item.remove(), 250);
-                }
+                item.style.opacity = '0';
+                item.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => item.remove(), 250);
             }
             return;
         }
@@ -99,18 +106,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // data-action shortcuts
         const actionEl = e.target.closest && e.target.closest('[data-action]');
         if (actionEl) {
-            e.preventDefault();
             const action = actionEl.getAttribute('data-action');
+            // known actions are handled; unknown actions should not silently block defaults
             if (action === 'open-catalog') {
+                e.preventDefault();
                 window.location.href = 'html/Catalogo.html';
+                return;
             } else if (action === 'open-orders') {
+                e.preventDefault();
                 window.location.href = 'html/Pedidos.html';
+                return;
             } else if (action === 'open-inventory') {
+                e.preventDefault();
                 window.location.href = 'html/inventario.html';
-            } else {
-                console.log('Acción no implementada:', action);
+                return;
+            } else if (action === 'delete') {
+                // handled above by delete selector, but keep a fallback
+                e.preventDefault();
+                const target = actionEl.closest('tr') || actionEl.closest('.product-card');
+                if (target && confirm('¿Eliminar?')) { target.remove(); }
+                return;
             }
-            return;
+            // unknown data-action -> do nothing special (let default happen)
         }
 
         // Paginación
@@ -131,9 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Anchors styled as .btn: let natural navigation happen
-        const aBtn = e.target.closest && e.target.closest('a.btn');
-        if (aBtn) return;
+    // (aBtn handled earlier)
     });
 
     // Search boxes (attach handlers directly to inputs/buttons)

@@ -30,6 +30,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
+  /* keep a persistent vertical scrollbar to avoid layout shift between pages */
+  overflow-y: scroll;
 }
 
 /* Contenedor principal del dashboard con layout flex */
@@ -41,11 +43,16 @@ body {
 /* Barra lateral con estilo mejorado */
 .sidebar {
   width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  overflow-y: auto;
+  /* Keep a persistent scrollbar gutter so the sidebar width doesn't change when content height changes */
+  overflow-y: scroll;
+  /* keep layout stable when content grows/shrinks */
+  scrollbar-gutter: stable both-edges;
+  flex-shrink: 0;
   -webkit-overflow-scrolling: touch;
   z-index: 1000;
   background: #172027; /* color oscuro uniforme */
@@ -91,7 +98,8 @@ body {
   padding: 14px 16px;
   color: #d1dbe6;
   text-decoration: none;
-  transition: var(--transition);
+  /* avoid transitioning layout-related properties to keep sidebar stable */
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
   border-radius: 10px;
   font-weight: 500;
 }
@@ -99,7 +107,7 @@ body {
 .main-nav a:hover {
   background-color: rgba(255, 255, 255, 0.04);
   color: #ffffff;
-  transform: translateX(6px);
+  /* removed translateX to avoid horizontal shifts that move the sidebar layout */
 }
 
 .main-nav a.active {
@@ -137,7 +145,7 @@ body {
 }
 .submenu-toggle:hover {
   background-color: rgba(255,255,255,0.03);
-  transform: translateX(6px);
+  /* avoid translateX to keep layout stable when hovering */
 }
 .submenu-toggle .caret {
   margin-left: auto;
@@ -163,7 +171,7 @@ body {
 .main-nav ul.submenu li a:hover {
   background-color: rgba(59,130,246,0.06);
   color: #fff;
-  transform: translateX(6px);
+  /* no translateX here: keep submenu items from shifting their container */
 }
 .has-submenu.open .submenu-toggle .caret {
   transform: rotate(180deg);
@@ -210,6 +218,8 @@ body {
 .main-content {
   flex: 1;
   margin-left: var(--sidebar-width);
+  /* ensure margin doesn't animate and shift layout when sidebar content toggles */
+  transition: none;
   padding: 30px 40px;
   overflow-y: auto;
   background-color: var(--color-bg);

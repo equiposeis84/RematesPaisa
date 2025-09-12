@@ -103,37 +103,121 @@
                         <tr>
                             <td>ORD-002</td>
                             <td>Ana Garcia</td>
-                            <td>2025-09-09</td>
-                            <td>$32.500</td>
-                            <td>En camino</td>
-                            <td>
-                                <button class="btn btn-sm">Ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ORD-003</td>
-                            <td>Juan Pérez</td>
-                            <td>2025-09-08</td>
-                            <td>$28.900</td>
-                            <td>Procesando</td>
-                            <td>
-                                <button class="btn btn-sm">Ver</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            <!DOCTYPE html>
+                            <html lang="es">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Pedidos - Remates El Paísa</title>
+                                <link rel="stylesheet" href="../css/style.css">
+                            </head>
+                            <body>
+                                <div class="dashboard-container">
+                                    <!-- Canonical sidebar -->
+                                    <aside class="sidebar">
+                                        <div class="logo">
+                                            <h1>Remates El Paísa</h1>
+                                        </div>
+                                        <nav class="main-nav">
+                                            <ul>
+                                                <li><a href="../inicioA.html"><span class="nav-icon">🏠</span>Inicio</a></li>
+                                                <li><a href="Catalogo.html"><span class="nav-icon">📦</span>Catálogo</a></li>
+                                                <li class="has-submenu">
+                                                    <button class="submenu-toggle" aria-expanded="false" aria-controls="gestion-submenu">
+                                                        <span class="nav-icon">⚙️</span>
+                                                        Gestión
+                                                        <span class="caret" aria-hidden="true">▾</span>
+                                                    </button>
+                                                    <ul id="gestion-submenu" class="submenu" hidden>
+                                                        <li><a href="inventario.html"><span class="nav-icon">✔️</span>Inventario</a></li>
+                                                        <li><a href="Pedidos.html"><span class="nav-icon">✉️</span>Pedidos</a></li>
+                                                        <li><a href="Usuarios.html"><span class="nav-icon">👥</span>Usuarios</a></li>
+                                                        <li><a href="Reporter.html"><span class="nav-icon">📊</span>Reportes</a></li>
+                                                        <li><a href="Cliente.html"><span class="nav-icon">🙍</span>Clientes</a></li>
+                                                        <li><a href="Repartidores.html"><span class="nav-icon">🚚</span>Repartidores</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <div class="user-section">
+                                            <div class="user-info">
+                                                <p><strong>Conectado como: Admin General</strong></p>
+                                            </div>
+                                            <nav class="secondary-nav">
+                                                <ul>
+                                                    <li><a href="#">Ayuda y Contacto</a></li>
+                                                    <li><a href="#">Cerrar Sesión</a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </aside>
 
-            <div class="pagination">
-                <button>&laquo; Anterior</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>Siguiente &raquo;</button>
-            </div>
-        </main>
-    </div>
+                                    <main class="main-content">
+                                        <header class="content-header">
+                                            <h2>Pedidos</h2>
+                                            <div style="margin-top: 15px;">
+                                                <button class="btn">Ver detalles</button>
+                                                <button class="btn">Actualizar estado</button>
+                                            </div>
+                                        </header>
 
-    <script src="../js/main.js"></script>
-</body>
-</html>
+                                        <div class="table-container">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID Pedido</th>
+                                                        <th>Cliente</th>
+                                                        <th>Fecha</th>
+                                                        <th>Total</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>ORD-001</td>
+                                                        <td>Carlos Sanchez</td>
+                                                        <td>2025-09-10</td>
+                                                        <td>$45.000</td>
+                                                        <td>Entregado</td>
+                                                        <td>
+                                                            <button class="btn btn-sm">Ver</button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>ORD-002</td>
+                                                        <td>Ana Garcia</td>
+                                                        <td>2025-09-09</td>
+                                                        <td>$32.500</td>
+                                                        <td>En camino</td>
+                                                        <td>
+                                                            <button class="btn btn-sm">Ver</button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>ORD-003</td>
+                                                        <td>Juan Pérez</td>
+                                                        <td>2025-09-08</td>
+                                                        <td>$28.900</td>
+                                                        <td>Procesando</td>
+                                                        <td>
+                                                            <button class="btn btn-sm">Ver</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="pagination">
+                                            <button>&laquo; Anterior</button>
+                                            <button class="active">1</button>
+                                            <button>2</button>
+                                            <button>3</button>
+                                            <button>Siguiente &raquo;</button>
+                                        </div>
+                                    </main>
+                                </div>
+
+                                <script src="../js/main.js"></script>
+                            </body>
+                            </html>
