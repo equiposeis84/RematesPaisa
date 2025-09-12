@@ -142,11 +142,33 @@ body {
 
 /* Contenido principal */
 .main-content {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background-color: var(--color-bg);
+  
+}
+.main-contentError {
   flex: 1;
   padding: 30px 40px;
   overflow-y: auto;
   background-color: var(--color-bg);
+  display: flex;
 }
+.content-headerError {
+  margin-bottom: 30px;
+  background-color: var(--color-bg);
+  padding: 26px 24px;
+  border-radius: calc(var(--border-radius)+4px);
+  box-shadow: #065f46;
+  display: center;
+  align-items: center;
+
+}
+
 
 /* Encabezado del contenido */
 .content-header {
