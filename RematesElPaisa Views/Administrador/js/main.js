@@ -1,20 +1,53 @@
 // Funcionalidad básica para el dashboard de administración
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Activar elementos del menú según la página actual
+
+    // Activar elementos del menú según la página actual (sin recargar ni animar sidebar)
     const currentPath = window.location.pathname || '';
     const currentFile = (currentPath.split('/').pop() || window.location.href.split('/').pop() || 'inicioA.html').toLowerCase();
     const menuLinks = document.querySelectorAll('.main-nav a');
-
     menuLinks.forEach(link => {
         const href = link.getAttribute('href') || '';
-        const hrefFile = href.split('/').pop() || '';
-        if (hrefFile.toLowerCase() === currentFile || href.toLowerCase().endsWith(currentFile)) {
+        let hrefFile = href.split('/').pop() || '';
+        if (href.startsWith('html/')) {
+            hrefFile = href.replace('html/', '');
+        }
+        if (hrefFile.toLowerCase() === currentFile) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
         }
     });
+
+    // Mantener abierto el submenú Gestión si la página actual es una de sus vistas
+    const gestionBtn = document.querySelector('.has-submenu > .submenu-toggle');
+    const gestionSubmenu = document.getElementById('gestion-submenu');
+    if (gestionBtn && gestionSubmenu) {
+        const subLinks = gestionSubmenu.querySelectorAll('a');
+        let anyActive = false;
+        subLinks.forEach(link => {
+            if (link.classList.contains('active')) anyActive = true;
+        });
+        // Si estamos en Pedidos.html, mantener abierto el submenú
+        const isPedidos = currentFile === 'pedidos.html';
+        if (anyActive || isPedidos) {
+            gestionBtn.classList.add('active');
+            gestionBtn.setAttribute('aria-expanded', 'true');
+            gestionSubmenu.removeAttribute('hidden');
+            gestionBtn.closest('.has-submenu').classList.add('open');
+            // Cambiar caret
+            const caret = gestionBtn.querySelector('.caret');
+            if (caret) caret.textContent = '▴';
+        } else {
+            gestionBtn.classList.remove('active');
+            gestionBtn.setAttribute('aria-expanded', 'false');
+            gestionSubmenu.setAttribute('hidden', '');
+            gestionBtn.closest('.has-submenu').classList.remove('open');
+            // Cambiar caret
+            const caret = gestionBtn.querySelector('.caret');
+            if (caret) caret.textContent = '▾';
+        }
+    }
 
     // Restaurar estado del submenu (persistencia simple)
     (function restoreSubmenuState() {
@@ -44,14 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })();
 
+
     // Delegated click handler (single listener to avoid conflicts)
     document.body.addEventListener('click', function(e) {
-        // If the user clicked a normal anchor (with href) that doesn't declare a data-action,
-        // allow the browser to handle navigation naturally. This avoids JS accidentally
-        // preventing link navigation (sidebar links, CTAs, etc.).
+        // Si el usuario hace click en un enlace del submenú, dejar que navegue normalmente
         const possibleAnchor = e.target.closest && e.target.closest('a[href]');
         if (possibleAnchor && !possibleAnchor.hasAttribute('data-action')) {
-            return; // let browser navigate
+            return; // dejar que el navegador navegue
         }
 
         const toggle = e.target.closest && e.target.closest('.submenu-toggle');
@@ -67,12 +99,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 submenu.setAttribute('hidden', '');
                 parentLi.removeAttribute('aria-expanded');
                 parentLi.classList.remove('open');
+                // Cambiar caret
+                const caret = toggle.querySelector('.caret');
+                if (caret) caret.textContent = '▾';
                 try { localStorage.setItem('adm_gestion_open', 'false'); } catch(e) {}
             } else {
                 toggle.setAttribute('aria-expanded', 'true');
                 submenu.removeAttribute('hidden');
                 parentLi.setAttribute('aria-expanded', 'true');
                 parentLi.classList.add('open');
+                // Cambiar caret
+                const caret = toggle.querySelector('.caret');
+                if (caret) caret.textContent = '▴';
                 try { localStorage.setItem('adm_gestion_open', 'true'); } catch(e) {}
             }
             return;
