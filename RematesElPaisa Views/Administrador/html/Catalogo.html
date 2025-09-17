@@ -85,53 +85,96 @@
                         </div>
                     </div>
                 </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Catálogo - Remates El Paísa</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <style>
+            /* Page level safety styles (small) */
+            .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+            .product-card{border:1px solid #eef2f7;padding:12px;border-radius:8px;background:#fff}
+            .product-title{font-weight:600;margin-bottom:6px}
+        </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo"><h1>Remates El Paísa</h1></div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../inicioA.html"><span class="nav-icon">🏠</span>Inicio</a></li>
+                    <li><a href="Catalogo.html" class="active"><span class="nav-icon">📦</span>Catálogo</a></li>
+                    <li class="has-submenu">
+                        <button class="submenu-toggle" aria-expanded="false">⚙️ Gestión <span class="caret">▾</span></button>
+                        <ul class="submenu" hidden>
+                            <li><a href="inventario.html">Inventario</a></li>
+                            <li><a href="Pedidos.html">Pedidos</a></li>
+                            <li><a href="Usuarios.html">Usuarios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-section"><div class="user-info"><p><strong>Conectado como: Admin General</strong></p></div></div>
+        </aside>
 
-                <!-- Producto 2 -->
-                <div class="product-card">
-                    <div class="product-image">Imagen del producto</div>
-                    <div class="product-info">
-                        <div class="product-title">Detergente Líquido para Ropa</div>
-                        <div class="product-category">Ropa • 1.5L</div>
-                        <div class="product-price">$28.000</div>
-                        <div class="product-stock">85 en stock</div>
-                        <p>Rinde hasta 50 lavadas. Su fórmula avanzada cuida los colores y elimina manchas.</p>
-                        <div class="product-actions">
-                            <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                        </div>
-                    </div>
-                </div>
+        <main class="main-content">
+            <header class="content-header"><h2>Catálogo</h2></header>
 
-                <!-- Producto 3 -->
-                <div class="product-card">
-                    <div class="product-image">Imagen del producto</div>
-                    <div class="product-info">
-                        <div class="product-title">Lavalozas Líquido Limón</div>
-                        <div class="product-category">Cocina • 750mL</div>
-                        <div class="product-price">$8.900</div>
-                        <div class="product-stock">210 en stock</div>
-                        <p>Arranca la grasa más difícil con su poder corta grasa.</p>
-                        <div class="product-actions">
-                            <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                        </div>
-                    </div>
-                </div>
+            <section class="product-grid">
+                <article class="product-card">
+                    <div class="product-title">Limpiador Multiusos Floral</div>
+                    <div class="product-category">Limpieza • 1L</div>
+                    <div class="product-price">$12.500</div>
+                    <div class="product-stock">150 en stock</div>
+                    <p>Aroma fresco y duradero.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
 
-                <!-- Producto 4 -->
-                <div class="product-card">
-                    <div class="product-image">Imagen del producto</div>
-                    <div class="product-info">
-                        <div class="product-title">Paño de Microfibra (Paquete x3)</div>
-                        <div class="product-category">Accesorios</div>
-                        <div class="product-price">$15.000</div>
-                        <div class="product-stock">60 en stock</div>
-                        <p>Paquete de 3 paños ultra absorbentes para limpieza general.</p>
-                        <div class="product-actions">
-                            <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                        </div>
-                    </div>
+                <article class="product-card">
+                    <div class="product-title">Detergente Líquido para Ropa</div>
+                    <div class="product-category">Ropa • 1.5L</div>
+                    <div class="product-price">$28.000</div>
+                    <div class="product-stock">85 en stock</div>
+                    <p>Rinde hasta 50 lavadas.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-title">Lavalozas Líquido Limón</div>
+                    <div class="product-category">Cocina • 750mL</div>
+                    <div class="product-price">$8.900</div>
+                    <div class="product-stock">210 en stock</div>
+                    <p>Poder corta grasa.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+            </section>
+
+            <div class="pagination"><button>&laquo; Anterior</button> <button class="active">1</button> <button>2</button> <button>Siguiente &raquo;</button></div>
+        </main>
+    </div>
+
+    <script>
+    (function(){
+        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var li = btn.closest('.has-submenu');
+                if(!li) return;
+                var submenu = li.querySelector('.submenu');
+                var open = !li.classList.contains('open');
+                li.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open);
+                if(submenu) submenu.hidden = !open;
+            });
+        });
+    })();
+    </script>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
                 </div>
 
                 <!-- Producto 5 -->
@@ -167,16 +210,102 @@
                     </div>
                 </div>
             </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Remates El Paísa</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* small page-level tweaks to ensure product cards look ok if CSS missing */
+        .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+        .product-card{border:1px solid #e6e6e6;padding:12px;border-radius:6px;background:#fff}
+        .product-title{font-weight:600;margin-bottom:6px}
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo"><h1>Remates El Paísa</h1></div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="sidebar-fixed"><a href="../inicioA.html">🏠 Inicio</a></li>
+                    <li class="sidebar-fixed"><a href="Catalogo.html" class="active">📦 Catálogo</a></li>
+                    <li class="has-submenu sidebar-fixed">
+                        <button class="submenu-toggle" aria-expanded="false">⚙️ Gestión <span class="caret">▾</span></button>
+                        <ul class="submenu" hidden>
+                            <li><a href="inventario.html">Inventario</a></li>
+                            <li><a href="Pedidos.html">Pedidos</a></li>
+                            <li><a href="Usuarios.html">Usuarios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-section"><div class="user-info"><p><strong>Conectado como: Admin General</strong></p></div></div>
+        </aside>
 
-            <div class="pagination">
-                <button>&laquo; Anterior</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>Siguiente &raquo;</button>
-            </div>
+        <main class="main-content">
+            <header class="content-header"><h2>Catálogo</h2></header>
+
+            <section class="product-grid">
+                <article class="product-card">
+                    <div class="product-title">Limpiador Multiusos Floral</div>
+                    <div class="product-category">Limpieza • 1L</div>
+                    <div class="product-price">$12.500</div>
+                    <div class="product-stock">150 en stock</div>
+                    <p>Aroma fresco y duradero.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-title">Detergente Líquido para Ropa</div>
+                    <div class="product-category">Ropa • 1.5L</div>
+                    <div class="product-price">$28.000</div>
+                    <div class="product-stock">85 en stock</div>
+                    <p>Rinde hasta 50 lavadas.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-title">Lavalozas Líquido Limón</div>
+                    <div class="product-category">Cocina • 750mL</div>
+                    <div class="product-price">$8.900</div>
+                    <div class="product-stock">210 en stock</div>
+                    <p>Poder corta grasa.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-title">Paño de Microfibra (Paquete x3)</div>
+                    <div class="product-category">Accesorios</div>
+                    <div class="product-price">$15.000</div>
+                    <div class="product-stock">60 en stock</div>
+                    <p>Ultra absorbente.</p>
+                    <div class="product-actions"><button class="btn">✏️ Editar</button> <button class="btn btn-danger">🗑️</button></div>
+                </article>
+            </section>
+
+            <div class="pagination"><button>&laquo; Anterior</button> <button class="active">1</button> <button>2</button> <button>Siguiente &raquo;</button></div>
         </main>
     </div>
+
+    <script>
+    // minimal submenu toggle used by admin pages
+    (function(){
+        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var li = btn.closest('.has-submenu');
+                if(!li) return;
+                var submenu = li.querySelector('.submenu');
+                var open = !li.classList.contains('open');
+                li.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open);
+                if(submenu) submenu.hidden = !open;
+            });
+        });
+    })();
+    </script>
 
     <script src="../js/main.js"></script>
 </body>
