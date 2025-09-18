@@ -1,0 +1,118 @@
+/* Estilos para la Barra Lateral (Sidebar) */
+
+/* Contenedor principal de la barra lateral */
+.sidebar {
+    width: var(--sidebar-width, 280px); /* Usar variable de :root o un valor por defecto */
+    background: #172027;
+    color: var(--color-light, #ffffff);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Logo de la empresa */
+.logo {
+    padding: 28px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.logo h1 {
+    font-size: 1.65rem;
+    color: var(--color-light, #ffffff);
+    font-weight: 700;
+    line-height: 1.05;
+}
+
+/* Navegación principal y secundaria (listas) */
+.main-nav ul, .secondary-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.main-nav li, .secondary-nav li {
+    margin: 6px 12px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Estilos generales para los enlaces de navegación */
+.main-nav a, .secondary-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    color: #d1dbe6;
+    text-decoration: none;
+    transition: var(--transition, all 0.3s ease);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Efecto hover para el menú principal */
+.main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    transform: translateX(6px);
+}
+
+/* Estilo para el enlace de la página activa Hace que resalte en que pagina se encuentra*/
+.main-nav a.active,
+.secondary-nav a.active {
+    background-color: rgba(59,130,246,0.12);
+    color: var(--color-light, #ffffff);
+    box-shadow: inset 4px 0 0 var(--color-primary, #3b82f6);
+}
+
+/* Estilos específicos para el menú secundario */
+.secondary-nav a {
+    color: #b9c4d6;
+    font-size: 0.95rem;
+}
+
+.secondary-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--color-light, #ffffff);
+}
+
+/* Sección de usuario en la parte inferior */
+.user-section {
+    padding: 18px 20px 28px 20px;
+    background-color: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.user-info {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+}
+
+/* Iconos de navegación (si los usas) */
+.nav-icon {
+    width: 22px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+/* Ajustes responsivos para la barra lateral */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* En pantallas pequeñas, la barra ocupa todo el ancho y se va abajo */
+    .sidebar {
+        width: 100%;
+        order: 2; /* Esto la manda al final del contenedor flex */
+    }
+}
