@@ -39,7 +39,9 @@
           a = candidate;
         }
       }
-      if(!a) return;
+  if(!a) return;
+  // If this anchor explicitly opts out of client-side routing, allow default navigation
+  if(a.hasAttribute && a.hasAttribute('data-external')) return;
       e.preventDefault();
       var view = a.getAttribute('data-view') || a.getAttribute('href');
       if(!view) return;

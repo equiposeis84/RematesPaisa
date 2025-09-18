@@ -113,7 +113,7 @@ body{
   display: block;
   justify-content: center;
   align-items: center;
-  height: 80%;
+  height: 76%;
 }
 
 .logo{padding:14px 10px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:center}
@@ -136,10 +136,10 @@ body{
 
 /* Secondary nav (Ayuda / Cerrar sesión) styled as compact buttons */
 .secondary-nav{margin-top:10px}
-.secondary-nav ul{display:flex;gap:8px;align-items:center}
-.secondary-nav a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);color:rgba(209,219,230,0.95);text-decoration:none;font-weight:700}
+.secondary-nav ul{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.secondary-nav a{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.03);color:rgba(209,219,230,0.95);text-decoration:none;font-weight:700;width:100%;justify-content:flex-start}
 .secondary-nav a:hover{background:rgba(255,255,255,0.06);color:#fff}
-.secondary-nav a.logout{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px}
+.secondary-nav a.logout{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px}
 .secondary-nav a.logout:hover{background:rgba(255,0,0,0.08);border-color:rgba(255,0,0,0.12);color:#fff}
 
 /* Submenu */
@@ -184,7 +184,7 @@ body{
 .card .btn + .btn{margin-left:8px}
 
 /* Botones */
-.btn{display:block;align-items:center;gap:8px;padding:10px 14px 20px 14px;border-radius:8px;background:var(--color-primary);color:var(--color-light);border:0;cursor:pointer;font-weight:600;transition:transform var(--transition),background var(--transition)}
+.btn{display:block;align-items:center;gap:8px;padding:10px 14px 20px 14px;border-radius:8px;background:var(--color-primary);color:var(--color-light);border:0;cursor:pointer;font-weight:600;transition:transform var(--transition), background var(--transition)}
 .btn:hover{background:var(--color-primary-dark);transform:translateY(-2px)}
 .btn-sm{padding:6px 10px;font-size:0.85rem}
 .btn-danger{background:var(--color-danger)}
