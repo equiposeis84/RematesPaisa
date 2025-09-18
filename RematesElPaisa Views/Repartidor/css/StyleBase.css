@@ -150,7 +150,7 @@ body {
 
 /* Contenido principal */
 .main-content {
-  display: flex;
+  display: block;
   justify-content: center; /* Centra horizontalmente */
   align-items: center;
   flex: 1;

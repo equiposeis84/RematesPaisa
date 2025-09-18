@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Remates El Paísa</title>
-    <link rel="stylesheet" href="StyleBase.css">
+    <link rel="stylesheet" href="../css/StyleBase.css">
 </head>
 <body>
     <div class="dashboard-container">
@@ -34,29 +34,20 @@
                 </nav>
             </div>
         </aside>
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Entregas Pendientes</h2>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2025-09-10</td><td>Ana Garcia</td><td>Detergente</td><td>24</td><td>$18.000</td><td>$432.000</td></tr>
+                        <tr><td>2025-09-12</td><td>Carlos Sanchez</td><td>Ambientador</td><td>12</td><td>$12.000</td><td>$144.000</td></tr>
+                    </tbody>    
+                </table>
+            </header>
+        </main>
 </div>
 
-<main class="main-content">
-    <header class="content-header">
-        <h2>Entregas Completadas</h2>
-        <div class="filters">
-            <table>
-                <tr>
-                    <td>Ordenar por:</td>
-                    <td>
-                        <select>
-                            <option>Fecha</option>
-                            <option>Cliente</option>
-                            <option>Producto</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select>
-                            <option>Ascendente</option>
-                            <option>Descendente</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="btn">Aplicar</button>
-                    </td>
-            </table>        </div>
+        
