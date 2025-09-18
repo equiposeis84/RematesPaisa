@@ -129,7 +129,22 @@ body{
 .has-submenu.open > .submenu-toggle .caret{transform:rotate(180deg);color:var(--color-primary)}
 
 /* Main content area */
-.main-content{flex:1;margin-left:var(--sidebar-width);padding:28px 36px;background:transparent;min-height:100vh}
+.main-content{
+  flex:1;
+  margin-left:var(--sidebar-width);
+  padding:auto;
+  background:transparent;
+  box-sizing: auto;
+  width: 100%;
+  align-self: center;
+}
+
+#app-content {
+  margin-left:var(--sidebar-width);
+  padding: 90px 90px 100px 90px;
+  min-height:100vh;
+  box-sizing: auto;
+}
 
 .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .content-header h1,.content-header h2{font-size:1.6rem;color:var(--color-text)}
@@ -148,11 +163,39 @@ body{
 .btn-edit{background:#f59e0b;color:#08233a}
 
 /* Tablas */
-.table-container{background:var(--color-light);border-radius:12px;overflow:auto;box-shadow:var(--card-shadow);margin-bottom:18px}
-table{width:100%;border-collapse:collapse;min-width:480px}
-th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--color-border)}
+/* Table layout: centered container, wider cells, comfortable padding */
+/* Table container expands relative to content area (keeps distance from sidebar) */
+.table-container{
+  background:var(--color-light);
+  border-radius:12px;
+  overflow:auto;
+  box-shadow:var(--card-shadow);
+  margin:0 32px 18px 0;
+  padding:16px;
+  /* Use available content width (subtract sidebar + padding) */
+  width: calc(100% - var(--sidebar-width) - 96px);
+  max-width: none; /* allow stretching on large screens */
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:auto;
+  min-width:760px; /* increase baseline for wider cells */
+}
+th,td{
+  padding:16px 26px; /* more generous horizontal padding */
+  text-align:left;
+  border-bottom:1px solid var(--color-border);
+}
 th{background:var(--color-primary);color:var(--color-light);font-weight:700}
 tr:hover td{background:#f8fafc}
+
+/* Specific layout for orders table: make columns proportional for readability */
+.orders-table th:nth-child(1), .orders-table td:nth-child(1){width:6%}
+.orders-table th:nth-child(2), .orders-table td:nth-child(2){width:40%}
+.orders-table th:nth-child(3), .orders-table td:nth-child(3){width:15%}
+.orders-table th:nth-child(4), .orders-table td:nth-child(4){width:20%}
+.orders-table th:nth-child(5), .orders-table td:nth-child(5){width:19%}
 
 /* Filters */
 .filters{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
