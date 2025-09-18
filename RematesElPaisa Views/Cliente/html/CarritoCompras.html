@@ -14,7 +14,7 @@
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="Inicio.html">Inicio</a></li>
+                 
                     <li><a href="Catalogo.html">Catálogo</a></li>
                     <li><a href="CarritoCompras.html" class="active">Carrito</a></li>
                     <li><a href="Pedidos.html">Pedidos</a></li>
@@ -39,10 +39,138 @@
                 <h2>Carrito de Compras</h2>
             </header>
             <section class="content-body">
-                <p>Aquí puedes ver los artículos que has agregado a tu carrito.</p>
+                <div class="cart-items">
+                    <table id="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-product-id="1">
+                                <td class="product-name">Producto 1</td>
+                                <td>
+                                    <input class="qty-input" type="number" min="1" value="2" aria-label="Cantidad Producto 1">
+                                </td>
+                                <td class="unit-price">50.00</td>
+                                <td class="line-total">100.00</td>
+                                <td><button class="remove-btn">Eliminar</button></td>
+                            </tr>
+                            <tr data-product-id="2">
+                                <td class="product-name">Producto 2</td>
+                                <td>
+                                    <input class="qty-input" type="number" min="1" value="1" aria-label="Cantidad Producto 2">
+                                </td>
+                                <td class="unit-price">30.00</td>
+                                <td class="line-total">30.00</td>
+                                <td><button class="remove-btn">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align:right"><strong>Total:</strong></td>
+                                <td id="cart-total">130.00</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
             </section>
         </main>
     </div>
 
 </body>
+    <script>
+        // Maneja cambios en cantidad y eliminaciones
+        (function(){
+            function toNumber(str){
+                return Number(String(str).replace(/[^0-9.\-]+/g, '')) || 0;
+            }
+
+            function formatMoney(value){
+                return value.toFixed(2);
+            }
+
+            function recalcRow(row){
+                var qty = parseInt(row.querySelector('.qty-input').value, 10) || 0;
+                if(qty < 1) { qty = 1; row.querySelector('.qty-input').value = 1; }
+                var unit = toNumber(row.querySelector('.unit-price').textContent);
+                var line = qty * unit;
+                row.querySelector('.line-total').textContent = formatMoney(line);
+                return line;
+            }
+
+            function recalcCart(){
+                var rows = document.querySelectorAll('#cart-table tbody tr');
+                var total = 0;
+                rows.forEach(function(r){ total += recalcRow(r); });
+                document.getElementById('cart-total').textContent = formatMoney(total);
+                persistCart();
+            }
+
+            function persistCart(){
+                try{
+                    var items = [];
+                    document.querySelectorAll('#cart-table tbody tr').forEach(function(r){
+                        var id = r.getAttribute('data-product-id') || null;
+                        var name = r.querySelector('.product-name').textContent.trim();
+                        var qty = parseInt(r.querySelector('.qty-input').value,10) || 1;
+                        var unit = toNumber(r.querySelector('.unit-price').textContent);
+                        items.push({id: id, name: name, qty: qty, unit: unit});
+                    });
+                    localStorage.setItem('cart', JSON.stringify(items));
+                }catch(e){
+                    // ignore storage errors
+                }
+            }
+
+            // Inicializar handlers
+            document.addEventListener('DOMContentLoaded', function(){
+                // qty change
+                document.querySelectorAll('.qty-input').forEach(function(input){
+                    input.addEventListener('change', function(){ recalcCart(); });
+                    input.addEventListener('input', function(){ /* optional live update */ });
+                });
+
+                // remove buttons
+                document.querySelectorAll('.remove-btn').forEach(function(btn){
+                    btn.addEventListener('click', function(e){
+                        var row = e.target.closest('tr');
+                        if(row) { row.parentNode.removeChild(row); recalcCart(); }
+                    });
+                });
+
+                // If there's a saved cart, try to load quantities
+                try{
+                    var saved = JSON.parse(localStorage.getItem('cart')||'[]');
+                    if(saved && saved.length){
+                        saved.forEach(function(item){
+                            var row = document.querySelector('#cart-table tbody tr[data-product-id="'+item.id+'"]');
+                            if(row){ row.querySelector('.qty-input').value = item.qty; }
+                        });
+                    }
+                }catch(e){}
+
+                recalcCart();
+            });
+        })();
+    </script>
+    <style>
+        .remove-btn {
+            background-color: #ff2a2a; /* Verde */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
 </html>

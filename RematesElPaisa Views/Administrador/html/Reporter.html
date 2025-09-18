@@ -1,67 +1,34 @@
-(function(){
-// Estructura base para la vista de Reportes
-document.write(`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Reportes - Remates El Paísa</title>
-	<link rel="stylesheet" href="../css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes - Remates El Paísa</title>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-	<div class="dashboard-container">
-		<aside class="sidebar">
-			<div class="logo">
-				<h1>Remates El Paísa</h1>
-			</div>
-			<nav class="main-nav">
-				<ul>
-					<li><a href="../Index.html">Inicio</a></li>
-					<li><a href="Catalogo.html">Catálogo</a></li>
-					<li><a href="inventario.html">Inventario</a></li>
-					<li><a href="Pedidos.html">Pedidos</a></li>
-					<li><a href="Usuarios.html">Usuarios</a></li>
-					<li><a href="Reporter.html" class="active">Reportes</a></li>
-					<li><a href="Cliente.html">Clientes</a></li>
-					<li><a href="Repartidores.html">Repartidores</a></li>
-				</ul>
-			</nav>
-			<div class="user-section">
-				<div class="user-info">
-					<p><strong>Conectado como: Admin General</strong></p>
-				</div>
-				<nav class="secondary-nav">
-					<ul>
-						<li><a href="#">Ayuda y Contacto</a></li>
-						<li><a href="#">Cerrar Sesión</a></li>
-					</ul>
-				</nav>
-			</div>
-		</aside>
-		<main class="main-content">
-			<header class="content-header">
-				<h2>Reportes y Estadísticas</h2>
-				<p>Accede a reportes detallados y estadísticas de ventas.</p>
-			</header>
-			<div class="stats-grid">
-				<div class="stat-card">
-					<div class="stat-value">$1.200.000</div>
-					<div class="stat-label">Ventas este mes</div>
-				</div>
-				<div class="stat-card">
-					<div class="stat-value">320</div>
-					<div class="stat-label">Pedidos entregados</div>
-				</div>
-				<div class="stat-card">
-					<div class="stat-value">$3.500.000</div>
-					<div class="stat-label">Total histórico</div>
-				</div>
-			</div>
-			<div class="chart-container">
-				[Gráfico de ventas próximamente]
-			</div>
-		</main>
-	</div>
+  <main class="main-content">
+    <header class="content-header">
+      <h2>Reportes</h2>
+      <p>Este es un espacio de ejemplo para reportes y estadísticas.</p>
+    </header>
+
+    <section class="content-cards">
+      <article class="card">
+        <div class="card-icon">📈</div>
+        <div>
+          <h3>Ventas</h3>
+          <p>Resumen de ventas por periodo.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-icon">📊</div>
+        <div>
+          <h3>Clientes</h3>
+          <p>Métricas de actividad y retención.</p>
+        </div>
+      </article>
+    </section>
+  </main>
 </body>
-</html>`);
-})();
+</html>

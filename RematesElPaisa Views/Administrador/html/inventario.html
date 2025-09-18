@@ -3,122 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario - Remates El Paísa</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
     <div class="dashboard-container">
         <aside class="sidebar">
-            <div class="logo">
-                <h1>Remates El Paísa</h1>
-            </div>
+            <div class="logo"><h1>Remates El Paísa</h1></div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="../Index.html">Inicio</a></li>
-                    <li><a href="Catalogo.html">Catálogo</a></li>
-                    <li><a href="inventario.html" class="active">Inventario</a></li>
-                    <li><a href="Pedidos.html">Pedidos</a></li>
-                    <li><a href="Usuarios.html">Usuarios</a></li>
-                    <li><a href="Reporter.html">Reportes</a></li>
-                    <li><a href="Cliente.html">Clientes</a></li>
-                    <li><a href="Repartidores.html">Repartidores</a></li>
+                    <li class="sidebar-fixed"><a href="../inicioA.html"><span class="nav-icon">🏠</span>Inicio</a></li>
+                    <li class="sidebar-fixed"><a href="Catalogo.html"><span class="nav-icon">📦</span>Catálogo</a></li>
+                    <li class="has-submenu sidebar-fixed">
+                        <button class="submenu-toggle" aria-expanded="false">⚙️ Gestión <span class="caret">▾</span></button>
+                        <ul class="submenu" hidden>
+                            <li><a href="inventario.html" class="active">Inventario</a></li>
+                            <li><a href="Pedidos.html">Pedidos</a></li>
+                            <li><a href="Usuarios.html">Usuarios</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
-            <div class="user-section">
-                <div class="user-info">
-                    <p><strong>Conectado como: Admin General</strong></p>
-                </div>
-                <nav class="secondary-nav">
-                    <ul>
-                        <li><a href="#">Ayuda y Contacto</a></li>
-                        <li><a href="#">Cerrar Sesión</a></li>
-                    </ul>
-                </nav>
-            </div>
+            <div class="user-section"><div class="user-info"><p><strong>Conectado como: Admin General</strong></p></div></div>
         </aside>
 
         <main class="main-content">
-            <header class="content-header">
-                <h2>Gestión de Inventario</h2>
-                <div class="filters">
-                    <div class="search-box">
-                        <input type="text" placeholder="Buscar producto...">
-                        <button class="btn">Buscar</button>
-                    </div>
-                    <button class="btn">+ Agregar Producto</button>
-                </div>
-            </header>
+          <header class="content-header">
+            <h2>Inventario</h2>
+            <p>Controla existencias y SKUs.</p>
+          </header>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Categoría</th>
-                            <th>Stock</th>
-                            <th>Precio</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Limpiador Multiusos Floral</td>
-                            <td>Limpieza</td>
-                            <td>150</td>
-                            <td>$12.500</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                                <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Detergente Líquido para Ropa</td>
-                            <td>Ropa</td>
-                            <td>85</td>
-                            <td>$28.000</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                                <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Lavalozas Líquido Limón</td>
-                            <td>Cocina</td>
-                            <td>210</td>
-                            <td>$8.900</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                                <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Paño de Microfibra (Paquete x3)</td>
-                            <td>Accesorios</td>
-                            <td>60</td>
-                            <td>$15.000</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-sm btn-edit">✏️ Editar</button>
-                                <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination">
-                <button>&laquo; Anterior</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>Siguiente &raquo;</button>
-            </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>SKU</th><th>Producto</th><th>Stock</th><th>Precio</th><th>Acciones</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>P001</td><td>Detergente</td><td>24</td><td>$18.000</td><td><button class="btn btn-sm">Editar</button></td></tr>
+                <tr><td>P002</td><td>Ambientador</td><td>12</td><td>$12.000</td><td><button class="btn btn-sm">Editar</button></td></tr>
+              </tbody>
+            </table>
+          </div>
         </main>
     </div>
+
+    <script>
+    (function(){
+        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var li = btn.closest('.has-submenu');
+                if(!li) return;
+                var submenu = li.querySelector('.submenu');
+                var open = !li.classList.contains('open');
+                li.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open);
+                if(submenu) submenu.hidden = !open;
+            });
+        });
+    })();
+    </script>
 
     <script src="../js/main.js"></script>
 </body>

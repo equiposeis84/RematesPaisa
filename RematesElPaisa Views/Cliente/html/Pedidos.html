@@ -14,7 +14,7 @@
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="Inicio.html">Inicio</a></li>
+               
                     <li><a href="Catalogo.html">Catálogo</a></li>
                     <li><a href="CarritoCompras.html">Carrito</a></li>
                     <li><a href="Pedidos.html" class="active">Pedidos</a></li>
@@ -39,10 +39,52 @@
                 <h2>Mis Pedidos</h2>
             </header>
             <section class="content-body">
-                <p>Aquí puedes ver el estado de tus pedidos.</p>
+            
+                <div class="orders-section">
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID Pedido</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                                <th>Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-order-id="101">
+                                <td>101</td>
+                                <td>2024-06-01</td>
+                                <td>Enviado</td>
+                                <td>150.00</td>
+                                <td><button class="view-details-btn" aria-label="Ver detalles del pedido 101">Ver Detalles</button></td>
+                            </tr>
+                            <tr data-order-id="102">
+                                <td>102</td>
+                                <td>2024-06-05</td>
+                                <td>Procesando</td>
+                                <td>200.00</td>
+                                <td><button class="view-details-btn" aria-label="Ver detalles del pedido 102">Ver Detalles</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
+
     </div>
 
 </body>
+<style>
+
+    button {
+        cursor: pointer;
+        padding: 5px 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 3px;
+    }
+</style>
+
 </html>
