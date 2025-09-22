@@ -57,6 +57,9 @@ body {
   padding: 40px;
   overflow-y: auto;
   background-color: var(--color-bg);
+  /* Dejar espacio a la izquierda para la sidebar fija */
+  margin-left: var(--sidebar-width, 280px);
+  width: calc(100% - var(--sidebar-width, 280px));
 }
 
 /* ==========================================================================
@@ -199,6 +202,8 @@ body {
   .main-content {
     order: 1; /* Asegura que el contenido principal vaya primero */
     padding: 20px;
+    margin-left: 0;
+    width: 100%;
   }
 }
 /* Contenedor para las tarjetas de contacto */
