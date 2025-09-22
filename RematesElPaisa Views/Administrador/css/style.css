@@ -113,7 +113,7 @@ body{
   display: block;
   justify-content: center;
   align-items: center;
-  height: 76%;
+  height: 65%;
 }
 
 .logo{padding:14px 10px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:center}
