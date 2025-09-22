@@ -1,65 +1,4 @@
-/* Asegura que el contenido principal y la tabla de pedidos se vean bien */
-.main-content {
-  flex: 1;
-  min-width: 0;
-  padding: 2rem 2rem 2rem 0;
-  overflow-x: auto;
-}
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-}
-th, td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  text-align: left;
-}
-th {
-  background: #f5f5f5;
-  font-weight: 600;
-}
-/* Espaciado vertical para reemplazar estilos en línea */
-.mt-15 {
-  margin-top: 15px;
-}
-/* Variables de colores según la paleta proporcionada */
-:root {
-  --color-bg: #f1f5f9;        /* Fondo claro */
-  --color-text: #0f172a;      /* Texto oscuro */
-  --color-primary: #3b82f6;   /* Azul primario */
-  --color-primary-dark: #2563eb; /* Azul más oscuro */
-  --color-secondary: #334155; /* Gris azulado */
-  --color-light: #ffffff;     /* Blanco */
-  --color-border: #e2e8f0;    /* Borde gris claro */
-  --color-accent: #6366f1;    /* Color acento */
-  --color-success: #10b981;   /* Verde éxito */
-  --color-warning: #f59e0b;   /* Amarillo advertencia */
-  --color-danger: #ef4444;    /* Rojo peligro */
-  --sidebar-width: 280px;     /* Ancho barra lateral */
-  --border-radius: 12px;      /* Radio de bordes */
-  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* Sombra tarjetas */
-  --transition: all 0.3s ease; /* Transición suave */
-}
-/*
-  Archivo: Administrador/css/style.css
-  Objetivo: hoja de estilos consolidada y limpia para la carpeta Administrador.
-  - Corrige reglas duplicadas/conflictivas.
-  - Añade helpers para iconos (.nav-icon, .icon-slot, .icon-img).
-  - Mantiene las clases esperadas por los HTML limpiados (.sidebar, .main-content, .submenu, .submenu-toggle, etc.).
-
-  Dónde poner tus iconos personalizados:
-  - En enlaces del sidebar: coloca <span class="nav-icon"><img class="icon-img" src="../img/icons/mi-icono.svg" alt=""></span>
-  - O usa un emoji/texto: <span class="nav-icon">🏠</span>
-  - También puedes incluir un span vacío para insertar un icono vía CSS: <span class="icon-slot"></span>
-
-  Nota: las rutas de ejemplo usan ../img/icons/ para iconos locales, ajústalas según tu estructura.
-*/
-
+/* Variables de color y diseño */
 :root{
   --color-bg: #f6f8fa;
   --color-text: #0f172a;
@@ -89,7 +28,7 @@ body{
 }
 
 /* Layout principal */
-.dashboard-container{display:flexbox;min-height:100vh;flex-direction:column; width: 100%}
+.dashboard-container{display:flex;min-height:100vh;flex-direction:column; width: 100%}
 
 /* Sidebar */
 .sidebar{
@@ -109,6 +48,7 @@ body{
   height: 0%;
 
 }
+/*altura de contenido sidebar*/
 .space {
   display: block;
   justify-content: center;
@@ -151,15 +91,8 @@ body{
 .submenu li a:hover{background:rgba(59,130,246,0.08);color:#fff}
 .has-submenu.open > .submenu-toggle .caret{transform:rotate(180deg);color:var(--color-primary)}
 
-/* Main content area */
-.main-content{
-  flex:left;
-  padding:auto;
-  background:transparent;
-  box-sizing: auto;
-  width: 100%;
-  align-self: left;
-}
+/* Main content area (kept concise; primary definition above is used) */
+/* ...existing code... */
 
 #app-content {
   margin-left:var(--sidebar-width);
@@ -198,17 +131,18 @@ body{
   border-radius:12px;
   overflow:auto;
   box-shadow:var(--card-shadow);
-  margin:0 32px 18px 0;
-  padding:16px;
-  /* Use available content width (subtract sidebar + padding) */
-  width: calc(100% - var(--sidebar-width) - 96px);
-  max-width: none; /* allow stretching on large screens */
+  margin:0 24px 18px 0;
+  padding:18px;
+  width: calc(100% - var(--sidebar-width) - 48px);
+  max-width: 1400px; /* cap to avoid extreme stretch on very large screens */
+  margin-left: auto;
+  margin-right: auto;
 }
 table{
   width:100%;
   border-collapse:collapse;
-  table-layout:auto;
-  min-width:760px; /* increase baseline for wider cells */
+  table-layout: fixed; /* make columns respect widths and wrap text */
+  min-width:900px; /* increase baseline for wider cells */
 }
 th,td{
   padding:16px 26px; /* more generous horizontal padding */
@@ -220,11 +154,11 @@ tr:hover td{background:#f8fafc}
 
 
 /* Specific layout for orders table: make columns proportional for readability */
-.orders-table th:nth-child(1), .orders-table td:nth-child(1){width:6%}
-.orders-table th:nth-child(2), .orders-table td:nth-child(2){width:40%}
-.orders-table th:nth-child(3), .orders-table td:nth-child(3){width:15%}
-.orders-table th:nth-child(4), .orders-table td:nth-child(4){width:20%}
-.orders-table th:nth-child(5), .orders-table td:nth-child(5){width:19%}
+.orders-table th:nth-child(1), .orders-table td:nth-child(1){width:8%}
+.orders-table th:nth-child(2), .orders-table td:nth-child(2){width:36%}
+.orders-table th:nth-child(3), .orders-table td:nth-child(3){width:18%}
+.orders-table th:nth-child(4), .orders-table td:nth-child(4){width:18%}
+.orders-table th:nth-child(5), .orders-table td:nth-child(5){width:20%}
 
 /* Filters */
 .filters{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -250,12 +184,19 @@ tr:hover td{background:#f8fafc}
 .badge-danger{background:#fee2e2;color:#b91c1c}
 
 /* Responsive */
-@media(max-width:1024px){.sidebar{width:240px;min-width:240px}.main-content{margin-left:240px}}
-@media(max-width:768px){
+@media(max-width:1200px){
+  .table-container{width:calc(100% - 48px);min-width:720px}
+  .sidebar{width:240px;min-width:240px}
+  .main-content{margin-left:240px}
+}
+@media(max-width:900px){
   .dashboard-container{flex-direction:column}
   .sidebar{position:relative;width:100%;height:auto}
   .main-content{margin-left:0;padding:18px}
   .content-cards{grid-template-columns:1fr}
+  .table-container{min-width:0;padding:12px}
+  table{table-layout:auto;min-width:0}
+  th,td{padding:12px}
 }
 
 /* Utility spacing */
