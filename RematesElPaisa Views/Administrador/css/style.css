@@ -62,6 +62,14 @@ body{
 .main-nav ul,.secondary-nav ul{list-style:none}
 .main-nav li{margin:8px 6px}
 
+/* Main content: offset from sidebar and padded (applies to pages using .main-content) */
+.main-content{
+  margin-left:var(--sidebar-width);
+  padding:40px;
+  box-sizing:border-box;
+  min-height:100vh;
+}
+
 /* Helper para iconos dentro del nav */
 .nav-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;padding:0px;margin-right:12px}
 .icon-slot{width:28px;height:28px;display:inline-block}
@@ -131,12 +139,10 @@ body{
   border-radius:12px;
   overflow:auto;
   box-shadow:var(--card-shadow);
-  margin:0 24px 18px 0;
+  margin:0 24px 18px 24px; /* keep left/right gutters equal */
   padding:18px;
-  width: calc(100% - var(--sidebar-width) - 48px);
-  max-width: 1400px; /* cap to avoid extreme stretch on very large screens */
-  margin-left: auto;
-  margin-right: auto;
+  width: calc(100% - 48px); /* full width inside content area minus gutters */
+  max-width: none;
 }
 table{
   width:100%;
@@ -165,6 +171,11 @@ tr:hover td{background:#f8fafc}
 .search-box{display:flex;max-width:420px;flex:1}
 .search-box input{flex:1;padding:10px;border:1px solid var(--color-border);border-radius:8px 0 0 8px}
 .search-box button{border-radius:0 8px 8px 0}
+
+/* Estilos para botones y selects en el header/filters */
+.filters .btn{padding:10px 14px;border-radius:8px;background:var(--color-primary);color:var(--color-light);border:0;cursor:pointer;font-weight:700}
+.filters .btn:hover{background:var(--color-primary-dark)}
+.filters select{padding:10px 12px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-light);color:var(--color-text)}
 
 /* Product grid */
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
