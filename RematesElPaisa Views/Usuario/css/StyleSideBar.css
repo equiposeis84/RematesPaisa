@@ -2,19 +2,27 @@
 
 /* Contenedor principal de la barra lateral */
 .sidebar {
-    width: var(--sidebar-width, 280px); /* Usar variable de :root o un valor por defecto */
+    width: var(--sidebar-width, 280px);
     background: #172027;
     color: var(--color-light, #ffffff);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
     border-right: 1px solid rgba(255, 255, 255, 0.03);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    overflow: hidden;
+    z-index: 10;
 }
 
 /* Logo de la empresa */
 .logo {
-    padding: 28px 20px;
+    padding: 18px 12px;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
@@ -29,12 +37,17 @@
 /* Navegación principal y secundaria (listas) */
 .main-nav ul, .secondary-nav ul {
     list-style: none;
-    padding: 0;
-    margin: 20px 0;
+    padding: 0 8px;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: calc(100vh - 220px);
+    overflow: auto;
 }
 
 .main-nav li, .secondary-nav li {
-    margin: 6px 12px;
+    margin: 0;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -44,7 +57,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 14px 16px;
+    padding: 10px 14px;
     color: #d1dbe6;
     text-decoration: none;
     transition: var(--transition, all 0.3s ease);
@@ -80,9 +93,10 @@
 
 /* Sección de usuario en la parte inferior */
 .user-section {
-    padding: 18px 20px 28px 20px;
+    padding: 12px 16px;
     background-color: transparent;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
+    margin-top: auto;
 }
 
 .user-info {
