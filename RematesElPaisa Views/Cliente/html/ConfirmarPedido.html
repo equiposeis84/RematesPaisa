@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Pedido - Remates El Paísa</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Remates El Paísa</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="Catalogo.html">Catálogo</a></li>
+                    <li><a href="CarritoCompras.html">Carrito</a></li>
+                    <li><a href="Pedidos.html">Pedidos</a></li>
+                    <li><a href="Perfil.html">Perfil</a></li>
+                </ul>
+            </nav>
+            <div class="user-section">
+                <div class="user-info">
+                    <p><strong>Conectado como: Cliente</strong></p>
+                </div>
+                <nav class="secondary-nav">
+                    <ul>
+                        <li><a href="#">Ayuda y Contacto</a></li>
+                        <li><a href="/RematesElPaisa Views/Usuario/index.html">Cerrar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Confirmar Pedido</h2>
+            </header>
+            <section class="content-body">
+                <h3>Detalles del Pedido</h3>
+                <p>Aquí puedes revisar y confirmar los detalles de tu pedido antes de finalizar la compra.</p>
+                <p><strong>Dirección de Envío:</strong> Calle Falsa 123</p>
+                <table id="order-summary">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Producto 1</td>
+                            <td>2</td>
+                            <td>$50.00</td>
+                            <td>$100.00</td>
+                        </tr>
+                        <tr>
+                            <td>Producto 2</td>
+                            <td>1</td>
+                            <td>$30.00</td>
+                            <td>$30.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"><strong>Total del Pedido:</strong></td>
+                            <td><strong>$130.00</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="confirmation-section">
+                    <!-- Aca va el boton para confirmar el pedido y redirigir a la pagina de pedido realizado con exito -->
+                    <a href="MetodoPago.html" class="btn confirm-btn">Elegir metodo de pago</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
+        
