@@ -1,20 +1,166 @@
 :root{
-  --primer-color: #3b82f6;
-  --segundo-color: #475569;
-  --tercer-color: #475569;
-  --border-radius: 8px;
-  --font-family-headers: 'Roboto', sans-serif;
-  --font-family: 'Nunito', sans-serif;
-  --font-size: 16px;
+    --color-bg: #f1f5f9;
+    --color-text: #0f172a;
+    --color-primary: #7aa5e9;
+    --color-primary-dark: #7f93bd;
+    --color-secondary: #334155;
+    --primary-color: var(--color-bg);
+    --secondary-color: #ffffff;
+    --third-color: var(--color-primary-dark);
+    --font-family-primary: 'Trebuchet MS', Arial, sans-serif;
+    --font-family-heading: 'Trebuchet MS', Arial, sans-serif;
+    --font-size-base: 1rem;
+    --border-radius: 8px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body{
+    margin: 0;
+    font-family: var(--font-family-primary);
+    color: var(--color-text);
+    background-color: var(--primary-color);
+    display: flex;
+    min-height: 100vh;
 }
 
-body {
-  font-family: var(--font-family-header);
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('https://copilot.microsoft.com/th/id/BCO.0193aa04-d51a-4140-b0ea-85be5a1dde1b.png');
+    background-position: right;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    z-index: -1;
+}
 
+.sidebar{
+    background-color: var(--color-primary-dark);
+    width: 240px;
+    min-height: 100vh;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.logo {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.658);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.logo h1 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.4rem;
+    font-family: var(--font-family-heading);
+}
+
+.main-nav ul, .secondary-nav ul {
+    list-style: none;
+    padding: 0 8px;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: calc(100vh - 220px);
+    overflow: auto;
+}
+
+.main-nav li, .secondary-nav li {
+    margin: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Estilos generales para los enlaces de navegación */
+.main-nav a, .secondary-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: var(--transition, all 0.3s ease);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Efecto hover para el menú principal */
+.main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    transform: translateX(6px);
+}
+
+/* Estilo para el enlace de la página activa Hace que resalte en que pagina se encuentra*/
+.main-nav a.active,
+.secondary-nav a.active {
+    background-color: rgba(59,130,246,0.12);
+    color: var(--color-light, #ffffff);
+    box-shadow: inset 4px 0 0 var(--color-primary, #3b82f6);
+}
+
+/* Estilos específicos para el menú secundario */
+.secondary-nav a {
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.secondary-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--color-light, #ffffff);
+}
+
+.user-section {
+    padding: 20px 10px;
+    background-color: transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.658);
+    margin-top: 20rem;
+}
+
+.user-info {
+    display: block;
+    padding-block: 3px;
+    padding-inline: 5px;
+    font-size: 0.95rem;
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border-radius: 10px;
+
+}
+
+main {
+    flex: 1;
+    margin-left: 24rem;
+    padding: 2rem;
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+        margin-bottom: 1rem;
+        box-shadow: none;
+    }
+    
+    main {
+        margin-left: 0;
+        padding: 1rem;
+    }
 }
