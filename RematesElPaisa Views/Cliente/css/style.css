@@ -118,6 +118,32 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+/* Asegurar que los botones de la barra lateral queden arriba y la info de usuario abajo */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondary-nav {
+  margin-top: 12px;
+}
+
+.main-nav {
+  margin-top: 8px;
+}
+
+.user-section {
+  margin-top: auto; /* empuja la sección de usuario al fondo */
+}
+
+.nav-icon {
+  width: 20px;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .user-info {
   margin-bottom: 12px;
   font-size: 0.95rem;
