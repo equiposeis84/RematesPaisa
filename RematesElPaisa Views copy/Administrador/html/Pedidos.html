@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - Remates El Paísa</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo"><h1>Remates El Paísa</h1></div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="sidebar-fixed"><a href="../inicioA.html">🏠 Inicio</a></li>
+                    <li class="sidebar-fixed"><a href="Catalogo.html">📦 Catálogo</a></li>
+                    <li class="has-submenu sidebar-fixed">
+                        <button class="submenu-toggle" aria-expanded="false">⚙️ Gestión <span class="caret">▾</span></button>
+                        <ul class="submenu" hidden>
+                            <li><a href="inventario.html">Inventario</a></li>
+                            <li><a href="Pedidos.html" class="active">Pedidos</a></li>
+                            <li><a href="Usuarios.html">Usuarios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-section"><div class="user-info"><p><strong>Conectado como: Admin General</strong></p></div></div>
+        </aside>
+
+        <main class="main-content">
+          <header class="content-header">
+            <h2>Pedidos</h2>
+            <p>Listado de pedidos recientes.</p>
+          </header>
+
+          <div class="table-container">
+            <table class="orders-table">
+              <thead>
+                <tr><th>#</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Fecha</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1001</td><td>Ana Garcia</td><td>$25.000</td><td><span class="badge badge-success">Entregado</span></td><td>2025-09-10</td></tr>
+                <tr><td>1002</td><td>Carlos Sanchez</td><td>$12.000</td><td><span class="badge badge-warning">En Camino</span></td><td>2025-09-12</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+    </div>
+
+    <script>
+    // minimal submenu toggle used by admin pages
+    (function(){
+        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var li = btn.closest('.has-submenu');
+                if(!li) return;
+                var submenu = li.querySelector('.submenu');
+                var open = !li.classList.contains('open');
+                li.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open);
+                if(submenu) submenu.hidden = !open;
+            });
+        });
+    })();
+    </script>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
