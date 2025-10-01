@@ -1,0 +1,99 @@
+const fs = require('fs');
+const path = require('path');
+
+const root = path.resolve(__dirname, '..');
+
+const svgs = {
+  archive: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-archive" viewBox="0 0 16 16"> <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg>`,
+  envelope: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-envelope" viewBox="0 0 16 16"> <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/> </svg>`,
+  box: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-box-seam" viewBox="0 0 16 16"> <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/> </svg>`,
+  bag: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-bag" viewBox="0 0 16 16"> <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/> </svg>`,
+  report: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-bar-chart-line" viewBox="0 0 16 16"> <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1zm1 12h2V2h-2zm-3 0V7H7v7zm-5 0v-3H2v3z"/> </svg>`,
+  gear: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-gear" viewBox="0 0 16 16"> <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/> <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/> </svg>`,
+  people: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-people" viewBox="0 0 16 16"> <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/> </svg>`,
+  truck: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-truck" viewBox="0 0 16 16"> <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/> </svg>`,
+  person_check: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-person-check" viewBox="0 0 16 16"> <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/> <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/> </svg>`,
+  check: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nav-icon bi bi-check-all" viewBox="0 0 16 16"> <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486z"/> </svg>`
+};
+
+const mappings = [
+  {keywords: ['Catalogo','Catálogo','Catálo','Catá'], svg: svgs.archive},
+  {keywords: ['Carrito','Carrito de Compras','CarritoCompras','CarritoCompras.html'], svg: svgs.bag},
+  {keywords: ['Pedidos','Mis Pedidos'], svg: svgs.bag},
+  {keywords: ['Inventario'], svg: svgs.box},
+  {keywords: ['Perfil'], svg: svgs.person_check},
+  {keywords: ['Usuarios','Usuario'], svg: svgs.people},
+  {keywords: ['Repartidores','Repartidor'], svg: svgs.truck},
+  {keywords: ['Clientes','Cliente'], svg: svgs.person_check},
+  {keywords: ['Reportes','reportes','Reporter'], svg: svgs.report},
+  {keywords: ['Gestión','Gestion','Gestión','Gestión','Gestión','Gesti'], svg: svgs.gear},
+  {keywords: ['Confirmar','Confirmar Pedido','ConfirmarPedido','Pagar Ahora','Elegir metodo de pago','Pagar'], svg: svgs.check},
+  {keywords: ['Agregar al carrito','Añadir al carrito','Añadir','Agregar'], svg: svgs.bag}
+];
+
+function walk(dir){
+  const files = fs.readdirSync(dir, {withFileTypes:true});
+  files.forEach(f => {
+    const full = path.join(dir, f.name);
+    if(f.isDirectory()) return walk(full);
+    if(!f.isFile()) return;
+    if(!full.endsWith('.html')) return;
+    // skip ayuda/contact files
+    const base = path.basename(full).toLowerCase();
+    if(base.includes('ayud') && base.includes('contact')) return;
+    if(base.includes('ayudaycontacto') || base.includes('ayudacontacto') || base.includes('ayuda') && base.includes('contacto')) return;
+
+    let content = fs.readFileSync(full, 'utf8');
+    let original = content;
+
+    // Insert icons into anchor navs and buttons
+    mappings.forEach(m => {
+      m.keywords.forEach(kw => {
+        // pattern to find anchors or buttons that contain the keyword but not an svg already
+        // handle <a ...>...KW... or >KW< with possible whitespace/newlines
+        const anchorRegex = new RegExp(`(<a\\b[^>]*>)([\s\S]*?)(\\b${escapeRegExp(kw)}\\b)`, 'gi');
+        content = content.replace(anchorRegex, (match, openTag, between, word)=>{
+          // if there's already an svg in the between or after openTag before word, skip
+          const snippet = between + word;
+          if(/<svg[\s\S]*?>/i.test(snippet)) return match;
+          // avoid injecting into ayuda/contact anchors
+          if(/ayud|contact/i.test(snippet) && /ayud|contact/i.test(word)) return match;
+          // inject svg with a space after it
+          return openTag + between + m.svg + ' ' + word;
+        });
+
+        // handle button text like <button...>Agregar al carrito</button>
+        const buttonRegex = new RegExp(`(<button\\b[^>]*>\\s*)(${escapeRegExp(kw)})(\\s*</button>)`, 'gi');
+        content = content.replace(buttonRegex, (match, open, word, close)=>{
+          if(/<svg[\s\S]*?>/i.test(match)) return match;
+          return open + m.svg + ' ' + word + close;
+        });
+
+        // handle links that are plain like > Carrito</a>
+        const simpleLinkRegex = new RegExp(`(>\\s*)(${escapeRegExp(kw)})(\\s*<\\/a>)`, 'gi');
+        content = content.replace(simpleLinkRegex, (match, pre, word, post, offset, str)=>{
+          // ensure we are inside an anchor and not in ayuda/contact
+          // find last '<a' before offset
+          const before = str.slice(0, offset);
+          const lastA = before.lastIndexOf('<a');
+          const lastCloseA = before.lastIndexOf('</a>');
+          if(lastA === -1 || lastA < lastCloseA) return match; // not inside anchor
+          const segment = str.slice(lastA, offset+match.length);
+          if(/<svg[\s\S]*?>/i.test(segment)) return match;
+          if(/ayud|contact/i.test(word)) return match;
+          return pre + m.svg + ' ' + word + post;
+        });
+      });
+    });
+
+    if(content !== original){
+      fs.writeFileSync(full, content, 'utf8');
+      console.log('Updated:', path.relative(root, full));
+    }
+  });
+}
+
+function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+walk(root);
+console.log('Done');
