@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prototipo Plataforma de Gestión - Remates El Paisa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="icon" href="img/placeholder.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -24,6 +22,10 @@
             </div>
             <div id="session-controls">
                  <!-- Controles de sesión se generarán con JS -->
+            <!-- JavaScript removed to run in no-JS mode. -->
+            <!-- Modals and debug banner are kept for graceful fallback. -->
+            <div id="debug-banner" style="position:fixed;left:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;z-index:100000;font-family:Inter,system-ui,Arial;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:none"></div>
+
             </div>
         </aside>
 
@@ -34,144 +36,40 @@
             <div id="page-home" class="page active">
                 <h2 class="text-3xl font-bold text-slate-800">Bienvenidos a la Plataforma de Gestión</h2>
                 <p class="mt-2 text-slate-600">Hemos diseñado esta plataforma para optimizar la gestión de tus pedidos y el control de inventario en Remates El Paisa.</p>
-                <div class="grid md:grid-cols-2 gap-6 mt-8">
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mb-4">
-                           <svg class="h-8 w-8 text-custom-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h7.5M8.25 12h7.5m-7.5 5.25h7.5M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-slate-800">Acceder al Catálogo Dinámico</h3>
-                        <p class="text-slate-500 mt-2">Explora nuestro catálogo actualizado con los mejores productos para el hogar.</p>
-                        <button onclick="navigateTo('catalog')" class="mt-4 bg-custom-blue text-white font-semibold py-2 px-4 rounded-lg hover:bg-custom-blue-dark transition-colors w-full">Ver Catálogo</button>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mb-4">
-                            <svg class="h-8 w-8 text-custom-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75c0-.231-.035-.454-.1-.664M6.75 7.5h10.5a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-7.5a2.25 2.25 0 012.25-2.25z" /></svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-slate-800">Mis pedidos y seguimiento</h3>
-                        <p class="text-slate-500 mt-2">Consulta el estado de tus pedidos y revisa tu historial de compras.</p>
-                        <button onclick="navigateTo('orders')" class="mt-4 bg-custom-blue text-white font-semibold py-2 px-4 rounded-lg hover:bg-custom-blue-dark transition-colors w-full">Consultar Pedidos</button>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Otras páginas -->
-            <div id="page-catalog" class="page"></div>
-            <div id="page-orders" class="page"></div>
-            <div id="page-login" class="page"></div>
-            <div id="page-cart" class="page"></div>
-            <div id="page-checkout" class="page"></div>
-            <div id="page-inventory" class="page"></div>
-            <div id="page-admin-orders" class="page"></div>
-            <div id="page-users" class="page"></div>
-            <div id="page-reports" class="page"></div>
-            <div id="page-admin-delivery-men" class="page"></div>
-            <div id="page-delivery-tasks" class="page"></div>
-            <div id="page-delivery-history" class="page"></div>
-            <div id="page-delivery-dashboard" class="page"></div>
-            <div id="page-help" class="page"></div>
-            <div id="page-register" class="page"></div>
-            <div id="page-clients" class="page"></div>
-            <div id="page-repartidores" class="page"></div>
-                <div id="page-providers" class="page"></div>
-            <div id="page-profile" class="page"></div>
-        </main>
-    </div>
+                <!-- Otras páginas (estáticas en modo sin-JS) -->
+                <div id="page-catalog" class="page"></div>
+                <div id="page-orders" class="page"></div>
+                <div id="page-login" class="page"></div>
+                <div id="page-cart" class="page"></div>
+                <div id="page-checkout" class="page"></div>
+                <div id="page-inventory" class="page"></div>
+                <div id="page-admin-orders" class="page"></div>
+                <div id="page-users" class="page"></div>
+                <div id="page-reports" class="page"></div>
+                <div id="page-admin-delivery-men" class="page"></div>
+            
+            </main>
 
-    <!-- Modals -->
-    <div id="product-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
-        <div id="product-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"></div>
-    </div>
-    <div id="order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
-        <div id="order-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6"></div>
-    </div>
-    <div id="edit-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
-        <div id="edit-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6"></div>
-    </div>
+        </div>
 
-    <!-- Seguridad: stubs y handlers globales antes de cargar los módulos.
-         Evita que excepciones en tiempo de importación dejen la app en blanco
-         y muestra errores claros en el debug banner para facilitar depuración. -->
-    <script>
-        // Valor por defecto para WhatsApp (si no está en constants)
-        window.whatsappNumber = window.whatsappNumber || '573001234567';
-        // Helper seguro para generar URLs de WhatsApp
-        window.getWhatsAppUrl = window.getWhatsAppUrl || function(number, message){
-            try { const base = 'https://wa.me/' + (number || window.whatsappNumber); return message ? base + '?text=' + encodeURIComponent(message) : base; } catch (e) { return '#'; }
-        };
-        // Stubs no-op para modales/funciones que pueden llamarse en import time
-        window.openDetailsModal = window.openDetailsModal || function(){ /* stub */ };
-        window.openEditModal = window.openEditModal || function(){ /* stub */ };
-        window.openProductModal = window.openProductModal || function(){ /* stub */ };
-        window.closeModal = window.closeModal || function(){ /* stub */ };
+        <!-- Modals (kept for markup only) -->
+        <div id="product-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
+            <div id="product-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"></div>
+        </div>
+        <div id="order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
+            <div id="order-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6"></div>
+        </div>
+        <div id="edit-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50">
+            <div id="edit-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6"></div>
+        </div>
 
-        // Mostrar errores en el debug banner para que el usuario los copie
-        function showDebugError(msg){
-            try {
-                const banner = document.getElementById('debug-banner');
-                if (banner) { banner.style.display = 'block'; banner.style.background = '#c71f1f'; banner.textContent = 'ERROR: ' + msg; }
-                console.error('[GLOBAL ERROR]', msg);
-            } catch(e) { console.error('showDebugError failed', e); }
-        }
+        <!-- JavaScript removed to run in no-JS mode. -->
+        <!-- Debug banner retained for possible manual use. -->
+        <div id="debug-banner" style="position:fixed;left:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;z-index:100000;font-family:Inter,system-ui,Arial;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:none"></div>
 
-        window.addEventListener('error', function(ev){
-            const m = ev && ev.message ? ev.message : (ev && ev.error && ev.error.message) || String(ev);
-            showDebugError(m);
-        });
-
-        window.addEventListener('unhandledrejection', function(ev){
-            const m = (ev && ev.reason && ev.reason.message) ? ev.reason.message : String(ev.reason || ev);
-            showDebugError('UnhandledRejection: ' + m);
-        });
-    </script>
-
-    <!-- Cargar sólo el entrypoint como módulo; los módulos se importan desde aquí -->
-    <script type="module" src="js/main.js"></script>
-
-    <!-- DEBUG BANNER: muestra estado de carga y ayuda a depurar si la app no renderiza -->
-    <div id="debug-banner" style="position:fixed;left:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;z-index:100000;font-family:Inter,system-ui,Arial;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:none"></div>
-    <script>
-        // Esperar un poco para que los módulos se carguen
-        setTimeout(() => {
-            const banner = document.getElementById('debug-banner');
-            try {
-                const ok = !!(window && window.navigateTo && window.renderNav);
-                const msgs = [];
-                msgs.push('navigateTo: ' + (window.navigateTo ? 'ok' : 'MISSING'));
-                msgs.push('renderNav: ' + (window.renderNav ? 'ok' : 'MISSING'));
-                msgs.push('api adapter: ' + (window.api ? 'ok' : 'MISSING'));
-                const text = ok ? 'App: módulos cargados correctamente' : 'App: módulos NO cargados — ver consola';
-                console.log('[DEBUG BANNER] Estado de carga:', msgs.join(' | '));
-                if (banner) {
-                    banner.style.display = 'block';
-                    banner.textContent = text + ' — ' + msgs.join(' | ');
-                    if (!ok) banner.style.background = '#c71f1f';
-                    setTimeout(() => { banner.style.display = ok ? 'none' : 'block'; }, 4000);
-                } else {
-                    alert(text + '\n' + msgs.join('\n'));
-                }
-            } catch (e) {
-                console.error('DEBUG BANNER error', e);
-                if (banner) { banner.style.display = 'block'; banner.textContent = 'DEBUG ERROR - ver consola'; banner.style.background = '#c71f1f'; }
-            }
-        }, 600);
-    </script>
-    <script>
-        // Verificación adicional para detectar fallos de importación silenciosos
-        setTimeout(() => {
-            try {
-                const banner = document.getElementById('debug-banner');
-                const ok = !!(window && window.navigateTo && window.renderNav);
-                if (!ok) {
-                    const missing = [];
-                    if (!window.navigateTo) missing.push('navigateTo');
-                    if (!window.renderNav) missing.push('renderNav');
-                    if (!window.api) missing.push('api');
-                    const msg = 'Módulo no cargado (posible import error). Faltan: ' + missing.join(', ');
-                    console.error('[MODULE LOAD]', msg);
-                    if (banner) { banner.style.display = 'block'; banner.style.background = '#c71f1f'; banner.textContent = msg; }
-                }
-            } catch (e) { console.error('post-load verify failed', e); }
-        }, 1200);
-    </script>
+    </body>
+    </html>
 </body>
 </html>

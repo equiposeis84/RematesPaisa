@@ -65,19 +65,19 @@ body {
 }
 
 /* Navegación principal con bordes redondeados */
-.main-nav ul, .secondary-nav ul {
+.primary-nav ul, .main-nav ul, .secondary-nav ul {
   list-style: none;
   padding: 0;
   margin: 20px 0;
 }
 
-.main-nav li, .secondary-nav li {
+.primary-nav li, .main-nav li, .secondary-nav li {
   margin: 6px 12px;
   border-radius: 10px;
   overflow: hidden;
 }
 
-.main-nav a, .secondary-nav a {
+.primary-nav a, .main-nav a, .secondary-nav a {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -89,13 +89,13 @@ body {
   font-weight: 500;
 }
 
-.main-nav a:hover {
+.primary-nav a:hover, .main-nav a:hover {
   background-color: rgba(255, 255, 255, 0.04);
   color: #ffffff;
   transform: translateX(6px);
 }
 
-.main-nav a.active {
+.primary-nav a.active, .main-nav a.active {
   background-color: rgba(59,130,246,0.12);
   color: var(--color-light);
   box-shadow: inset 4px 0 0 var(--color-primary);
@@ -128,7 +128,7 @@ body {
   margin-top: 12px;
 }
 
-.main-nav {
+.main-nav, .primary-nav {
   margin-top: 8px;
 }
 
@@ -136,13 +136,6 @@ body {
   margin-top: auto; /* empuja la sección de usuario al fondo */
 }
 
-.nav-icon {
-  width: 20px;
-  margin-right: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .user-info {
   margin-bottom: 12px;
@@ -160,10 +153,20 @@ body {
 
 .nav-icon {
   width: 22px;
+  height: 22px;
+  margin-right: 8px;
   display: inline-flex;
-  justify-content: center;
   align-items: center;
-  font-size: 18px;
+  justify-content: center;
+  flex: 0 0 22px; /* evita que el icono cambie de tamaño en flex layouts */
+}
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
 /* Contenido principal */

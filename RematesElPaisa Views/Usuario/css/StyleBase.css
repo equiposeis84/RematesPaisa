@@ -160,6 +160,19 @@ body {
   font-size: 0.85rem;
 }
 
+/* Iconos dentro de botones (alineación y tamaño) */
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.btn .btn-icon {
+  margin-right: 10px; /* espacio entre icono y texto */
+}
+
 /* Paginación (botones de 1, 2, 3... Siguiente) */
 .pagination {
   width: 100%;
