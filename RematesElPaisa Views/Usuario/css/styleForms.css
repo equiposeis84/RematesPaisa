@@ -60,8 +60,8 @@
 /* Botón principal del formulario (reutiliza .btn pero lo hace más grande) */
 .form-container .btn {
   width: 100%;
-  padding: 12px 20px;
-  font-size: 1rem;
+  padding: 10px 14px;
+  font-size: 0.98rem;
   margin-top: 10px;
 }
 
@@ -86,21 +86,21 @@
 /* fila de vistas (3 botones) */
 .vistas-row {
   display: flex;
-  gap: 12px;
+  flex-direction: column; /* apilar verticalmente */
+  gap: 10px;
 }
 
 .vistas-row .btn {
-  flex: 1;
-  padding: 0 16px; /* padding horizontal fijo, vertical controlado por height */
+  width: 100%; /* ocupar todo el ancho del contenedor */
+  padding: 10px 14px;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  justify-content: flex-start; /* ícono + texto alineados a la izquierda */
+  gap: 12px;
   text-decoration: none;
-  height: 64px !important; /* altura fija y forzada */
-  line-height: 1; /* evita saltos de línea por tamaño de fuente */
+  height: auto !important; /* dejar que el contenido defina la altura */
   box-sizing: border-box;
 }
 
