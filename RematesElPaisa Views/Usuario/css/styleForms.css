@@ -60,8 +60,8 @@
 /* Botón principal del formulario (reutiliza .btn pero lo hace más grande) */
 .form-container .btn {
   width: 100%;
-  padding: 12px 20px;
-  font-size: 1rem;
+  padding: 10px 14px;
+  font-size: 0.98rem;
   margin-top: 10px;
 }
 
@@ -81,17 +81,44 @@
 }
 .vistas {
   margin-top: 20px;
+}
+
+/* fila de vistas (3 botones) */
+.vistas-row {
   display: flex;
-  justify-content: space-between;
-  color:blueviolet 
+  flex-direction: column; /* apilar verticalmente */
+  gap: 10px;
 }
-.vistas .btn {
-  width: 48%;
-  padding: 10px 0;
-  font-size: 0.9rem;
-  background-color:blueviolet
-  
+
+.vistas-row .btn {
+  width: 100%; /* ocupar todo el ancho del contenedor */
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start; /* ícono + texto alineados a la izquierda */
+  gap: 12px;
+  text-decoration: none;
+  height: auto !important; /* dejar que el contenido defina la altura */
+  box-sizing: border-box;
 }
-.vistas .btn:hover {
-  background-color: indigo;
+
+/* Variantes */
+.btn--primary { background-color: #6d28d9; color: #fff; box-shadow: 0 3px 8px rgba(109,40,217,0.18); }
+.btn--primary:hover { background-color: #581c87; transform: translateY(-2px); }
+
+.btn--secondary { background-color: #10b981; color: #fff; box-shadow: 0 3px 8px rgba(16,185,129,0.18); }
+.btn--secondary:hover { background-color: #0e9f6e; transform: translateY(-2px); }
+
+.btn--tertiary { background-color: #3b82f6; color: #fff; box-shadow: 0 3px 8px rgba(59,130,246,0.18); }
+.btn--tertiary:hover { background-color: #2563eb; transform: translateY(-2px); }
+
+@media (max-width: 540px) {
+  .vistas-row { flex-direction: column; }
+  .vistas-row .btn { width: 100%; }
 }
+
+/* Asegura que los iconos y el texto se muestren centrados y no cambien la altura */
+.vistas-row .btn .btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
+.vistas-row .btn { vertical-align: middle; }
