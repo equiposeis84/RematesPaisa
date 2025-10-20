@@ -1,13 +1,13 @@
 USE mydb;
 SHOW TABLES;
 INSERT INTO cliente (
-  idCliente,
-  tipoDocumentoCliente,
-  nombreCliente,
-  apellidoCliente,
-  direccionCliente,
-  telefonoCliente,
-  emailCliente
+	idCliente,
+	tipoDocumentoCliente,
+	nombreCliente,
+	apellidoCliente,
+	direccionCliente,
+	telefonoCliente,
+	emailCliente
 )
 VALUES
 ('1002456789', 'CC', 'Camila', 'Torres', 'Carrera 12 #45-23', '3102546789', 'camila.torres@gmail.com'),
