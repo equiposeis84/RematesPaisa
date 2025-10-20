@@ -1,4 +1,5 @@
 USE mydb;
+SHOW TABLES;
 
 INSERT INTO proveedores (
   idProveedores,

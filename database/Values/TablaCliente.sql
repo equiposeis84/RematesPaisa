@@ -1,5 +1,6 @@
 USE mydb;
 SHOW TABLES;
+
 INSERT INTO cliente (
 	idCliente,
 	tipoDocumentoCliente,
@@ -23,3 +24,5 @@ VALUES
 
 -- Ver los datos insertados
 SELECT * FROM cliente;
+
+
