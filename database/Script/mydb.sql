@@ -54,27 +54,38 @@ CREATE TABLE IF NOT EXISTS `productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `entrada` (
-  `idEntrada` INT(11) NOT NULL,
+  `idEntrada` INT NOT NULL AUTO_INCREMENT,
   `fechaEntrada` DATE NOT NULL,
-  `reciboEntrada` FLOAT(10,2) NOT NULL,
-  `idProveedores` INT(11) NOT NULL,
+  `idProveedores` INT NOT NULL,
   PRIMARY KEY (`idEntrada`),
   KEY `idx_idProveedoresEntrada` (`idProveedores`),
-  CONSTRAINT `fk_entrada_proveedores` FOREIGN KEY (`idProveedores`) REFERENCES `proveedores` (`idProveedores`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_entrada_proveedores`
+    FOREIGN KEY (`idProveedores`)
+    REFERENCES `proveedores` (`idProveedores`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `pedidos` (
-  `idPedidos` INT(11) NOT NULL,
+  `idPedidos` INT NOT NULL AUTO_INCREMENT,
   `fechaPedido` DATE NOT NULL,
   `horaPedido` TIME NOT NULL,
   `idCliente` VARCHAR(40) NOT NULL,
-  `valorPedido` FLOAT(10,2) NOT NULL,
-  `ivaPedido` VARCHAR(45) NOT NULL,
-  `totalPedido` FLOAT(10,2) NOT NULL,
+  `valorPedido` DECIMAL(10,2) NOT NULL,
+  `ivaPedido` DECIMAL(10,2) NOT NULL,
+  `totalPedido` DECIMAL(10,2) NOT NULL,
+  `estadoPedido` VARCHAR(20) NOT NULL,
+  `repartidorPedido` VARCHAR(100) NULL,
+
   PRIMARY KEY (`idPedidos`),
   KEY `idx_idCliente` (`idCliente`),
-  CONSTRAINT `fk_pedidos_cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_pedidos_cliente`
+    FOREIGN KEY (`idCliente`)
+    REFERENCES `cliente` (`idCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 CREATE TABLE IF NOT EXISTS `detalleproductos` (
   `idPedido` INT(5) NOT NULL,
@@ -136,5 +147,9 @@ COMMIT;
  /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
  /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-
-
+-- Desactiva temporalmente las restricciones de claves foráneas:
+SET FOREIGN_KEY_CHECKS = 0;
+-- Elimina la tabla sin restricciones:
+DROP TABLE IF EXISTS detalleproductos;
+-- Activa de nuevo las restricciones (muy importante):
+SET FOREIGN_KEY_CHECKS = 1;
