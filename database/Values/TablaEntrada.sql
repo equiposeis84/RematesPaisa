@@ -10,4 +10,4 @@ VALUES
 (1, '2025-10-20', 1);
 
  -- Ver los datos insertados
-SELECT * FROM entrada;
+SELECT * FROM entrada;  
