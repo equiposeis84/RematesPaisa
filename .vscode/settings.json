@@ -11,9 +11,9 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "Prueba",
-            "username": "root",
+            "name": "LocalHostXAMPP",
             "database": "mydb",
+            "username": "root",
             "password": ""
         }
     ]
