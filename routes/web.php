@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\ProductosController; 
 
-// Ruta PRINCIPAL - Esta debe existir
+// Ruta PRINCIPAL 
 Route::get('/', function () {
-    return view('welcome'); // o la vista que quieras usar como inicio
+    return view('welcome'); 
 });
 
-// Tus rutas de clientes
+
 Route::resource('clientes', ClienteController::class);
+Route::resource('proveedores', ProveedorController::class);
+Route::resource('productos', ProductosController::class);

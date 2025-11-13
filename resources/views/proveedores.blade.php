@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modulo Clientes</title>
+    <title>Modulo Proveedores</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container-sm d-flex justify-content-center mt-5">
         <div class="card">
             <div class="card-body" style="width: 1200px;">
-                <h3>Modulo Clientes</h3>
+                <h3>Modulo Proveedores</h3>
                 
                 <!-- Mostrar mensajes de éxito -->
                 @if(session('success'))
@@ -32,10 +31,10 @@
                 <hr>
 
                 <!-- Formulario de búsqueda -->
-                <form name="clientes" action="{{ url('/clientes') }}" method="GET">
+                <form name="Proveedores" action="{{ url('/proveedores') }}" method="GET">
                     <div class="text-end mb-3">
-                        <!-- Botón para abrir modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCliente">
+                        <!-- Botón para abrir modal CORREGIDO -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor">
                             <i class="fa-solid fa-plus"></i> Nuevo
                         </button>
                     </div>
@@ -52,53 +51,48 @@
 
                         <div class="col-md-6 text-end">
                            <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
-                           <a href="{{ url('/clientes') }}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
+                           <a href="{{ url('/proveedores') }}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
                         </div>
                     </div>
                 </form>
                 
-                <!-- Tabla clientes -->
+                <!-- Tabla Proveedores -->
                 @if($datos->count() > 0)
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-primary">
                         <tr>
-                            <th>N° Documento</th>
-                            <th>Tipo Documento</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
-                            <th>Dirección</th>
-                            <th>Acciones</th>
+                            <td>idProveedores</td>
+                            <td>tipoDocumentoProveedor</td>
+                            <td>nombreProveedor</td>
+                            <td>telefonoProveedor</td>
+                            <td>correoProveedor</td>
+                            <td>Acciones</td>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($datos as $item)
                             <tr>
-                                <td>{{ $item->idCliente }}</td> 
-                                <td>{{ $item->tipoDocumentoCliente }}</td>  
-                                <td>{{ $item->nombreCliente }}</td>
-                                <td>{{ $item->apellidoCliente }}</td>  
-                                <td>{{ $item->emailCliente }}</td>
-                                <td>{{ $item->telefonoCliente }}</td>
-                                <td>{{ $item->direccionCliente }}</td>
+                                <td>{{ $item->idProveedores }}</td> 
+                                <td>{{ $item->tipoDocumentoProveedor }}</td>  
+                                <td>{{ $item->nombreProveedor }}</td>
+                                <td>{{ $item->telefonoProveedor }}</td>  
+                                <td>{{ $item->correoProveedor }}</td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalEditarCliente"
-                                            data-id="{{ $item->idCliente }}"
-                                            data-tipodoc="{{ $item->tipoDocumentoCliente }}"
-                                            data-nombre="{{ $item->nombreCliente }}"
-                                            data-apellido="{{ $item->apellidoCliente }}"
-                                            data-email="{{ $item->emailCliente }}"
-                                            data-telefono="{{ $item->telefonoCliente }}"
-                                            data-direccion="{{ $item->direccionCliente }}">
+                                            data-bs-target="#modalEditarProveedor"
+                                            data-id="{{ $item->idProveedores }}"
+                                            data-tipodoc="{{ $item->tipoDocumentoProveedor }}"
+                                            data-nombre="{{ $item->nombreProveedor }}"
+                                            data-email="{{ $item->correoProveedor }}"
+                                            data-telefono="{{ $item->telefonoProveedor }}"
+                                            data-direccion="{{ $item->direccionProveedor ?? '' }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
-                                    <form action="{{ route('clientes.destroy', $item->idCliente) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('proveedores.destroy', $item->idProveedores) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este cliente?')">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este proveedor?')">
                                             <i class="fa-solid fa-trash"></i> Eliminar
                                         </button>
                                     </form>
@@ -148,9 +142,9 @@
                 <div class="alert alert-info text-center mt-3">
                     <i class="fas fa-info-circle"></i> 
                     @if(request('search'))
-                        No se encontraron clientes con "{{ request('search') }}"
+                        No se encontraron proveedores con "{{ request('search') }}"
                     @else
-                        No hay clientes registrados.
+                        No hay proveedores registrados.
                     @endif
                 </div>
                 @endif
@@ -158,30 +152,30 @@
         </div>
     </div> <!-- Fin del container -->
 
-    <!-- Modal para Nuevo Cliente -->
-    <div class="modal fade" id="modalCliente" tabindex="-1" aria-labelledby="modalClienteLabel" aria-hidden="true">
+    <!-- Modal para Nuevo Proveedor -->
+    <div class="modal fade" id="modalProveedor" tabindex="-1" aria-labelledby="modalProveedorLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalClienteLabel">Nuevo Cliente</h1>
+                    <h1 class="modal-title fs-5" id="modalProveedorLabel">Nuevo Proveedor</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('clientes.store') }}" method="POST">
+                <form action="{{ route('proveedores.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <!-- CAMPO PARA NÚMERO DE DOCUMENTO -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="idCliente" class="form-label">Número de Documento *</label>
-                                    <input type="text" class="form-control" id="idCliente" name="idCliente" required 
+                                    <label for="idProveedor" class="form-label">Número de Documento *</label>
+                                    <input type="text" class="form-control" id="idProveedor" name="idProveedor" required 
                                            placeholder="Ej: 123456789">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
-                                    <select class="form-select" id="tipoDocumentoCliente" name="tipoDocumentoCliente" required>
+                                    <label for="tipoDocumentoProveedor" class="form-label">Tipo Documento *</label>
+                                    <select class="form-select" id="tipoDocumentoProveedor" name="tipoDocumentoProveedor" required>
                                         <option value="">Seleccionar...</option>
                                         <option value="Cédula">Cédula</option>
                                         <option value="Pasaporte">Pasaporte</option>
@@ -194,60 +188,54 @@
                         <!-- FIN CAMPO DOCUMENTO -->
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="nombreCliente" class="form-label">Nombre *</label>
-                                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="apellidoCliente" class="form-label">Apellido *</label>
-                                    <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" required>
+                                    <label for="nombreProveedor" class="form-label">Nombre Completo *</label>
+                                    <input type="text" class="form-control" id="nombreProveedor" name="nombreProveedor" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="emailCliente" class="form-label">Email *</label>
-                                    <input type="email" class="form-control" id="emailCliente" name="emailCliente" required>
+                                    <label for="emailProveedor" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="emailProveedor" name="emailProveedor" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="telefonoCliente" class="form-label">Teléfono</label>
-                                    <input type="text" class="form-control" id="telefonoCliente" name="telefonoCliente">
+                                    <label for="telefonoProveedor" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="telefonoProveedor" name="telefonoProveedor">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="direccionCliente" class="form-label">Dirección</label>
-                                    <input type="text" class="form-control" id="direccionCliente" name="direccionCliente">
+                                    <label for="direccionProveedor" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="direccionProveedor" name="direccionProveedor">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+                        <button type="submit" class="btn btn-primary">Guardar Proveedor</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal para Editar Cliente -->
-    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+    <!-- Modal para Editar Proveedor -->
+    <div class="modal fade" id="modalEditarProveedor" tabindex="-1" aria-labelledby="modalEditarProveedorLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalEditarClienteLabel">Editar Cliente</h1>
+                    <h1 class="modal-title fs-5" id="modalEditarProveedorLabel">Editar Proveedor</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formEditarCliente" method="POST">
+                <form id="formEditarProveedor" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -255,14 +243,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="edit_idCliente" class="form-label">Número de Documento *</label>
-                                    <input type="text" class="form-control" id="edit_idCliente" name="idCliente" readonly>
+                                    <label for="edit_idProveedor" class="form-label">Número de Documento *</label>
+                                    <input type="text" class="form-control" id="edit_idProveedor" name="idProveedor" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="edit_tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
-                                    <select class="form-select" id="edit_tipoDocumentoCliente" name="tipoDocumentoCliente" required>
+                                    <label for="edit_tipoDocumentoProveedor" class="form-label">Tipo Documento *</label>
+                                    <select class="form-select" id="edit_tipoDocumentoProveedor" name="tipoDocumentoProveedor" required>
                                         <option value="Cédula">Cédula</option>
                                         <option value="Pasaporte">Pasaporte</option>
                                         <option value="RUC">RUC</option>
@@ -274,52 +262,46 @@
                         <!-- FIN CAMPO DOCUMENTO -->
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="edit_nombreCliente" class="form-label">Nombre *</label>
-                                    <input type="text" class="form-control" id="edit_nombreCliente" name="nombreCliente" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="edit_apellidoCliente" class="form-label">Apellido *</label>
-                                    <input type="text" class="form-control" id="edit_apellidoCliente" name="apellidoCliente" required>
+                                    <label for="edit_nombreProveedor" class="form-label">Nombre Completo *</label>
+                                    <input type="text" class="form-control" id="edit_nombreProveedor" name="nombreProveedor" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="edit_emailCliente" class="form-label">Email *</label>
-                                    <input type="email" class="form-control" id="edit_emailCliente" name="emailCliente" required>
+                                    <label for="edit_emailProveedor" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="edit_emailProveedor" name="emailProveedor" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="edit_telefonoCliente" class="form-label">Teléfono</label>
-                                    <input type="text" class="form-control" id="edit_telefonoCliente" name="telefonoCliente">
+                                    <label for="edit_telefonoProveedor" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="edit_telefonoProveedor" name="telefonoProveedor">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="edit_direccionCliente" class="form-label">Dirección</label>
-                                    <input type="text" class="form-control" id="edit_direccionCliente" name="direccionCliente">
+                                    <label for="edit_direccionProveedor" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="edit_direccionProveedor" name="direccionProveedor">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Actualizar Cliente</button>
+                        <button type="submit" class="btn btn-primary">Actualizar Proveedor</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
         // Auto cerrar alertas después de 5 segundos
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -331,41 +313,38 @@
             }, 5000);
 
             // Configurar modal de edición
-            const modalEditar = document.getElementById('modalEditarCliente');
+            const modalEditar = document.getElementById('modalEditarProveedor');
             if (modalEditar) {
                 modalEditar.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
                     const id = button.getAttribute('data-id');
                     const tipoDoc = button.getAttribute('data-tipodoc');
                     const nombre = button.getAttribute('data-nombre');
-                    const apellido = button.getAttribute('data-apellido');
                     const email = button.getAttribute('data-email');
                     const telefono = button.getAttribute('data-telefono');
                     const direccion = button.getAttribute('data-direccion');
 
                     // Actualizar el formulario
-                    document.getElementById('formEditarCliente').action = `/clientes/${id}`;
-                    document.getElementById('edit_idCliente').value = id; // ← AGREGAR ESTA LÍNEA
-                    document.getElementById('edit_tipoDocumentoCliente').value = tipoDoc;
-                    document.getElementById('edit_nombreCliente').value = nombre;
-                    document.getElementById('edit_apellidoCliente').value = apellido;
-                    document.getElementById('edit_emailCliente').value = email;
-                    document.getElementById('edit_telefonoCliente').value = telefono || '';
-                    document.getElementById('edit_direccionCliente').value = direccion || '';
+                    document.getElementById('formEditarProveedor').action = `/proveedores/${id}`;
+                    document.getElementById('edit_idProveedor').value = id; 
+                    document.getElementById('edit_tipoDocumentoProveedor').value = tipoDoc;
+                    document.getElementById('edit_nombreProveedor').value = nombre;
+                    document.getElementById('edit_emailProveedor').value = email;
+                    document.getElementById('edit_telefonoProveedor').value = telefono || '';
+                    document.getElementById('edit_direccionProveedor').value = direccion || '';
                 });
             }
 
-            // Limpiar formulario de nuevo cliente cuando se cierra el modal
-            const modalNuevo = document.getElementById('modalCliente');
+            // Limpiar formulario de nuevo proveedor cuando se cierra el modal - CORREGIDO
+            const modalNuevo = document.getElementById('modalProveedor');
             if (modalNuevo) {
                 modalNuevo.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('idCliente').value = '';
-                    document.getElementById('tipoDocumentoCliente').value = '';
-                    document.getElementById('nombreCliente').value = '';
-                    document.getElementById('apellidoCliente').value = '';
-                    document.getElementById('emailCliente').value = '';
-                    document.getElementById('telefonoCliente').value = '';
-                    document.getElementById('direccionCliente').value = '';
+                    document.getElementById('idProveedor').value = '';
+                    document.getElementById('tipoDocumentoProveedor').value = '';
+                    document.getElementById('nombreProveedor').value = '';
+                    document.getElementById('emailProveedor').value = '';
+                    document.getElementById('telefonoProveedor').value = '';
+                    document.getElementById('direccionProveedor').value = '';
                 });
             }
         });
