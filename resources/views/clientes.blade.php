@@ -90,7 +90,12 @@
                                             data-email="{{ $item->emailCliente }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
-                                    
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalDeleteCliente"
+                                            data-id="{{ $item->idCliente }}">
+                                        <i class="fa-solid fa-trash-can"></i> Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
