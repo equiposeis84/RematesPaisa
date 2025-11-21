@@ -88,28 +88,21 @@
                                 </td>
                                 <td>{{ $item->repartidorPedido ?? 'N/A' }}</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-success btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalEditarPedido"
-                                                data-id="{{ $item->idPedidos }}"
-                                                data-fecha="{{ $item->fechaPedido }}"
-                                                data-hora="{{ $item->horaPedido }}"
-                                                data-cliente="{{ $item->idCliente }}"
-                                                data-valor="{{ $item->valorPedido }}"
-                                                data-iva="{{ $item->ivaPedido }}"
-                                                data-total="{{ $item->totalPedido }}"
-                                                data-estado="{{ $item->estadoPedido }}"
-                                                data-repartidor="{{ $item->repartidorPedido }}">
-                                            <i class="fa-solid fa-pen-to-square"></i> Editar
-                                        </button>
-                                        
-                                        <!-- Nuevo botón para agregar productos -->
-                                        <button type="button" class="btn btn-info btn-sm" 
-                                                onclick="agregarProductos({{ $item->idPedidos }})">
-                                            <i class="fa-solid fa-cart-plus"></i> Productos
-                                        </button>
-                                    </div>
+                                    <button type="button" class="btn btn-success btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEditarPedido"
+                                            data-id="{{ $item->idPedidos }}"
+                                            data-fecha="{{ $item->fechaPedido }}"
+                                            data-hora="{{ $item->horaPedido }}"
+                                            data-cliente="{{ $item->idCliente }}"
+                                            data-valor="{{ $item->valorPedido }}"
+                                            data-iva="{{ $item->ivaPedido }}"
+                                            data-total="{{ $item->totalPedido }}"
+                                            data-estado="{{ $item->estadoPedido }}"
+                                            data-repartidor="{{ $item->repartidorPedido }}">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -257,6 +250,29 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Guardar Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+     <!-- Modal para Eliminar el pedido  -->
+    <div class="modal fade" id="modalEliminarPedido" tabindex="-1" aria-labelledby="modalEliminarPedidoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarPedidoLabel">Eliminar Pedido</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarPedido" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este pedido?</p>
+                        <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar Pedido</button>
                     </div>
                 </form>
             </div>
@@ -413,16 +429,5 @@
                 });
             }
         });
-
-        // Función para redirigir a la gestión de productos del pedido
-        function agregarProductos(idPedido) {
-            // Aquí puedes redirigir a la ruta que manejará los productos del pedido
-            // Por ejemplo:
-            window.location.href = `/pedidos/${idPedido}/productos`;
-            
-            // O si prefieres abrir un modal para agregar productos:
-            // alert('Función para agregar productos al pedido: ' + idPedido);
-            // Puedes implementar aquí la lógica para abrir un modal o redirigir
-        }
     </script>
 @endsection
