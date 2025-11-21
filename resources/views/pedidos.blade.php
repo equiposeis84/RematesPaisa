@@ -102,6 +102,12 @@
                                             data-repartidor="{{ $item->repartidorPedido }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarPedido"
+                                            data-id="{{ $item->idPedidos }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
                                     
                                 </td>
                             </tr>
@@ -429,5 +435,16 @@
                 });
             }
         });
+            // Modal para eliminar pedido
+                    const modalEliminar = document.getElementById('modalEliminarPedido');
+            if (modalEliminar) {
+                modalEliminar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    
+                    // Actualizar el formulario de eliminación
+                    document.getElementById('formEliminarPedido').action = `/pedidos/${id}`;
+                });
+            }
     </script>
 @endsection
