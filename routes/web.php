@@ -5,6 +5,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductosController; 
 use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\ProductosPedidoController;
 
 
 // Ruta PRINCIPAL 
@@ -40,3 +41,10 @@ Route::post('/proveedores', [ProveedorController::class,"store"])->name('proveed
 Route::get('/proveedores/{idProveedor}', [ProveedorController::class,"edit"])->name('proveedores.edit');
 Route::put('/proveedores/{idProveedor}', [ProveedorController::class,"update"])->name('proveedores.update');
 Route::delete('/proveedores/{idProveedor}', [ProveedorController::class,"destroy"])->name('proveedores.destroy');
+// -----------------------------------------------------------------------------
+Route::get('/pedidos/{idPedidos}/productos', [ProductosPedidoController::class,"index"])->name('pedidos.productos.index');
+Route::post('/pedidos/{idPedidos}/productos', [ProductosPedidoController::class,"store"])->name('pedidos.productos.store');
+Route::delete('/pedidos/{idPedidos}/productos/{idProductoPedido}', [ProductosPedidoController::class,"destroy"])->name('pedidos.productos.destroy');
+// -----------------------------------------------------------------------------
+Route::get('/pedidos/{idPedidos}/productos/{idProductoPedido}', [ProductosPedidoController::class,"edit"])->name('pedidos.productos.edit');
+Route::put('/pedidos/{idPedidos}/productos/{idProductoPedido}', [ProductosPedidoController::class,"update"])->name('pedidos.productos.update');

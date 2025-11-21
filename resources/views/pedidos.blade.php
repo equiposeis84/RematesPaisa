@@ -88,21 +88,28 @@
                                 </td>
                                 <td>{{ $item->repartidorPedido ?? 'N/A' }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-sm" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalEditarPedido"
-                                            data-id="{{ $item->idPedidos }}"
-                                            data-fecha="{{ $item->fechaPedido }}"
-                                            data-hora="{{ $item->horaPedido }}"
-                                            data-cliente="{{ $item->idCliente }}"
-                                            data-valor="{{ $item->valorPedido }}"
-                                            data-iva="{{ $item->ivaPedido }}"
-                                            data-total="{{ $item->totalPedido }}"
-                                            data-estado="{{ $item->estadoPedido }}"
-                                            data-repartidor="{{ $item->repartidorPedido }}">
-                                        <i class="fa-solid fa-pen-to-square"></i> Editar
-                                    </button>
-                                    
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-success btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalEditarPedido"
+                                                data-id="{{ $item->idPedidos }}"
+                                                data-fecha="{{ $item->fechaPedido }}"
+                                                data-hora="{{ $item->horaPedido }}"
+                                                data-cliente="{{ $item->idCliente }}"
+                                                data-valor="{{ $item->valorPedido }}"
+                                                data-iva="{{ $item->ivaPedido }}"
+                                                data-total="{{ $item->totalPedido }}"
+                                                data-estado="{{ $item->estadoPedido }}"
+                                                data-repartidor="{{ $item->repartidorPedido }}">
+                                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                                        </button>
+                                        
+                                        <!-- Nuevo botón para agregar productos -->
+                                        <button type="button" class="btn btn-info btn-sm" 
+                                                onclick="agregarProductos({{ $item->idPedidos }})">
+                                            <i class="fa-solid fa-cart-plus"></i> Productos
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -406,5 +413,16 @@
                 });
             }
         });
+
+        // Función para redirigir a la gestión de productos del pedido
+        function agregarProductos(idPedido) {
+            // Aquí puedes redirigir a la ruta que manejará los productos del pedido
+            // Por ejemplo:
+            window.location.href = `/pedidos/${idPedido}/productos`;
+            
+            // O si prefieres abrir un modal para agregar productos:
+            // alert('Función para agregar productos al pedido: ' + idPedido);
+            // Puedes implementar aquí la lógica para abrir un modal o redirigir
+        }
     </script>
 @endsection
