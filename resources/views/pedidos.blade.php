@@ -102,6 +102,12 @@
                                             data-repartidor="{{ $item->repartidorPedido }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
+                                     <button type="button" class="btn btn-danger btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarPedido"
+                                            data-id="{{ $item->idPedidos }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
                                     
                                 </td>
                             </tr>
@@ -250,6 +256,29 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Guardar Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+     <!-- Modal para Eliminar el pedido  -->
+    <div class="modal fade" id="modalEliminarPedido" tabindex="-1" aria-labelledby="modalEliminarPedidoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarPedidoLabel">Eliminar Pedido</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarPedido" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este pedido?</p>
+                        <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar Pedido</button>
                     </div>
                 </form>
             </div>
@@ -406,5 +435,16 @@
                 });
             }
         });
+                        // Configurar modal de eliminación
+                const modalEliminar = document.getElementById('modalEliminarPedido');
+                if (modalEliminar) {
+                    modalEliminar.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const id = button.getAttribute('data-id');
+                        
+                        // Actualizar el formulario de eliminación
+                        document.getElementById('formEliminarPedido').action = `/pedidos/${id}`;
+                    });
+                }
     </script>
 @endsection
