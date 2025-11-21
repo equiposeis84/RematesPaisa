@@ -87,6 +87,12 @@
                                             data-precio="{{ $item->precioUnitario }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarProducto"
+                                            data-id="{{ $item->idProductos }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
                                     
                                 </td>
                             </tr>
@@ -307,57 +313,87 @@
             </div>
         </div>
     </div>
+    <!-- Modal para Eliminar Producto -->
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarProductoLabel">Eliminar Producto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarProducto" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este producto?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto cerrar alertas después de 5 segundos
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.alert');
-                alerts.forEach(function(alert) {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                });
-            }, 5000);
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
 
-            // Configurar modal de edición
-            const modalEditar = document.getElementById('modalEditarProducto');
-            if (modalEditar) {
-                modalEditar.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const id = button.getAttribute('data-id');
-                    const nombre = button.getAttribute('data-nombre');
-                    const entrada = button.getAttribute('data-entrada');
-                    const salida = button.getAttribute('data-salida');
-                    const categoria = button.getAttribute('data-categoria');
-                    const proveedor = button.getAttribute('data-proveedor');
-                    const precio = button.getAttribute('data-precio');
+        // Configurar modal de edición
+        const modalEditar = document.getElementById('modalEditarProducto');
+        if (modalEditar) {
+            modalEditar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const entrada = button.getAttribute('data-entrada');
+                const salida = button.getAttribute('data-salida');
+                const categoria = button.getAttribute('data-categoria');
+                const proveedor = button.getAttribute('data-proveedor');
+                const precio = button.getAttribute('data-precio');
 
-                    // Actualizar el formulario
-                    document.getElementById('formEditarProducto').action = `/productos/${id}`;
-                    document.getElementById('edit_idProductos').value = id;
-                    document.getElementById('edit_nombreProducto').value = nombre;
-                    document.getElementById('edit_entradaProducto').value = entrada;
-                    document.getElementById('edit_salidaProducto').value = salida;
-                    document.getElementById('edit_categoriaProducto').value = categoria;
-                    document.getElementById('edit_idProveedores').value = proveedor;
-                    document.getElementById('edit_precioUnitario').value = precio;
-                });
-            }
+                document.getElementById('formEditarProducto').action = `/productos/${id}`;
+                document.getElementById('edit_idProductos').value = id;
+                document.getElementById('edit_nombreProducto').value = nombre;
+                document.getElementById('edit_entradaProducto').value = entrada;
+                document.getElementById('edit_salidaProducto').value = salida;
+                document.getElementById('edit_categoriaProducto').value = categoria;
+                document.getElementById('edit_idProveedores').value = proveedor;
+                document.getElementById('edit_precioUnitario').value = precio;
+            });
+        }
 
-            // Limpiar formulario de nuevo producto cuando se cierra el modal
-            const modalNuevo = document.getElementById('modalProducto');
-            if (modalNuevo) {
-                modalNuevo.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('idProductos').value = '';
-                    document.getElementById('categoriaProducto').value = '';
-                    document.getElementById('nombreProducto').value = '';
-                    document.getElementById('entradaProducto').value = '';
-                    document.getElementById('salidaProducto').value = '';
-                    document.getElementById('idProveedores').value = '';
-                    document.getElementById('precioUnitario').value = '';
-                });
-            }
-        });
-    </script>
+        // Limpiar formulario de nuevo producto cuando se cierra el modal
+        const modalNuevo = document.getElementById('modalProducto');
+        if (modalNuevo) {
+            modalNuevo.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('idProductos').value = '';
+                document.getElementById('categoriaProducto').value = '';
+                document.getElementById('nombreProducto').value = '';
+                document.getElementById('entradaProducto').value = '';
+                document.getElementById('salidaProducto').value = '';
+                document.getElementById('idProveedores').value = '';
+                document.getElementById('precioUnitario').value = '';
+            });
+        }
+
+        // Configurar modal de eliminación
+        const modalEliminar = document.getElementById('modalEliminarProducto');
+        if (modalEliminar) {
+            modalEliminar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('formEliminarProducto').action = `/productos/${id}`;
+            });
+        }
+    }); 
+</script>
 @endsection

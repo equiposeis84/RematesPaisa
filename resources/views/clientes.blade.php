@@ -96,6 +96,7 @@
                                             data-id="{{ $item->idCliente }}">
                                         <i class="fa-solid fa-trash-can"></i> Eliminar
                                     </button>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -240,6 +241,30 @@
             </div>
         </div>
     </div>
+    <!-- Modal para Eliminar Cliente -->
+                <div class="modal fade" id="modalDeleteCliente" tabindex="-1" aria-labelledby="modalDeleteClienteLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="formEliminarCliente" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <div class="modal-body">
+                                    <p>¿Está seguro de que desea eliminar este cliente?</p>
+                                    <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                      
 
     <!-- Modal para Editar Cliente -->
     <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
@@ -253,7 +278,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <!-- CAMPOS PRINCIPALES -->
+      <!-- CAMPOS PRINCIPALES -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -330,58 +355,68 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Auto cerrar alertas después de 5 segundos
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.alert');
-                alerts.forEach(function(alert) {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                });
-            }, 5000);
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
 
-            // Configurar modal de edición
-            const modalEditar = document.getElementById('modalEditarCliente');
-            if (modalEditar) {
-                modalEditar.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const id = button.getAttribute('data-id');
-                    const empresa = button.getAttribute('data-empresa');
-                    const tipoDoc = button.getAttribute('data-tipodoc');
-                    const nombre = button.getAttribute('data-nombre');
-                    const apellido = button.getAttribute('data-apellido');
-                    const direccion = button.getAttribute('data-direccion');
-                    const telefono = button.getAttribute('data-telefono');
-                    const email = button.getAttribute('data-email');
+        // Configurar modal de edición
+        const modalEditar = document.getElementById('modalEditarCliente');
+        if (modalEditar) {
+            modalEditar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const empresa = button.getAttribute('data-empresa');
+                const tipoDoc = button.getAttribute('data-tipodoc');
+                const nombre = button.getAttribute('data-nombre');
+                const apellido = button.getAttribute('data-apellido');
+                const direccion = button.getAttribute('data-direccion');
+                const telefono = button.getAttribute('data-telefono');
+                const email = button.getAttribute('data-email');
 
-                    // Actualizar el formulario
-                    document.getElementById('formEditarCliente').action = `/clientes/${id}`;
-                    document.getElementById('edit_idCliente').value = id;
-                    document.getElementById('edit_NombreEmpresa').value = empresa;
-                    document.getElementById('edit_tipoDocumentoCliente').value = tipoDoc;
-                    document.getElementById('edit_nombreCliente').value = nombre;
-                    document.getElementById('edit_apellidoCliente').value = apellido;
-                    document.getElementById('edit_direccionCliente').value = direccion;
-                    document.getElementById('edit_telefonoCliente').value = telefono;
-                    document.getElementById('edit_emailCliente').value = email;
-                });
-            }
+                document.getElementById('formEditarCliente').action = `/clientes/${id}`;
+                document.getElementById('edit_idCliente').value = id;
+                document.getElementById('edit_NombreEmpresa').value = empresa;
+                document.getElementById('edit_tipoDocumentoCliente').value = tipoDoc;
+                document.getElementById('edit_nombreCliente').value = nombre;
+                document.getElementById('edit_apellidoCliente').value = apellido;
+                document.getElementById('edit_direccionCliente').value = direccion;
+                document.getElementById('edit_telefonoCliente').value = telefono;
+                document.getElementById('edit_emailCliente').value = email;
+            });
+        }
 
-            // Limpiar formulario de nuevo cliente cuando se cierra el modal
-            const modalNuevo = document.getElementById('modalCliente');
-            if (modalNuevo) {
-                modalNuevo.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('NombreEmpresa').value = '';
-                    document.getElementById('idCliente').value = '';
-                    document.getElementById('tipoDocumentoCliente').value = '';
-                    document.getElementById('nombreCliente').value = '';
-                    document.getElementById('apellidoCliente').value = '';
-                    document.getElementById('direccionCliente').value = '';
-                    document.getElementById('telefonoCliente').value = '';
-                    document.getElementById('emailCliente').value = '';
-                });
-            }
-        });
-    </script>
+        // Limpiar formulario de nuevo cliente cuando se cierra el modal
+        const modalNuevo = document.getElementById('modalCliente');
+        if (modalNuevo) {
+            modalNuevo.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('NombreEmpresa').value = '';
+                document.getElementById('idCliente').value = '';
+                document.getElementById('tipoDocumentoCliente').value = '';
+                document.getElementById('nombreCliente').value = '';
+                document.getElementById('apellidoCliente').value = '';
+                document.getElementById('direccionCliente').value = '';
+                document.getElementById('telefonoCliente').value = '';
+                document.getElementById('emailCliente').value = '';
+            });
+        }
+
+        // Configurar modal de eliminación
+        const modalDelete = document.getElementById('modalDeleteCliente');
+        if (modalDelete) {
+            modalDelete.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                
+                // Actualizar el formulario de eliminación
+                document.getElementById('formEliminarCliente').action = `/clientes/${id}`;
+            });
+        }
+    }); 
+</script>
 @endsection

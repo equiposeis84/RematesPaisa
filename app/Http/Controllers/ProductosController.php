@@ -15,7 +15,6 @@ class ProductosController extends Controller
         
         if ($search) {
             $query->where(function($q) use ($search) {
-                
                 $q->where('nombreProducto', 'LIKE', "%{$search}%")
                 ->orWhere('idProductos', 'LIKE', "%{$search}%")
                   ->orWhere('categoriaProducto', 'LIKE', "%{$search}%")
@@ -41,18 +40,18 @@ class ProductosController extends Controller
              'idProductos.unique' => 'El ID del producto ya existe en la base de datos.',
         ]);
 
-        Productos::create($request->all()); // Cambiado a Producto
+        Productos::create($request->all());
         return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente');
     }
 
     public function edit($idProductos)
     {
-        $productos = Productos::findOrFail($idProductos); // Cambiado a Producto
+        $producto = Productos::findOrFail($idProductos);
         return view('productos.edit', compact('producto'));
     }
 
     public function update(Request $request, $idProductos){
-        $productos = Productos::findOrFail($idProductos); // Cambiado a Producto
+        $producto = Productos::findOrFail($idProductos);
         
         $request->validate([
             'nombreProducto' => 'required|string|max:45',
@@ -61,11 +60,9 @@ class ProductosController extends Controller
             'categoriaProducto' => 'required|string|max:45',
             'idProveedores' => 'required|integer',
             'precioUnitario' => 'required|numeric|min:0'
-        ],[
-            'idProductos.unique' => 'El ID del producto ya existe en la base de datos.',
         ]);
         
-        $productos->update([
+        $producto->update([
             'nombreProducto' => $request->nombreProducto,
             'entradaProducto' => $request->entradaProducto,
             'salidaProducto' => $request->salidaProducto,
@@ -79,7 +76,7 @@ class ProductosController extends Controller
 
     public function destroy($idProductos){
         try{
-            $producto = Producto::findOrFail($idProductos); // Cambiado a Producto
+            $producto = Productos::findOrFail($idProductos); 
             $producto->delete();
             return redirect()->route('productos.index')->with('success', 'Producto eliminado exitosamente');
             

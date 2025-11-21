@@ -6,16 +6,13 @@ use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProveedorController;
 
-
 // Ruta PRINCIPAL 
 Route::get('/', function () {
     return view('welcome'); 
 });
-// rutas principales
-Route::resource('clientes', ClienteController::class);
-Route::resource('proveedores', ProveedorController::class);
-Route::resource('productos', ProductosController::class);
-Route::resource('pedidos', PedidosController::class);
+
+
+
 // -----------------------------------------------------------------------------
 Route::get('/clientes', [ClienteController::class,"index"])->name('clientes.index');
 Route::post('/clientes', [ClienteController::class,"store"])->name('clientes.store');
@@ -23,11 +20,11 @@ Route::get('/clientes/{idCliente}', [ClienteController::class,"edit"])->name('cl
 Route::put('/clientes/{idCliente}', [ClienteController::class,"update"])->name('clientes.update');
 Route::delete('/clientes/{idCliente}', [ClienteController::class,"destroy"])->name('clientes.destroy');
 // -----------------------------------------------------------------------------
-Route::get ('/productos', [ProductosController::class,"index"])->name('productos.index');
+Route::get('/productos', [ProductosController::class,"index"])->name('productos.index');
 Route::post('/productos', [ProductosController::class,"store"])->name('productos.store');
 Route::get('/productos/{idProducto}', [ProductosController::class,"edit"])->name('productos.edit');
 Route::put('/productos/{idProducto}', [ProductosController::class,"update"])->name('productos.update');
-Route::delete('/productos/{idProducto}', [ProductosController::class,"destroy"])->name('productos.destroy');
+Route::delete('/productos/{idProducto}', [ProductosController::class, 'destroy'])->name('productos.destroy');
 // -----------------------------------------------------------------------------
 Route::get('/pedidos', [PedidosController::class,"index"])->name('pedidos.index');
 Route::post('/pedidos', [PedidosController::class,"store"])->name('pedidos.store');
@@ -40,4 +37,3 @@ Route::post('/proveedores', [ProveedorController::class,"store"])->name('proveed
 Route::get('/proveedores/{idProveedor}', [ProveedorController::class,"edit"])->name('proveedores.edit');
 Route::put('/proveedores/{idProveedor}', [ProveedorController::class,"update"])->name('proveedores.update');
 Route::delete('/proveedores/{idProveedor}', [ProveedorController::class,"destroy"])->name('proveedores.destroy');
-// -----------------------------------------------------------------------------
