@@ -78,6 +78,13 @@
                                             data-correo="{{ $item->correoProveedor }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
+                                 <button type="button" class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarProveedor"
+                                            data-id="{{ $item->NITProveedores }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+
                                     
                                 </td>
                             </tr>
@@ -243,6 +250,28 @@
             </div>
         </div>
     </div>
+    <!-- Modal para Eliminar Proveedor -->
+    <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-labelledby="modalEliminarProveedorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarProveedorLabel">Eliminar Proveedor</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarProveedor" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este proveedor?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -285,6 +314,13 @@
                     document.getElementById('correoProveedor').value = '';
                 });
             }
+            // Configurar modal de eliminación
+            const modalEliminar = document.getElementById('modalEliminarProveedor');
+            modalEliminar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('formEliminarProveedor').action = `/proveedores/${id}`;
+            });
         });
     </script>
 @endsection

@@ -23,7 +23,7 @@ class Productos extends Model
         'entradaProducto',
         'salidaProducto',
         'categoriaProducto',
-        'idProveedores',
+        'NITProveedores',
         'precioUnitario'
     ];
 

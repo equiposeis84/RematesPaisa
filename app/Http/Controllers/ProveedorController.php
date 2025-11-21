@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use App\Models\Productos;
 
 class ProveedorController extends Controller
 {
@@ -65,22 +66,29 @@ class ProveedorController extends Controller
         return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado exitosamente');
     }
 
-    public function destroy($NITProveedores){
-        try{
+    public function destroy($NITProveedores)
+    {
+        try {
+            // Buscar el proveedor
             $proveedor = Proveedor::findOrFail($NITProveedores);
             
-            // Verificar si el proveedor tiene productos asociados
-            $tieneProductos = \DB::table('productos')->where('idProveedores', $NITProveedores)->exists();
+            // Verificar si hay productos asociados - CORREGIDO
+            $productosAsociados = Productos::where('NITProveedores', $proveedor->NITProveedores)->exists();
             
-            if ($tieneProductos) {
-                return redirect()->route('proveedores.index')->with('error', 'No se puede eliminar el proveedor porque tiene productos asociados');
+            if ($productosAsociados) {
+                return redirect()->route('proveedores.index')
+                    ->with('error', 'No se puede eliminar el proveedor porque tiene productos asociados. Elimine primero los productos.');
             }
             
+            // Si no hay productos asociados, eliminar el proveedor
             $proveedor->delete();
-            return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado exitosamente');
             
-        }catch(\Exception $e){
-            return redirect()->route('proveedores.index')->with('error', 'Error al eliminar el proveedor: ' . $e->getMessage());
+            return redirect()->route('proveedores.index')
+                ->with('success', 'Proveedor eliminado correctamente');
+                
+        } catch (\Exception $e) {
+            return redirect()->route('proveedores.index')
+                ->with('error', 'Error al eliminar el proveedor: ' . $e->getMessage());
         }
     }
 }
