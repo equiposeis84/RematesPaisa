@@ -41,13 +41,14 @@ body{
   display:block;flex-direction:column;justify-content:space-between;padding:18px 12px;
   box-shadow:2px 0 12px rgba(2,6,23,0.45);
 }
+
 .este{
   display: block;
   justify-content: center;
   align-items: center;
   height: 0%;
-}
 
+}
 /*altura de contenido sidebar*/
 .space {
   display: block;
@@ -64,9 +65,10 @@ body{
 
 /* Main content: offset from sidebar and padded (applies to pages using .main-content) */
 .main-content{
-  margin-left:80px;
-  padding:1px;        
+  margin-left:var(--sidebar-width);
+  padding:40px;
   box-sizing:border-box;
+  min-height:100vh;
 }
 
 /* Helper para iconos dentro del nav */
@@ -102,11 +104,21 @@ body{
 /* ...existing code... */
 
 #app-content {
-  margin-left:150px;
+  margin-left:var(--sidebar-width);
   /* Reduced overall padding so content doesn't feel too far or too cramped */
-  padding: 30px 40px 60px 40px;
+  padding: 40px 40px 60px 40px;
+  min-height:100vh;
+  box-sizing: border-box;
+}
+
+.content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px}
+.content-header h1,.content-header h2{font-size:1.6rem;color:var(--color-text)}
+.welcome-badge{background:linear-gradient(90deg,#10b981,#34d399);color:#fff;padding:8px 14px;border-radius:999px;font-weight:700}
 
 /* Cards */
+.content-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-bottom:22px}
+.card{background:var(--color-light);padding:18px;border-radius:12px;box-shadow:var(--card-shadow);display:flex;gap:18px;align-items:center}
+.card-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(59,130,246,0.08);color:var(--color-primary);font-size:20px}
 
 /* Make the card content stack vertically and ensure CTA button is wider and centered */
 .card > div{display:flex;flex-direction:column;gap:8px}
@@ -123,7 +135,16 @@ body{
 /* Tablas */
 /* Table layout: centered container, wider cells, comfortable padding */
 /* Table container expands relative to content area (keeps distance from sidebar) */
-
+.table-container{
+  background:var(--color-light);
+  border-radius:12px;
+  overflow:auto;
+  box-shadow:var(--card-shadow);
+  margin:0 24px 18px 24px; /* keep left/right gutters equal */
+  padding:18px;
+  width: calc(100% - 48px); /* full width inside content area minus gutters */
+  max-width: none;
+}
 table{
   width:100%;
   border-collapse:collapse;
@@ -133,11 +154,12 @@ table{
 th,td{
   padding:16px 26px; /* more generous horizontal padding */
   text-align:left;
+  border-bottom:1px solid var(--color-border);
 }
 th{background:var(--color-primary);color:var(--color-light);font-weight:700}
 tr:hover td{background:#f8fafc}
 
-}
+
 /* Specific layout for orders table: make columns proportional for readability */
 .orders-table th:nth-child(1), .orders-table td:nth-child(1){width:8%}
 .orders-table th:nth-child(2), .orders-table td:nth-child(2){width:36%}
@@ -174,7 +196,7 @@ tr:hover td{background:#f8fafc}
 .badge-danger{background:#fee2e2;color:#b91c1c}
 
 /* Responsive */
-@media(max-width:600px){
+@media(max-width:1200px){
   .table-container{width:calc(100% - 48px);min-width:720px}
   .sidebar{width:240px;min-width:240px}
   .main-content{margin-left:240px}
