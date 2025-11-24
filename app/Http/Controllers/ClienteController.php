@@ -18,6 +18,8 @@ class ClienteController extends Controller
                 $q->where('nombreCliente', 'LIKE', "%{$search}%")
                     ->orWhere('apellidoCliente', 'LIKE', "%{$search}%")
                     ->orWhere('emailCliente', 'LIKE', "%{$search}%")
+                    ->orWhere('idCliente', 'LIKE', "%{$search}%")
+-                   ->orWhere('NombreEmpresa', 'LIKE', "%{$search}%")
                     ->orWhere('tipoDocumentoCliente', 'LIKE', "%{$search}%");
             });
         }
@@ -30,6 +32,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'NombreEmpresa' => 'required|string|max:100',
             'idCliente'           => 'required|unique:cliente,idCliente',
             'nombreUsuario'   => 'required|string|max:40|unique:usuarios,nombreUsuario',
             'tipoDocumentoCliente'=> 'required|string|max:20',
