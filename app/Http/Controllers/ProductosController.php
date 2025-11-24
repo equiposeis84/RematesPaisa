@@ -34,7 +34,7 @@ class ProductosController extends Controller
             'entradaProducto' => 'required|integer',
             'salidaProducto' => 'required|integer',
             'categoriaProducto' => 'required|string|max:45',
-            'idProveedores' => 'required|integer',
+            'NITProveedores' => 'required|integer',
             'precioUnitario' => 'required|numeric|min:0'
         ],[
              'idProductos.unique' => 'El ID del producto ya existe en la base de datos.',

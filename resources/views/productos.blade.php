@@ -59,7 +59,7 @@
                             <th>Entrada</th>
                             <th>Salida</th>
                             <th>Categoría</th>
-                            <th>ID Proveedor</th>
+                            <th>NIT Proveedor</th>
                             <th>Precio Unitario</th>
                             <th>Acciones</th>
                         </tr>
@@ -72,7 +72,7 @@
                                 <td>{{ $item->entradaProducto }}</td>
                                 <td>{{ $item->salidaProducto }}</td>  
                                 <td>{{ $item->categoriaProducto }}</td>
-                                <td>{{ $item->idProveedores }}</td>
+                                <td>{{ $item->NITProveedores }}</td>
                                 <td>${{ number_format($item->precioUnitario, 2) }}</td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
@@ -83,7 +83,7 @@
                                             data-entrada="{{ $item->entradaProducto }}"
                                             data-salida="{{ $item->salidaProducto }}"
                                             data-categoria="{{ $item->categoriaProducto }}"
-                                            data-proveedor="{{ $item->idProveedores }}"
+                                            data-proveedor="{{ $item->NITProveedores }}"
                                             data-precio="{{ $item->precioUnitario }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
@@ -210,8 +210,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="idProveedores" class="form-label">ID Proveedor *</label>
-                                    <input type="number" class="form-control" id="idProveedores" name="idProveedores" required min="1">
+                                    <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" required min="1">
                                 </div>
                             </div>
                         </div>
@@ -291,8 +291,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="edit_idProveedores" class="form-label">ID Proveedor *</label>
-                                    <input type="number" class="form-control" id="edit_idProveedores" name="idProveedores" required min="1">
+                                    <label for="edit_NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="number" class="form-control" id="edit_NITProveedores" name="NITProveedores" required min="1">
                                 </div>
                             </div>
                         </div>
@@ -366,7 +366,7 @@
                 document.getElementById('edit_entradaProducto').value = entrada;
                 document.getElementById('edit_salidaProducto').value = salida;
                 document.getElementById('edit_categoriaProducto').value = categoria;
-                document.getElementById('edit_idProveedores').value = proveedor;
+                document.getElementById('edit_NITProveedores').value = proveedor;
                 document.getElementById('edit_precioUnitario').value = precio;
             });
         }
@@ -380,7 +380,7 @@
                 document.getElementById('nombreProducto').value = '';
                 document.getElementById('entradaProducto').value = '';
                 document.getElementById('salidaProducto').value = '';
-                document.getElementById('idProveedores').value = '';
+                document.getElementById('NITProveedores').value = '';
                 document.getElementById('precioUnitario').value = '';
             });
         }
