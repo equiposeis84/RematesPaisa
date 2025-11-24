@@ -56,7 +56,7 @@
                         <tr>
                             <th>ID Cliente</th>
                             <th>Nombre Empresa</th>
-                            <th>Tipo Documento</th>
+                            <th>Tipo Doc.</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Dirección</th>
