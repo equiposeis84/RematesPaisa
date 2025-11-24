@@ -9,20 +9,18 @@ class Proveedor extends Model
 {
     use HasFactory;
 
-    protected $table = 'proveedores'; 
+    protected $table = 'proveedores';
     
-    protected $primaryKey = 'NITProveedores';
-    
-    public $incrementing = false;
-    
-    protected $keyType = 'integer';
+    protected $primaryKey = 'idProveedores';
     
     protected $fillable = [
-        'NITProveedores',
+        'idProveedores',
+        'tipoDocumentoProveedor',
         'nombreProveedor',
         'telefonoProveedor',
-        'correoProveedor'
+        'correoProveedor',
     ];
 
-    public $timestamps = false;
+    public $incrementing = false;
+    protected $keyType = 'string';
 }
