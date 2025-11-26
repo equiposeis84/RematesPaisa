@@ -262,6 +262,11 @@
                                         <option value="Hogar">Hogar</option>
                                         <option value="Deportes">Deportes</option>
                                         <option value="Juguetes">Juguetes</option>
+                                        <option value="Cocina">Cocina</option>
+                                        <option value="Infantil">Infantil</option>
+                                        <option value="Decoración">Decoración</option>
+                                        <option value="Jardín">Jardín</option>
+                                        <option value="Muebles">Muebles</option>
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </div>
