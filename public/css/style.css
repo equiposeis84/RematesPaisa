@@ -1,0 +1,217 @@
+/* Variables de color y diseño */
+
+:root{
+  --color-bg: #f6f8fa;
+  --color-text: #0f172a;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #475569;
+  --color-light: #ffffff;
+  --color-border: #e6eef7;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --sidebar-width: 280px;
+  --border-radius: 12px;
+  --card-shadow: 0 6px 20px rgba(8,24,44,0.06);
+  --transition: 180ms ease;
+}
+
+/* Reset básico */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial;
+  background:var(--color-bg);
+  color:var(--color-text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Layout principal */
+.dashboard-container{display:flex;min-height:100vh;flex-direction:column; width: 100%}
+
+/* Sidebar */
+.sidebar{
+  width:var(--sidebar-width);
+  min-width:var(--sidebar-width);
+  position:fixed;
+  height: 100%;
+  background:#0b1720;color:var(--color-light);
+  display:block;flex-direction:column;justify-content:space-between;padding:18px 12px;
+  box-shadow:2px 0 12px rgba(2,6,23,0.45);
+}
+
+.este{
+  display: block;
+  justify-content: center;
+  align-items: center;
+  height: 0%;
+
+}
+/*altura de contenido sidebar*/
+.space {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  height: 65%;
+}
+
+.logo{padding:14px 10px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:center}
+.logo h1{font-size:1.3rem;line-height:1;color:#f8fafc}
+
+.main-nav ul,.secondary-nav ul{list-style:none}
+.main-nav li{margin:8px 6px}
+
+/* Main content: offset from sidebar and padded (applies to pages using .main-content) */
+.main-content{
+  margin-left:var(--sidebar-width);
+  padding:40px;
+  box-sizing:border-box;
+  min-height:100vh;
+}
+
+/* Helper para iconos dentro del nav */
+.nav-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;padding:0px;margin-right:12px}
+.icon-slot{width:28px;height:28px;display:inline-block}
+.icon-img{width:20px;height:20px;display:block}
+
+.main-nav a{display:flex;align-items:center;padding:8px 12px;border-radius:10px;color:rgba(209,219,230,0.95);text-decoration:none;font-weight:600;transition:background var(--transition),color var(--transition)}
+.main-nav a:hover{background:rgba(255,255,255,0.03);color:#fff}
+.main-nav a.active{background:rgba(59,130,246,0.12);box-shadow:inset 4px 0 0 var(--color-primary);color:#fff}
+
+.user-section{padding:14px 8px;border-top:1px solid rgba(255,255,255,0.03)}
+.user-info{font-size:0.95rem;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px}
+
+/* Secondary nav (Ayuda / Cerrar sesión) styled as compact buttons */
+.secondary-nav{margin-top:10px}
+.secondary-nav ul{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.secondary-nav a{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.03);color:rgba(209,219,230,0.95);text-decoration:none;font-weight:700;width:100%;justify-content:flex-start}
+.secondary-nav a:hover{background:rgba(255,255,255,0.06);color:#fff}
+.secondary-nav a.logout{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px}
+.secondary-nav a.logout:hover{background:rgba(255,0,0,0.08);border-color:rgba(255,0,0,0.12);color:#fff}
+
+/* Submenu */
+.has-submenu{position:relative}
+.submenu-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;background:transparent;border:0;color:rgba(209,219,230,0.95);cursor:pointer;font-weight:700}
+.submenu-toggle .caret{margin-left:auto;transition:transform 200ms ease}
+.submenu{list-style:none;padding-left:6px;margin-top:8px}
+.submenu li a{display:block;padding:8px 12px;border-radius:8px;color:rgba(199,210,230,0.95);text-decoration:none}
+.submenu li a:hover{background:rgba(59,130,246,0.08);color:#fff}
+.has-submenu.open > .submenu-toggle .caret{transform:rotate(180deg);color:var(--color-primary)}
+
+/* Main content area (kept concise; primary definition above is used) */
+/* ...existing code... */
+
+#app-content {
+  margin-left:var(--sidebar-width);
+  /* Reduced overall padding so content doesn't feel too far or too cramped */
+  padding: 40px 40px 60px 40px;
+  min-height:100vh;
+  box-sizing: border-box;
+}
+
+.content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px}
+.content-header h1,.content-header h2{font-size:1.6rem;color:var(--color-text)}
+.welcome-badge{background:linear-gradient(90deg,#10b981,#34d399);color:#fff;padding:8px 14px;border-radius:999px;font-weight:700}
+
+/* Cards */
+.content-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-bottom:22px}
+.card{background:var(--color-light);padding:18px;border-radius:12px;box-shadow:var(--card-shadow);display:flex;gap:18px;align-items:center}
+.card-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(59,130,246,0.08);color:var(--color-primary);font-size:20px}
+
+/* Make the card content stack vertically and ensure CTA button is wider and centered */
+.card > div{display:flex;flex-direction:column;gap:8px}
+.card .btn{min-width:220px;padding:12px 28px;border-radius:10px;align-self:center}
+.card .btn + .btn{margin-left:8px}
+
+/* Botones */
+.btn{display:block;align-items:center;gap:8px;padding:10px 14px 20px 14px;border-radius:8px;background:var(--color-primary);color:var(--color-light);border:0;cursor:pointer;font-weight:600;transition:transform var(--transition), background var(--transition)}
+.btn:hover{background:var(--color-primary-dark);transform:translateY(-2px)}
+.btn-sm{padding:6px 10px;font-size:0.85rem}
+.btn-danger{background:var(--color-danger)}
+.btn-edit{background:#f59e0b;color:#08233a}
+
+/* Tablas */
+/* Table layout: centered container, wider cells, comfortable padding */
+/* Table container expands relative to content area (keeps distance from sidebar) */
+.table-container{
+  background:var(--color-light);
+  border-radius:12px;
+  overflow:auto;
+  box-shadow:var(--card-shadow);
+  margin:0 24px 18px 24px; /* keep left/right gutters equal */
+  padding:18px;
+  width: calc(100% - 48px); /* full width inside content area minus gutters */
+  max-width: none;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout: fixed; /* make columns respect widths and wrap text */
+  min-width:900px; /* increase baseline for wider cells */
+}
+th,td{
+  padding:16px 26px; /* more generous horizontal padding */
+  text-align:left;
+  border-bottom:1px solid var(--color-border);
+}
+th{background:var(--color-primary);color:var(--color-light);font-weight:700}
+tr:hover td{background:#f8fafc}
+
+
+/* Specific layout for orders table: make columns proportional for readability */
+.orders-table th:nth-child(1), .orders-table td:nth-child(1){width:8%}
+.orders-table th:nth-child(2), .orders-table td:nth-child(2){width:36%}
+.orders-table th:nth-child(3), .orders-table td:nth-child(3){width:18%}
+.orders-table th:nth-child(4), .orders-table td:nth-child(4){width:18%}
+.orders-table th:nth-child(5), .orders-table td:nth-child(5){width:20%}
+
+/* Filters */
+.filters{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.search-box{display:flex;max-width:420px;flex:1}
+.search-box input{flex:1;padding:10px;border:1px solid var(--color-border);border-radius:8px 0 0 8px}
+.search-box button{border-radius:0 8px 8px 0}
+
+/* Estilos para botones y selects en el header/filters */
+.filters .btn{padding:10px 14px;border-radius:8px;background:var(--color-primary);color:var(--color-light);border:0;cursor:pointer;font-weight:700}
+.filters .btn:hover{background:var(--color-primary-dark)}
+.filters select{padding:10px 12px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-light);color:var(--color-text)}
+
+/* Product grid */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.product-card{background:var(--color-light);border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow)}
+.product-image{height:160px;background:linear-gradient(45deg,#e8eef8,#f6f9fc);display:flex;align-items:center;justify-content:center}
+.product-info{padding:14px}
+
+/* Pagination */
+.pagination{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.pagination button{padding:8px 12px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-light)}
+.pagination button.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+
+/* Badges */
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:600}
+.badge-success{background:#d1fae5;color:#065f46}
+.badge-warning{background:#fef3c7;color:#92400e}
+.badge-danger{background:#fee2e2;color:#b91c1c}
+
+/* Responsive */
+@media(max-width:1200px){
+  .table-container{width:calc(100% - 48px);min-width:720px}
+  .sidebar{width:240px;min-width:240px}
+  .main-content{margin-left:240px}
+}
+@media(max-width:900px){
+  .dashboard-container{flex-direction:column}
+  .sidebar{position:relative;width:100%;height:auto}
+  .main-content{margin-left:0;padding:18px}
+  .content-cards{grid-template-columns:1fr}
+  .table-container{min-width:0;padding:12px}
+  table{table-layout:auto;min-width:0}
+  th,td{padding:12px}
+}
+
+/* Utility spacing */
+.mt-15{margin-top:15px}
+
+/* End of file */
