@@ -76,6 +76,9 @@
                 <div class="form-group">
                 <label for="NombreEmpresa">Nombre Empresa</label>   
                <input type="text" name="nombreEmpresa" required>
+               <div class="form-group">
+                <label for="NitEmpresa">NIT Empresa</label>   
+               <input type="text" name="nitEmpresa" required>
 
         </div>
         <div class="form-group">

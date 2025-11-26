@@ -16,7 +16,7 @@ class Cliente extends Model
    
 
     protected $fillable = [
-
+        'NitEmpresa',
         'idCliente',
         'NombreEmpresa',
         'tipoDocumentoCliente',
