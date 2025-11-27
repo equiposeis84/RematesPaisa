@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Roles;
+use App\Models\Usuario;
 
 class RolesController extends Controller
 {
@@ -11,13 +12,12 @@ class RolesController extends Controller
     {
         $search = $request->get('search');
         
-        $query = Roles::query();
+        $query = Roles::withCount('usuarios');
         
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('idRol', 'LIKE', "%{$search}%")
-                  ->orWhere('nombreRol', 'LIKE', "%{$search}%")
-                  ->orWhere('descripcionRol', 'LIKE', "%{$search}%");
+                  ->orWhere('nombreRol', 'LIKE', "%{$search}%");
             });
         }
         
@@ -35,8 +35,7 @@ class RolesController extends Controller
     {
         $request->validate([
             'idRol' => 'required|unique:roles,idRol',
-            'nombreRol' => 'required|string|max:45',
-            'descripcionRol' => 'nullable|string|max:255'
+            'nombreRol' => 'required|string|max:45'
         ],[
             'idRol.unique' => 'El ID del rol ya existe en la base de datos.',
         ]);
@@ -56,8 +55,7 @@ class RolesController extends Controller
         $rol = Roles::findOrFail($idRol);
         
         $request->validate([
-            'nombreRol' => 'required|string|max:45',
-            'descripcionRol' => 'nullable|string|max:255'
+            'nombreRol' => 'required|string|max:45'
         ]);
         
         $rol->update($request->all());
@@ -79,4 +77,48 @@ class RolesController extends Controller
                 ->with('error', 'Error al eliminar el rol porque ya esta asociado: ' . $e->getMessage());
         }
     }
-}   
+
+    // MÉTODO CORREGIDO: Obtener usuarios para asignar a rol
+    public function getUsuariosParaRol($idRol)
+    {
+        \Log::info("Solicitando usuarios para rol: " . $idRol);
+        
+        try {
+            $usuarios = Usuario::with('rol')->get();
+            
+            \Log::info("Usuarios encontrados: " . $usuarios->count());
+            
+            $usuariosMapeados = $usuarios->map(function($usuario) use ($idRol) {
+                return [
+                    'idUsuario' => $usuario->idUsuario,
+                    'nombre' => $usuario->nombre,
+                    'email' => $usuario->email,
+                    'idRol' => $usuario->idRol,
+                    'rol_actual' => $usuario->rol ? $usuario->rol->nombreRol : 'Sin rol',
+                    'seleccionado' => $usuario->idRol == $idRol
+                ];
+            });
+            
+            \Log::info("Usuarios mapeados: " . json_encode($usuariosMapeados));
+            
+            return response()->json($usuariosMapeados);
+            
+        } catch (\Exception $e) {
+            \Log::error("Error al obtener usuarios: " . $e->getMessage());
+            return response()->json([], 500);
+        }
+    }
+
+    // MÉTODO: Asignar usuarios al rol
+    public function asignarUsuarios(Request $request, $idRol)
+    {
+        $usuariosSeleccionados = $request->input('usuarios', []);
+        
+        // Actualizar los usuarios seleccionados
+        Usuario::whereIn('idUsuario', $usuariosSeleccionados)
+               ->update(['idRol' => $idRol]);
+        
+        return redirect()->route('roles.index')
+               ->with('success', 'Usuarios asignados al rol exitosamente');
+    }
+}
