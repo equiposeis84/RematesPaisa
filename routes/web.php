@@ -190,19 +190,19 @@ Route::get('/', function () {
 // RUTAS PARA ROLES
 // -----------------------------------------------------------------------------
 
-// Cliente (role 1)
+// Cliente (role 2)
 Route::get('/cliente', function () {
     return view('Clientes.CatalogoU'); 
 })->middleware(['auth', 'role:1']);
 
-// Repartidor (role 2)
-//Route::middleware(['role:2'])->group(function () {
+// Repartidor (role 3)
+//Route::middleware(['role:3'])->group(function () {
 //    Route::get('/resources/views/Clientes', [RepartidorController::class, 'index'])
 //        ->name('repartidor.pedidos');
 //});
 
-// Administrador (role 3)
-//Route::middleware(['role:3'])->group(function () {
+// Administrador (role 1)
+//Route::middleware(['role:1'])->group(function () {
 //    Route::get('/admin/panel', [AdminController::class, 'index'])
 //        ->name('admin.panel');  
 //});
