@@ -1,0 +1,124 @@
+/*Separador para Iniciar sesion, registro y recuperar contraseña y olvidocontraseña*/
+/*/////////////////////////////////////////////////////////////////////////////////*/
+/* --- ESTILOS PARA FORMULARIOS DE LOGIN/REGISTRO --- */
+/* (Añadir al final de tu StyleBase.css) */
+
+/* Modificación para que el área de contenido pueda centrar el formulario */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del formulario */
+.form-container {
+  background-color: var(--color-light);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  max-width: 450px; /* Ancho máximo del formulario */
+  text-align: center;
+}
+
+.form-container h1 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+
+}
+
+/* Grupos de formulario (label + input) */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Botón principal del formulario (reutiliza .btn pero lo hace más grande) */
+.form-container .btn {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.98rem;
+  margin-top: 10px;
+}
+
+/* Enlaces adicionales debajo del formulario */
+.form-links {
+  margin-top: 25px;
+  font-size: 0.9rem;
+}
+
+.form-links a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.form-links a:hover {
+  text-decoration: underline;
+}
+.vistas {
+  margin-top: 20px;
+}
+
+/* fila de vistas (3 botones) */
+.vistas-row {
+  display: flex;
+  flex-direction: column; /* apilar verticalmente */
+  gap: 10px;
+}
+
+.vistas-row .btn {
+  width: 100%; /* ocupar todo el ancho del contenedor */
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start; /* ícono + texto alineados a la izquierda */
+  gap: 12px;
+  text-decoration: none;
+  height: auto !important; /* dejar que el contenido defina la altura */
+  box-sizing: border-box;
+}
+
+/* Variantes */
+.btn--primary { background-color: #6d28d9; color: #fff; box-shadow: 0 3px 8px rgba(109,40,217,0.18); }
+.btn--primary:hover { background-color: #581c87; transform: translateY(-2px); }
+
+.btn--secondary { background-color: #10b981; color: #fff; box-shadow: 0 3px 8px rgba(16,185,129,0.18); }
+.btn--secondary:hover { background-color: #0e9f6e; transform: translateY(-2px); }
+
+.btn--tertiary { background-color: #3b82f6; color: #fff; box-shadow: 0 3px 8px rgba(59,130,246,0.18); }
+.btn--tertiary:hover { background-color: #2563eb; transform: translateY(-2px); }
+
+@media (max-width: 540px) {
+  .vistas-row { flex-direction: column; }
+  .vistas-row .btn { width: 100%; }
+}
+
+/* Asegura que los iconos y el texto se muestren centrados y no cambien la altura */
+.vistas-row .btn .btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
+.vistas-row .btn { vertical-align: middle; }

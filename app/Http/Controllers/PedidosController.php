@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pedidos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; 
 
 class PedidosController extends Controller
 {
@@ -27,7 +28,8 @@ class PedidosController extends Controller
         return view('pedidos')->with('datos', $datos);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'idPedidos' => 'required|unique:pedidos,idPedidos',
             'fechaPedido' => 'required|date',
@@ -39,20 +41,49 @@ class PedidosController extends Controller
             'estadoPedido' => 'required|string|max:20',
             'repartidorPedido' => 'nullable|string|max:100'
         ],[
-             'idPedidos.unique' => 'El ID del pedido ya existe en la base de datos.',
+            'idPedidos.unique' => 'El ID del pedido ya existe en la base de datos.',
         ]);
 
-        Pedidos::create($request->all());
-        return redirect()->route('pedidos.index')->with('success', 'Pedido creado exitosamente');
+
+        $cliente = DB::table('cliente')->where('idCliente', $request->idCliente)->first();
+        
+        if (!$cliente) {
+           
+            return redirect()->route('pedidos.index')
+                ->with('error', 'El cliente con ID ' . $request->idCliente . ' no existe en la base de datos.')
+                ->withInput();
+        }
+
+        //Agregar try-catch para manejar errores
+        try {
+            Pedidos::create($request->all());
+            return redirect()->route('pedidos.index')->with('success', 'Pedido creado exitosamente');
+            
+        } catch (\Exception $e) {
+            return redirect()->route('pedidos.index')
+                ->with('error', 'Error al crear el pedido: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
+    
     public function edit($idPedidos)
     {
-        $pedidos = Pedidos::findOrFail($idPedidos);
-        return view('pedidos.edit', compact('pedido'));
+        $pedido = Pedidos::findOrFail($idPedidos); 
+        return view('pedidos.edit', compact('pedido')); 
     }
 
-    public function update(Request $request, $idPedidos){
+    public function update(Request $request, $idPedidos)
+    {
+        
+        $cliente = DB::table('cliente')->where('idCliente', $request->idCliente)->first();
+        
+        if (!$cliente) {
+            return redirect()->route('pedidos.index')
+                ->with('error', 'El cliente con ID ' . $request->idCliente . ' no existe en la base de datos.')
+                ->withInput();
+        }
+
         $pedidos = Pedidos::findOrFail($idPedidos);
         
         $request->validate([
@@ -66,27 +97,35 @@ class PedidosController extends Controller
             'repartidorPedido' => 'nullable|string|max:100'
         ]);
         
-        $pedidos->update([
-            'fechaPedido' => $request->fechaPedido,
-            'horaPedido' => $request->horaPedido,
-            'idCliente' => $request->idCliente,
-            'valorPedido' => $request->valorPedido,
-            'ivaPedido' => $request->ivaPedido,
-            'totalPedido' => $request->totalPedido,
-            'estadoPedido' => $request->estadoPedido,
-            'repartidorPedido' => $request->repartidorPedido
-        ]);
-        
-        return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado exitosamente');
+        try {
+            $pedidos->update([
+                'fechaPedido' => $request->fechaPedido,
+                'horaPedido' => $request->horaPedido,
+                'idCliente' => $request->idCliente,
+                'valorPedido' => $request->valorPedido,
+                'ivaPedido' => $request->ivaPedido,
+                'totalPedido' => $request->totalPedido,
+                'estadoPedido' => $request->estadoPedido,
+                'repartidorPedido' => $request->repartidorPedido
+            ]);
+            
+            return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado exitosamente');
+            
+        } catch (\Exception $e) {
+            return redirect()->route('pedidos.index')
+                ->with('error', 'Error al actualizar el pedido: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
-    public function destroy($idPedidos){
-        try{
+    public function destroy($idPedidos)
+    {
+        try {
             $pedidos = Pedidos::findOrFail($idPedidos);
             $pedidos->delete();
             return redirect()->route('pedidos.index')->with('success', 'Pedido eliminado exitosamente');
             
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->route('pedidos.index')->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
         }
     }
