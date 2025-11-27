@@ -13,10 +13,17 @@ class Cliente extends Model
     protected $primaryKey = 'idCliente';
     public $incrementing = false; // Como es documento, NO debe autoincrementar
     protected $keyType = 'string'; // Documento puede contener letras o ceros a la izquierda
+<<<<<<< HEAD
     public $timestamps = false;
 
     protected $fillable = [
 
+=======
+   
+
+    protected $fillable = [
+        'NitEmpresa',
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
         'idCliente',
         'NombreEmpresa',
         'tipoDocumentoCliente',
@@ -26,4 +33,8 @@ class Cliente extends Model
         'telefonoCliente',
         'direccionCliente'
     ];
+<<<<<<< HEAD
+=======
+    public $timestamps = false;
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
 }

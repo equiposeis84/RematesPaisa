@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+<<<<<<< HEAD
 class Productos extends Model  // ← CAMBIAR de 'Producto' a 'Productos'
 {
     use HasFactory;
@@ -40,4 +41,29 @@ class Productos extends Model  // ← CAMBIAR de 'Producto' a 'Productos'
         }
         return $query;
     }
+=======
+class Productos extends Model
+{
+    use HasFactory;
+
+    protected $table = 'productos'; 
+    
+    protected $primaryKey = 'idProductos';
+    
+    public $incrementing = true;
+    
+    protected $keyType = 'integer';
+    
+    protected $fillable = [
+        'idProductos',
+        'nombreProducto',
+        'entradaProducto',
+        'salidaProducto',
+        'categoriaProducto',
+        'NITProveedores',
+        'precioUnitario'
+    ];
+
+    public $timestamps = false;
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
 }

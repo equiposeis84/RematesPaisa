@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +16,17 @@
                 <h3>Módulo Productos</h3>
                 
                 <!-- Mostrar mensajes -->
+=======
+@extends('welcome')
+@section('title', 'Productos')
+@section('content')
+    <div class="container-sm d-flex justify-content-center mt-5">
+        <div class="card">
+            <div class="card-body" style="width: 1200px;">
+                <h3>Modulo Productos</h3>
+                
+                <!-- Mostrar mensajes de éxito -->
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle"></i> {{ session('success') }}
@@ -32,10 +44,18 @@
                 <hr>
 
                 <!-- Formulario de búsqueda -->
+<<<<<<< HEAD
                 <form action="{{ url('/productos') }}" method="GET">
                     <div class="text-end mb-3">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">
                             <i class="fa-solid fa-plus"></i> Nuevo Producto
+=======
+                <form name="productos" action="{{ url('/productos') }}" method="GET">
+                    <div class="text-end mb-3">
+                        <!-- Botón para abrir modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                            <i class="fa-solid fa-plus"></i> Nuevo
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                         </button>
                     </div>
                     <div class="row g-2 align-items-center">
@@ -43,11 +63,19 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" 
+<<<<<<< HEAD
                                        placeholder="Buscar por nombre o categoría" 
+=======
+                                       placeholder="Buscar por nombre, categoría o ID" 
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                        name="search"
                                        value="{{ request('search') }}">
                             </div>
                         </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                         <div class="col-md-6 text-end">
                            <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
                            <a href="{{ url('/productos') }}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
@@ -56,6 +84,7 @@
                 </form>
                 
                 <!-- Tabla productos -->
+<<<<<<< HEAD
                 @if(isset($productos) && $productos->count() > 0)
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-primary">
@@ -68,10 +97,24 @@
                             <th>Categoría</th>
                             <th>Precio Unitario</th>
                             <th>Proveedor ID</th>
+=======
+                @if($datos->count() > 0)
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID Producto</th>
+                            <th>Nombre</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Categoría</th>
+                            <th>NIT Proveedor</th>
+                            <th>Precio Unitario</th>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
+<<<<<<< HEAD
                         @foreach ($productos as $producto)
                             <tr>
                                 <td>{{ $producto->idProductos }}</td> 
@@ -89,10 +132,22 @@
                                 <td>{{ $producto->categoriaProducto }}</td>
                                 <td>${{ number_format($producto->precioUnitario, 2) }}</td>
                                 <td>{{ $producto->idProveedores ?? 'N/A' }}</td>
+=======
+                        @foreach ($datos as $item)
+                            <tr>
+                                <td>{{ $item->idProductos }}</td> 
+                                <td>{{ $item->nombreProducto }}</td>  
+                                <td>{{ $item->entradaProducto }}</td>
+                                <td>{{ $item->salidaProducto }}</td>  
+                                <td>{{ $item->categoriaProducto }}</td>
+                                <td>{{ $item->NITProveedores }}</td>
+                                <td>${{ number_format($item->precioUnitario, 2) }}</td>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEditarProducto"
+<<<<<<< HEAD
                                             data-id="{{ $producto->idProductos }}"
                                             data-nombre="{{ $producto->nombreProducto }}"
                                             data-entrada="{{ $producto->entradaProducto }}"
@@ -109,6 +164,24 @@
                                             <i class="fa-solid fa-trash"></i> Eliminar
                                         </button>
                                     </form>
+=======
+                                            data-id="{{ $item->idProductos }}"
+                                            data-nombre="{{ $item->nombreProducto }}"
+                                            data-entrada="{{ $item->entradaProducto }}"
+                                            data-salida="{{ $item->salidaProducto }}"
+                                            data-categoria="{{ $item->categoriaProducto }}"
+                                            data-proveedor="{{ $item->NITProveedores }}"
+                                            data-precio="{{ $item->precioUnitario }}">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarProducto"
+                                            data-id="{{ $item->idProductos }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+                                    
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </td>
                             </tr>
                         @endforeach
@@ -118,33 +191,61 @@
                 <!-- Paginación -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
+<<<<<<< HEAD
                         <li class="page-item {{ $productos->onFirstPage() ? 'disabled' : '' }}">
                             <a class="page-link" 
                                href="{{ $productos->previousPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+=======
+                        <!-- Botón anterior -->
+                        <li class="page-item {{ $datos->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" 
+                               href="{{ $datos->previousPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 Atrás
                             </a>
                         </li>
 
+<<<<<<< HEAD
                         @for ($i = 1; $i <= $productos->lastPage(); $i++)
                             <li class="page-item {{ $productos->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link" 
                                    href="{{ $productos->url($i) }}{{ request('search') ? '&search=' . request('search') : '' }}">
+=======
+                        <!-- Números de página -->
+                        @for ($i = 1; $i <= $datos->lastPage(); $i++)
+                            <li class="page-item {{ $datos->currentPage() == $i ? 'active' : '' }}">
+                                <a class="page-link" 
+                                   href="{{ $datos->url($i) }}{{ request('search') ? '&search=' . request('search') : '' }}">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                     {{ $i }}
                                 </a>
                             </li>
                         @endfor
                             
+<<<<<<< HEAD
                         <li class="page-item {{ !$productos->hasMorePages() ? 'disabled' : '' }}">
                             <a class="page-link" 
                                href="{{ $productos->nextPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+=======
+                        <!-- Botón Siguiente -->
+                        <li class="page-item {{ !$datos->hasMorePages() ? 'disabled' : '' }}">
+                            <a class="page-link" 
+                               href="{{ $datos->nextPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 Siguiente
                             </a>
                         </li>
                     </ul>
                 </nav>
 
+<<<<<<< HEAD
                 <div class="text-muted mt-2">
                     Mostrando {{ $productos->firstItem() }} a {{ $productos->lastItem() }} de {{ $productos->total() }} registros
+=======
+                <!-- Información de registros -->
+                <div class="text-muted mt-2">
+                    Mostrando {{ $datos->firstItem() }} a {{ $datos->lastItem() }} de {{ $datos->total() }} registros
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                 </div>
 
                 @else
@@ -159,9 +260,15 @@
                 @endif
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 
     <!-- Modal Nuevo Producto -->
+=======
+    </div> <!-- Fin del container -->
+
+    <!-- Modal para Nuevo Producto -->
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
     <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -172,6 +279,7 @@
                 <form action="{{ route('productos.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
+<<<<<<< HEAD
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -186,10 +294,20 @@
                                 <div class="mb-3">
                                     <label for="entradaProductos" class="form-label">Cantidad Entrada *</label>
                                     <input type="number" class="form-control" id="entradaProductos" name="entradaProducto" required>
+=======
+                        <!-- CAMPO PARA ID PRODUCTO -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="idProductos" class="form-label">ID Producto *</label>
+                                    <input type="text" class="form-control" id="idProductos" name="idProductos" required 
+                                           placeholder="Ej: 1001">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="salidaProductos" class="form-label">Cantidad Salida</label>
                                     <input type="number" class="form-control" id="salidaProductos" name="salidaProducto">
                                 </div>
@@ -201,18 +319,27 @@
                                 <div class="mb-3">
                                     <label for="categoriaProductos" class="form-label">Categoría *</label>
                                     <select class="form-select" id="categoriaProductos" name="categoriaProducto" required>
+=======
+                                    <label for="categoriaProducto" class="form-label">Categoría *</label>
+                                    <select class="form-select" id="categoriaProducto" name="categoriaProducto" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                         <option value="">Seleccionar...</option>
                                         <option value="Electrónicos">Electrónicos</option>
                                         <option value="Ropa">Ropa</option>
                                         <option value="Hogar">Hogar</option>
                                         <option value="Deportes">Deportes</option>
+<<<<<<< HEAD
                                         <option value="Alimentos">Alimentos</option>
                                         <option value="Bebidas">Bebidas</option>
                                         <option value="Oficina">Oficina</option>
+=======
+                                        <option value="Juguetes">Juguetes</option>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="predoUnitario" class="form-label">Precio Unitario *</label>
@@ -229,6 +356,44 @@
                                 <div class="mb-3">
                                     <label for="idProveedores" class="form-label">ID Proveedor</label>
                                     <input type="number" class="form-control" id="idProveedores" name="idProveedores" min="0">
+=======
+                        </div>
+                        <!-- FIN CAMPO ID PRODUCTO -->
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="nombreProducto" class="form-label">Nombre del Producto *</label>
+                                    <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="entradaProducto" class="form-label">Entrada *</label>
+                                    <input type="number" class="form-control" id="entradaProducto" name="entradaProducto" required min="0">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="salidaProducto" class="form-label">Salida *</label>
+                                    <input type="number" class="form-control" id="salidaProducto" name="salidaProducto" required min="0">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" required min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="precioUnitario" class="form-label">Precio Unitario *</label>
+                                    <input type="number" step="0.01" class="form-control" id="precioUnitario" name="precioUnitario" required min="0">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                         </div>
@@ -242,7 +407,11 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Modal Editar Producto -->
+=======
+    <!-- Modal para Editar Producto -->
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
     <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -254,6 +423,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
+<<<<<<< HEAD
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -268,10 +438,19 @@
                                 <div class="mb-3">
                                     <label for="edit_entradaProductos" class="form-label">Cantidad Entrada *</label>
                                     <input type="number" class="form-control" id="edit_entradaProductos" name="entradaProducto" required>
+=======
+                        <!-- CAMPO PARA ID PRODUCTO (solo lectura) -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="edit_idProductos" class="form-label">ID Producto *</label>
+                                    <input type="text" class="form-control" id="edit_idProductos" name="idProductos" readonly>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="edit_salidaProductos" class="form-label">Cantidad Salida</label>
                                     <input type="number" class="form-control" id="edit_salidaProductos" name="salidaProducto">
                                 </div>
@@ -283,17 +462,31 @@
                                 <div class="mb-3">
                                     <label for="edit_categoriaProductos" class="form-label">Categoría *</label>
                                     <select class="form-select" id="edit_categoriaProductos" name="categoriaProducto" required>
+=======
+                                    <label for="edit_categoriaProducto" class="form-label">Categoría *</label>
+                                    <select class="form-select" id="edit_categoriaProducto" name="categoriaProducto" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                         <option value="Electrónicos">Electrónicos</option>
                                         <option value="Ropa">Ropa</option>
                                         <option value="Hogar">Hogar</option>
                                         <option value="Deportes">Deportes</option>
+<<<<<<< HEAD
                                         <option value="Alimentos">Alimentos</option>
                                         <option value="Bebidas">Bebidas</option>
                                         <option value="Oficina">Oficina</option>
+=======
+                                        <option value="Juguetes">Juguetes</option>
+                                        <option value="Cocina">Cocina</option>
+                                        <option value="Infantil">Infantil</option>
+                                        <option value="Decoración">Decoración</option>
+                                        <option value="Jardín">Jardín</option>
+                                        <option value="Muebles">Muebles</option>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="edit_predoUnitario" class="form-label">Precio Unitario *</label>
@@ -310,6 +503,43 @@
                                 <div class="mb-3">
                                     <label for="edit_idProveedores" class="form-label">ID Proveedor</label>
                                     <input type="number" class="form-control" id="edit_idProveedores" name="idProveedores" min="0">
+=======
+                        </div>
+                        <!-- FIN CAMPO ID PRODUCTO -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="edit_nombreProducto" class="form-label">Nombre del Producto *</label>
+                                    <input type="text" class="form-control" id="edit_nombreProducto" name="nombreProducto" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="edit_entradaProducto" class="form-label">Entrada *</label>
+                                    <input type="number" class="form-control" id="edit_entradaProducto" name="entradaProducto" required min="0">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="edit_salidaProducto" class="form-label">Salida *</label>
+                                    <input type="number" class="form-control" id="edit_salidaProducto" name="salidaProducto" required min="0">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="edit_NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="number" class="form-control" id="edit_NITProveedores" name="NITProveedores" required min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="edit_precioUnitario" class="form-label">Precio Unitario *</label>
+                                    <input type="number" step="0.01" class="form-control" id="edit_precioUnitario" name="precioUnitario" required min="0">
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                         </div>
@@ -322,6 +552,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -373,3 +604,89 @@
     </script>
 </body>
 </html>
+=======
+    <!-- Modal para Eliminar Producto -->
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarProductoLabel">Eliminar Producto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarProducto" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este producto?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // Configurar modal de edición
+        const modalEditar = document.getElementById('modalEditarProducto');
+        if (modalEditar) {
+            modalEditar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const entrada = button.getAttribute('data-entrada');
+                const salida = button.getAttribute('data-salida');
+                const categoria = button.getAttribute('data-categoria');
+                const proveedor = button.getAttribute('data-proveedor');
+                const precio = button.getAttribute('data-precio');
+
+                document.getElementById('formEditarProducto').action = `/productos/${id}`;
+                document.getElementById('edit_idProductos').value = id;
+                document.getElementById('edit_nombreProducto').value = nombre;
+                document.getElementById('edit_entradaProducto').value = entrada;
+                document.getElementById('edit_salidaProducto').value = salida;
+                document.getElementById('edit_categoriaProducto').value = categoria;
+                document.getElementById('edit_NITProveedores').value = proveedor;
+                document.getElementById('edit_precioUnitario').value = precio;
+            });
+        }
+
+        // Limpiar formulario de nuevo producto cuando se cierra el modal
+        const modalNuevo = document.getElementById('modalProducto');
+        if (modalNuevo) {
+            modalNuevo.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('idProductos').value = '';
+                document.getElementById('categoriaProducto').value = '';
+                document.getElementById('nombreProducto').value = '';
+                document.getElementById('entradaProducto').value = '';
+                document.getElementById('salidaProducto').value = '';
+                document.getElementById('NITProveedores').value = '';
+                document.getElementById('precioUnitario').value = '';
+            });
+        }
+
+        // Configurar modal de eliminación
+        const modalEliminar = document.getElementById('modalEliminarProducto');
+        if (modalEliminar) {
+            modalEliminar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('formEliminarProducto').action = `/productos/${id}`;
+            });
+        }
+    }); 
+</script>
+@endsection
+>>>>>>> 1992225baf11169504a8d35174321996067799e9

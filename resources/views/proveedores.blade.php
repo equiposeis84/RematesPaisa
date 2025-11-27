@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+=======
+@extends('welcome')
+@section('title', 'Proveedores')
+@section('content')
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
     <div class="container-sm d-flex justify-content-center mt-5">
         <div class="card">
             <div class="card-body" style="width: 1200px;">
@@ -31,9 +37,15 @@
                 <hr>
 
                 <!-- Formulario de búsqueda -->
+<<<<<<< HEAD
                 <form name="Proveedores" action="{{ url('/proveedores') }}" method="GET">
                     <div class="text-end mb-3">
                         <!-- Botón para abrir modal CORREGIDO -->
+=======
+                <form name="proveedores" action="{{ url('/proveedores') }}" method="GET">
+                    <div class="text-end mb-3">
+                        <!-- Botón para abrir modal -->
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor">
                             <i class="fa-solid fa-plus"></i> Nuevo
                         </button>
@@ -43,7 +55,11 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" 
+<<<<<<< HEAD
                                        placeholder="Buscar por nombre, documento o email" 
+=======
+                                       placeholder="Buscar por NIT, nombre, email o teléfono" 
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                        name="search"
                                        value="{{ request('search') }}">
                             </div>
@@ -56,31 +72,51 @@
                     </div>
                 </form>
                 
+<<<<<<< HEAD
                 <!-- Tabla Proveedores -->
+=======
+                <!-- Tabla proveedores -->
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                 @if($datos->count() > 0)
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-primary">
                         <tr>
+<<<<<<< HEAD
                             <td>idProveedores</td>
                             <td>tipoDocumentoProveedor</td>
                             <td>nombreProveedor</td>
                             <td>telefonoProveedor</td>
                             <td>correoProveedor</td>
                             <td>Acciones</td>
+=======
+                            <th>NIT Proveedor</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($datos as $item)
                             <tr>
+<<<<<<< HEAD
                                 <td>{{ $item->idProveedores }}</td> 
                                 <td>{{ $item->tipoDocumentoProveedor }}</td>  
                                 <td>{{ $item->nombreProveedor }}</td>
                                 <td>{{ $item->telefonoProveedor }}</td>  
                                 <td>{{ $item->correoProveedor }}</td>
+=======
+                                <td>{{ $item->NITProveedores }}</td> 
+                                <td>{{ $item->nombreProveedor }}</td>  
+                                <td>{{ $item->telefonoProveedor }}</td>
+                                <td>{{ $item->correoProveedor }}</td>  
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEditarProveedor"
+<<<<<<< HEAD
                                             data-id="{{ $item->idProveedores }}"
                                             data-tipodoc="{{ $item->tipoDocumentoProveedor }}"
                                             data-nombre="{{ $item->nombreProveedor }}"
@@ -96,6 +132,22 @@
                                             <i class="fa-solid fa-trash"></i> Eliminar
                                         </button>
                                     </form>
+=======
+                                            data-id="{{ $item->NITProveedores }}"
+                                            data-nombre="{{ $item->nombreProveedor }}"
+                                            data-telefono="{{ $item->telefonoProveedor }}"
+                                            data-correo="{{ $item->correoProveedor }}">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                 <button type="button" class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarProveedor"
+                                            data-id="{{ $item->NITProveedores }}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+
+                                    
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </td>
                             </tr>
                         @endforeach
@@ -163,6 +215,7 @@
                 <form action="{{ route('proveedores.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
+<<<<<<< HEAD
                         <!-- CAMPO PARA NÚMERO DE DOCUMENTO -->
                         <div class="row">
                             <div class="col-md-6">
@@ -191,6 +244,24 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="nombreProveedor" class="form-label">Nombre Completo *</label>
+=======
+                        <!-- CAMPO PARA NIT PROVEEDOR -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="text" class="form-control" id="NITProveedores" name="NITProveedores" required 
+                                           placeholder="Ej: 123456789">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FIN CAMPO NIT PROVEEDOR -->
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="nombreProveedor" class="form-label">Nombre del Proveedor *</label>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                     <input type="text" class="form-control" id="nombreProveedor" name="nombreProveedor" required>
                                 </div>
                             </div>
@@ -198,12 +269,18 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="emailProveedor" class="form-label">Email *</label>
                                     <input type="email" class="form-control" id="emailProveedor" name="emailProveedor" required>
+=======
+                                    <label for="telefonoProveedor" class="form-label">Teléfono *</label>
+                                    <input type="text" class="form-control" id="telefonoProveedor" name="telefonoProveedor" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="telefonoProveedor" class="form-label">Teléfono</label>
                                     <input type="text" class="form-control" id="telefonoProveedor" name="telefonoProveedor">
                                 </div>
@@ -214,6 +291,10 @@
                                 <div class="mb-3">
                                     <label for="direccionProveedor" class="form-label">Dirección</label>
                                     <input type="text" class="form-control" id="direccionProveedor" name="direccionProveedor">
+=======
+                                    <label for="correoProveedor" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="correoProveedor" name="correoProveedor" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                         </div>
@@ -239,6 +320,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
+<<<<<<< HEAD
                         <!-- CAMPO PARA NÚMERO DE DOCUMENTO (solo lectura) -->
                         <div class="row">
                             <div class="col-md-6">
@@ -265,6 +347,22 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="edit_nombreProveedor" class="form-label">Nombre Completo *</label>
+=======
+                        <!-- CAMPO PARA NIT PROVEEDOR (solo lectura) -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="edit_NITProveedores" class="form-label">NIT Proveedor *</label>
+                                    <input type="text" class="form-control" id="edit_NITProveedores" name="NITProveedores" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FIN CAMPO NIT PROVEEDOR -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="edit_nombreProveedor" class="form-label">Nombre del Proveedor *</label>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                     <input type="text" class="form-control" id="edit_nombreProveedor" name="nombreProveedor" required>
                                 </div>
                             </div>
@@ -272,12 +370,18 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="edit_emailProveedor" class="form-label">Email *</label>
                                     <input type="email" class="form-control" id="edit_emailProveedor" name="emailProveedor" required>
+=======
+                                    <label for="edit_telefonoProveedor" class="form-label">Teléfono *</label>
+                                    <input type="text" class="form-control" id="edit_telefonoProveedor" name="telefonoProveedor" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+<<<<<<< HEAD
                                     <label for="edit_telefonoProveedor" class="form-label">Teléfono</label>
                                     <input type="text" class="form-control" id="edit_telefonoProveedor" name="telefonoProveedor">
                                 </div>
@@ -288,6 +392,10 @@
                                 <div class="mb-3">
                                     <label for="edit_direccionProveedor" class="form-label">Dirección</label>
                                     <input type="text" class="form-control" id="edit_direccionProveedor" name="direccionProveedor">
+=======
+                                    <label for="edit_correoProveedor" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="edit_correoProveedor" name="correoProveedor" required>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
                                 </div>
                             </div>
                         </div>
@@ -300,8 +408,36 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+=======
+    <!-- Modal para Eliminar Proveedor -->
+    <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-labelledby="modalEliminarProveedorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalEliminarProveedorLabel">Eliminar Proveedor</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarProveedor" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar este proveedor?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
         // Auto cerrar alertas después de 5 segundos
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -318,6 +454,7 @@
                 modalEditar.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
                     const id = button.getAttribute('data-id');
+<<<<<<< HEAD
                     const tipoDoc = button.getAttribute('data-tipodoc');
                     const nombre = button.getAttribute('data-nombre');
                     const email = button.getAttribute('data-email');
@@ -351,3 +488,38 @@
     </script>
 </body>
 </html>
+=======
+                    const nombre = button.getAttribute('data-nombre');
+                    const telefono = button.getAttribute('data-telefono');
+                    const correo = button.getAttribute('data-correo');
+
+                    // Actualizar el formulario
+                    document.getElementById('formEditarProveedor').action = `/proveedores/${id}`;
+                    document.getElementById('edit_NITProveedores').value = id;
+                    document.getElementById('edit_nombreProveedor').value = nombre;
+                    document.getElementById('edit_telefonoProveedor').value = telefono;
+                    document.getElementById('edit_correoProveedor').value = correo;
+                });
+            }
+
+            // Limpiar formulario de nuevo proveedor cuando se cierra el modal
+            const modalNuevo = document.getElementById('modalProveedor');
+            if (modalNuevo) {
+                modalNuevo.addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('NITProveedores').value = '';
+                    document.getElementById('nombreProveedor').value = '';
+                    document.getElementById('telefonoProveedor').value = '';
+                    document.getElementById('correoProveedor').value = '';
+                });
+            }
+            // Configurar modal de eliminación
+            const modalEliminar = document.getElementById('modalEliminarProveedor');
+            modalEliminar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('formEliminarProveedor').action = `/proveedores/${id}`;
+            });
+        });
+    </script>
+@endsection
+>>>>>>> 1992225baf11169504a8d35174321996067799e9

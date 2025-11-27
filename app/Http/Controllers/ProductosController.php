@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Productos;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+=======
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
 
 class ProductosController extends Controller
 {
     public function index(Request $request)
     {
+<<<<<<< HEAD
         try {
             $search = $request->input('search');
             
@@ -133,3 +137,81 @@ class ProductosController extends Controller
         }
     }
 }
+=======
+        $search = $request->get('search');
+        
+        $query = Productos::query();
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nombreProducto', 'LIKE', "%{$search}%")
+                ->orWhere('idProductos', 'LIKE', "%{$search}%")
+                  ->orWhere('categoriaProducto', 'LIKE', "%{$search}%")
+                  ->orWhere('NITProveedores', 'LIKE', "%{$search}%"); 
+            });
+        }
+        
+        $datos = $query->orderBy('idProductos', 'asc')->paginate(10);
+        
+        return view('productos')->with('datos', $datos);
+    }
+
+    public function store(Request $request){
+        $request->validate([
+            'idProductos' => 'required|unique:productos,idProductos',
+            'nombreProducto' => 'required|string|max:45',
+            'entradaProducto' => 'required|integer',
+            'salidaProducto' => 'required|integer',
+            'categoriaProducto' => 'required|string|max:45',
+            'NITProveedores' => 'required|integer',
+            'precioUnitario' => 'required|numeric|min:0'
+        ],[
+             'idProductos.unique' => 'El ID del producto ya existe en la base de datos.',
+        ]);
+
+        Productos::create($request->all());
+        return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente');
+    }
+
+    public function edit($idProducto) 
+    {
+        $producto = Productos::findOrFail($idProducto); 
+        return view('productos.edit', compact('producto')); 
+    }
+
+    public function update(Request $request, $idProducto){ 
+        $producto = Productos::findOrFail($idProducto); 
+        
+        $request->validate([
+            'nombreProducto' => 'required|string|max:45',
+            'entradaProducto' => 'required|integer',
+            'salidaProducto' => 'required|integer',
+            'categoriaProducto' => 'required|string|max:45',
+            'NITProveedores' => 'required|integer', 
+            'precioUnitario' => 'required|numeric|min:0'
+        ]);
+        
+        $producto->update([
+            'nombreProducto' => $request->nombreProducto,
+            'entradaProducto' => $request->entradaProducto,
+            'salidaProducto' => $request->salidaProducto,
+            'categoriaProducto' => $request->categoriaProducto,
+            'NITProveedores' => $request->NITProveedores, 
+            'precioUnitario' => $request->precioUnitario
+        ]);
+        
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente');
+    }
+
+    public function destroy($idProducto){ 
+        try{
+            $producto = Productos::findOrFail($idProducto); 
+            $producto->delete();
+            return redirect()->route('productos.index')->with('success', 'Producto eliminado exitosamente');
+            
+        }catch(\Exception $e){
+            return redirect()->route('productos.index')->with('error', 'Error al eliminar el producto: ' . $e->getMessage());
+        }
+    }
+}
+>>>>>>> 1992225baf11169504a8d35174321996067799e9
