@@ -67,7 +67,8 @@ Route::post('/proveedores', [ProveedorController::class,"store"])->name('proveed
 Route::get('/proveedores/{idProveedor}', [ProveedorController::class,"edit"])->name('proveedores.edit');
 Route::put('/proveedores/{idProveedor}', [ProveedorController::class,"update"])->name('proveedores.update');
 Route::delete('/proveedores/{idProveedor}', [ProveedorController::class,"destroy"])->name('proveedores.destroy');
-<<<<<<< HEAD
+// -----------------------------------------------------------------------------
+// RUTAS CRUD ROLES
 // -----------------------------------------------------------------------------
 Route::get('/roles', [App\Http\Controllers\RolesController::class, 'index'])->name('roles.index');
 Route::get('/roles/create', [App\Http\Controllers\RolesController::class, 'create'])->name('roles.create');
@@ -75,8 +76,17 @@ Route::post('/roles', [App\Http\Controllers\RolesController::class, 'store'])->n
 Route::get('/roles/{idRol}/edit', [App\Http\Controllers\RolesController::class, 'edit'])->name('roles.edit');
 Route::put('/roles/{idRol}', [App\Http\Controllers\RolesController::class, 'update'])->name('roles.update');
 Route::delete('/roles/{idRol}', [App\Http\Controllers\RolesController::class, 'destroy'])->name('roles.destroy');
+
+
+// NUEVAS RUTAS PARA ASIGNAR USUARIOS
+Route::get('/roles/{idRol}/usuarios', [App\Http\Controllers\RolesController::class, 'getUsuariosParaRol'])->name('roles.usuarios');
+Route::post('/roles/{idRol}/asignar-usuarios', [App\Http\Controllers\RolesController::class, 'asignarUsuarios'])->name('roles.asignar-usuarios');
 // -----------------------------------------------------------------------------
-=======
+// RUTAS CRUD USUARIOS
+Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+Route::put('/usuarios/{idUsuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
+Route::delete('/usuarios/{idUsuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
 
 
 // -----------------------------------------------------------------------------
@@ -208,4 +218,3 @@ Route::get('/admin/inicio', function () {
 // FIN DEL ARCHIVO COMPLETO Y COMBINADO
 // -----------------------------------------------------------------------------
 
->>>>>>> fe899f071dc102f2735bfaf705dfbe63035d1f87

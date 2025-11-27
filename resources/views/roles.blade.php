@@ -1,12 +1,12 @@
 @extends('welcome')
-@section('title', 'Roles')
+@section('title', 'Roles de Usuario')
 @section('content')
     <div class="container-sm d-flex justify-content-center mt-5">
         <div class="card">
             <div class="card-body" style="width: 1200px;">
-                <h3>Módulo Roles</h3>
+                <h3>Módulo Roles de Usuario</h3>
                 
-                <!-- Mostrar mensajes de éxito -->
+                <!-- Mensajes de alerta -->
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle"></i> {{ session('success') }}
@@ -21,14 +21,19 @@
                     </div>
                 @endif
                 
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Nota:</strong> Los roles definen los permisos y acceso de los usuarios en el sistema. 
+                    Cada usuario registrado debe tener asignado un rol.
+                </div>
+                
                 <hr>
 
                 <!-- Formulario de búsqueda -->
                 <form name="roles" action="{{ route('roles.index') }}" method="GET">
                     <div class="text-end mb-3">
-                        <!-- Botón para abrir modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRol">
-                            <i class="fa-solid fa-plus"></i> Nuevo
+                            <i class="fa-solid fa-plus"></i> Nuevo Rol
                         </button>
                     </div>
                     <div class="row g-2 align-items-center">
@@ -36,7 +41,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" 
-                                       placeholder="Buscar por ID, nombre o descripción" 
+                                       placeholder="Buscar por ID o nombre del rol" 
                                        name="search"
                                        value="{{ request('search') }}">
                             </div>
@@ -49,31 +54,50 @@
                     </div>
                 </form>
                 
-                <!-- Tabla roles -->
+                <!-- Tabla de roles -->
                 @if($datos->count() > 0)
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-primary">
                         <tr>
                             <th>ID Rol</th>
                             <th>Nombre del Rol</th>
-                            <th>Descripción</th>
+                            <th>Usuarios Asignados</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($datos as $rol)
                             <tr>
-                                <td>{{ $rol->idRol }}</td> 
-                                <td>{{ $rol->nombreRol }}</td>  
-                                <td>{{ $rol->descripcionRol ?? 'N/A' }}</td>
                                 <td>
+                                    <span class="badge bg-primary">{{ $rol->idRol }}</span>
+                                </td> 
+                                <td>
+                                    <strong>{{ $rol->nombreRol }}</strong>
+                                    @if($rol->idRol == 1)
+                                        <span class="badge bg-danger ms-1">Sistema</span>
+                                    @endif
+                                </td>  
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-users"></i> 
+                                        {{ $rol->usuarios_count }} usuarios
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($rol->idRol != 1)
                                     <button type="button" class="btn btn-success btn-sm" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEditarRol"
                                             data-id="{{ $rol->idRol }}"
-                                            data-nombre="{{ $rol->nombreRol }}"
-                                            data-descripcion="{{ $rol->descripcionRol }}">
+                                            data-nombre="{{ $rol->nombreRol }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalAsignarUsuarios"
+                                            data-id="{{ $rol->idRol }}"
+                                            data-nombre="{{ $rol->nombreRol }}">
+                                        <i class="fa-solid fa-user-plus"></i> Asignar
                                     </button>
                                     <button type="button" class="btn btn-danger btn-sm" 
                                             data-bs-toggle="modal" 
@@ -81,6 +105,9 @@
                                             data-id="{{ $rol->idRol }}">
                                         <i class="fa-solid fa-trash"></i> Eliminar
                                     </button>
+                                    @else
+                                    <span class="text-muted">Rol del sistema</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -90,7 +117,6 @@
                 <!-- Paginación -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
-                        <!-- Botón anterior -->
                         <li class="page-item {{ $datos->onFirstPage() ? 'disabled' : '' }}">
                             <a class="page-link" 
                                href="{{ $datos->previousPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
@@ -98,7 +124,6 @@
                             </a>
                         </li>
 
-                        <!-- Números de página -->
                         @for ($i = 1; $i <= $datos->lastPage(); $i++)
                             <li class="page-item {{ $datos->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link" 
@@ -108,7 +133,6 @@
                             </li>
                         @endfor
                             
-                        <!-- Botón Siguiente -->
                         <li class="page-item {{ !$datos->hasMorePages() ? 'disabled' : '' }}">
                             <a class="page-link" 
                                href="{{ $datos->nextPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
@@ -118,7 +142,6 @@
                     </ul>
                 </nav>
 
-                <!-- Información de registros -->
                 <div class="text-muted mt-2">
                     Mostrando {{ $datos->firstItem() }} a {{ $datos->lastItem() }} de {{ $datos->total() }} registros
                 </div>
@@ -135,26 +158,31 @@
                 @endif
             </div>
         </div>
-    </div> <!-- Fin del container -->
+    </div>
 
     <!-- Modal para Nuevo Rol -->
     <div class="modal fade" id="modalRol" tabindex="-1" aria-labelledby="modalRolLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalRolLabel">Nuevo Rol</h1>
+                    <h1 class="modal-title fs-5" id="modalRolLabel">Crear Nuevo Rol</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('roles.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <!-- CAMPO PARA ID ROL -->
+                        <div class="alert alert-warning">
+                            <small><i class="fas fa-exclamation-triangle"></i> 
+                            Los roles definen los permisos de los usuarios. Crea roles específicos para diferentes tipos de usuarios.</small>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="idRol" class="form-label">ID Rol *</label>
                                     <input type="number" class="form-control" id="idRol" name="idRol" required 
-                                           placeholder="Ej: 1, 2, 3..." min="1">
+                                           placeholder="Ej: 4, 5, 6..." min="4">
+                                    <div class="form-text">Los IDs 1-3 están reservados para roles del sistema</div>
                                     @error('idRol')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
@@ -164,25 +192,14 @@
                                 <div class="mb-3">
                                     <label for="nombreRol" class="form-label">Nombre del Rol *</label>
                                     <input type="text" class="form-control" id="nombreRol" name="nombreRol" required 
-                                           placeholder="Ej: Admin, Cliente, Repartidor" maxlength="45">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- FIN CAMPO ID ROL -->
-                    
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="descripcionRol" class="form-label">Descripción</label>
-                                    <textarea class="form-control" id="descripcionRol" name="descripcionRol" 
-                                              rows="3" placeholder="Descripción del rol..." maxlength="255"></textarea>
+                                           placeholder="Ej: Supervisor, Vendedor, etc." maxlength="45">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Rol</button>
+                        <button type="submit" class="btn btn-primary">Crear Rol</button>
                     </div>
                 </form>
             </div>
@@ -194,14 +211,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalEditarRolLabel">Editar Rol</h1>
+                    <h1 class="modal-title fs-5" id="modalEditarRolLabel">Editar Rol de Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formEditarRol" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <!-- CAMPO PARA ID ROL (solo lectura) -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -217,21 +233,79 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- FIN CAMPO ID ROL -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Actualizar Rol</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Asignar Usuarios al Rol -->
+    <div class="modal fade" id="modalAsignarUsuarios" tabindex="-1" aria-labelledby="modalAsignarUsuariosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalAsignarUsuariosLabel">Asignar Usuarios al Rol: <span id="nombreRolAsignar"></span></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formAsignarUsuarios" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <small><i class="fas fa-info-circle"></i> 
+                            Seleccione los usuarios que desea asignar a este rol.</small>
+                        </div>
                         
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="edit_descripcionRol" class="form-label">Descripción</label>
-                                    <textarea class="form-control" id="edit_descripcionRol" name="descripcionRol" 
-                                              rows="3" maxlength="255"></textarea>
+                        <!-- Buscador de usuarios -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" id="buscarUsuario" 
+                                       placeholder="Buscar usuarios por nombre o email...">
+                                <button type="button" class="btn btn-outline-secondary" id="limpiarBusqueda">
+                                    <i class="fas fa-times"></i> Limpiar
+                                </button>
+                            </div>
+                            <div class="form-text">Escribe para filtrar la lista de usuarios</div>
+                        </div>
+                        
+                        <!-- Lista de usuarios -->
+                        <div class="mb-3">
+                            <label class="form-label">Usuarios Disponibles 
+                                <span class="badge bg-primary" id="contadorTotal">0</span>
+                            </label>
+                            <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;" class="border rounded p-2">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p>Cargando usuarios...</p>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contador y controles -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted" id="contadorUsuarios">0 usuarios seleccionados</small>
+                                <small class="text-muted ms-2" id="contadorFiltrados"></small>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-success btn-sm" id="seleccionarTodos">
+                                    <i class="fas fa-check"></i> Todos
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="deseleccionarTodos">
+                                    <i class="fas fa-times"></i> Ninguno
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Actualizar Rol</button>
+                        <button type="submit" class="btn btn-primary">Asignar Usuarios Seleccionados</button>
                     </div>
                 </form>
             </div>
@@ -251,6 +325,11 @@
                     @method('DELETE')
                     <div class="modal-body">
                         <p>¿Está seguro de que desea eliminar este rol?</p>
+                        <div class="alert alert-warning">
+                            <small><i class="fas fa-exclamation-triangle"></i> 
+                            <strong>Advertencia:</strong> Si hay usuarios asignados a este rol, no podrá eliminarlo. 
+                            Primero debe reasignar esos usuarios a otro rol.</small>
+                        </div>
                         <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
                     </div>
                     <div class="modal-footer">
@@ -264,8 +343,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto cerrar alertas después de 5 segundos
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto cerrar alertas después de 5 segundos
             setTimeout(function() {
                 const alerts = document.querySelectorAll('.alert');
                 alerts.forEach(function(alert) {
@@ -281,13 +360,26 @@
                     const button = event.relatedTarget;
                     const id = button.getAttribute('data-id');
                     const nombre = button.getAttribute('data-nombre');
-                    const descripcion = button.getAttribute('data-descripcion');
 
-                    // Actualizar el formulario
                     document.getElementById('formEditarRol').action = `/roles/${id}`;
                     document.getElementById('edit_idRol').value = id;
                     document.getElementById('edit_nombreRol').value = nombre;
-                    document.getElementById('edit_descripcionRol').value = descripcion || '';
+                });
+            }
+
+            // Configurar modal de asignar usuarios
+            const modalAsignar = document.getElementById('modalAsignarUsuarios');
+            if (modalAsignar) {
+                modalAsignar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const idRol = button.getAttribute('data-id');
+                    const nombreRol = button.getAttribute('data-nombre');
+
+                    document.getElementById('formAsignarUsuarios').action = `/roles/${idRol}/asignar-usuarios`;
+                    document.getElementById('nombreRolAsignar').textContent = nombreRol;
+                    document.getElementById('buscarUsuario').value = '';
+                    
+                    cargarUsuariosParaRol(idRol);
                 });
             }
 
@@ -297,21 +389,144 @@
                 modalEliminar.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
                     const id = button.getAttribute('data-id');
-                    
-                    // Actualizar el formulario de eliminación
                     document.getElementById('formEliminarRol').action = `/roles/${id}`;
                 });
             }
 
-            // Limpiar formulario de nuevo rol cuando se cierra el modal
+            // Limpiar formulario de nuevo rol
             const modalNuevo = document.getElementById('modalRol');
             if (modalNuevo) {
                 modalNuevo.addEventListener('hidden.bs.modal', function () {
                     document.getElementById('idRol').value = '';
                     document.getElementById('nombreRol').value = '';
-                    document.getElementById('descripcionRol').value = '';
                 });
             }
+
+            // Variables globales para usuarios
+            let todosLosUsuarios = [];
+            let usuariosFiltrados = [];
+
+            // Función para cargar usuarios
+            function cargarUsuariosParaRol(idRol) {
+                fetch(`/roles/${idRol}/usuarios`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                        return response.json();
+                    })
+                    .then(usuarios => {
+                        todosLosUsuarios = usuarios;
+                        usuariosFiltrados = [...usuarios];
+                        renderizarUsuarios();
+                        actualizarContadores();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('listaUsuarios').innerHTML = 
+                            '<div class="alert alert-danger">Error al cargar usuarios. Verifique la conexión.</div>';
+                    });
+            }
+
+            // Función para renderizar usuarios
+            function renderizarUsuarios() {
+                const listaUsuarios = document.getElementById('listaUsuarios');
+                
+                if (usuariosFiltrados.length === 0) {
+                    listaUsuarios.innerHTML = '<div class="alert alert-warning">No se encontraron usuarios que coincidan con la búsqueda.</div>';
+                    return;
+                }
+
+                let html = '';
+                usuariosFiltrados.forEach(usuario => {
+                    const usuarioHTML = `
+                        <div class="form-check mb-2 p-2 border rounded usuario-item" data-id="${usuario.idUsuario}" data-nombre="${usuario.nombre.toLowerCase()}" data-email="${usuario.email.toLowerCase()}">
+                            <input class="form-check-input usuario-checkbox" type="checkbox" 
+                                   name="usuarios[]" value="${usuario.idUsuario}" id="usuario_${usuario.idUsuario}"
+                                   ${usuario.seleccionado ? 'checked' : ''}>
+                            <label class="form-check-label w-100" for="usuario_${usuario.idUsuario}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong class="nombre-usuario">${usuario.nombre}</strong><br>
+                                        <small class="text-muted email-usuario">${usuario.email}</small>
+                                    </div>
+                                    <span class="badge ${usuario.rol_actual === 'Sin rol' ? 'bg-warning' : 'bg-info'}">
+                                        ${usuario.rol_actual}
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    `;
+                    html += usuarioHTML;
+                });
+                
+                listaUsuarios.innerHTML = html;
+                actualizarContadores();
+            }
+
+            // Función para filtrar usuarios
+            function filtrarUsuarios(termino) {
+                if (!termino) {
+                    usuariosFiltrados = [...todosLosUsuarios];
+                } else {
+                    const terminoLower = termino.toLowerCase();
+                    usuariosFiltrados = todosLosUsuarios.filter(usuario => 
+                        usuario.nombre.toLowerCase().includes(terminoLower) ||
+                        usuario.email.toLowerCase().includes(terminoLower)
+                    );
+                }
+                renderizarUsuarios();
+            }
+
+            // Actualizar contadores
+            function actualizarContadores() {
+                const seleccionados = document.querySelectorAll('.usuario-checkbox:checked').length;
+                const totalFiltrados = usuariosFiltrados.length;
+                const totalGeneral = todosLosUsuarios.length;
+                
+                document.getElementById('contadorUsuarios').textContent = 
+                    `${seleccionados} usuario(s) seleccionados`;
+                document.getElementById('contadorTotal').textContent = totalGeneral;
+                
+                if (totalFiltrados !== totalGeneral) {
+                    document.getElementById('contadorFiltrados').textContent = 
+                        `(${totalFiltrados} filtrados)`;
+                } else {
+                    document.getElementById('contadorFiltrados').textContent = '';
+                }
+            }
+
+            // Event listeners para el buscador
+            document.getElementById('buscarUsuario')?.addEventListener('input', function(e) {
+                filtrarUsuarios(e.target.value);
+            });
+
+            document.getElementById('limpiarBusqueda')?.addEventListener('click', function() {
+                document.getElementById('buscarUsuario').value = '';
+                filtrarUsuarios('');
+            });
+
+            // Seleccionar/Deseleccionar todos
+            document.getElementById('seleccionarTodos')?.addEventListener('click', function() {
+                document.querySelectorAll('.usuario-checkbox').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                actualizarContadores();
+            });
+
+            document.getElementById('deseleccionarTodos')?.addEventListener('click', function() {
+                document.querySelectorAll('.usuario-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                actualizarContadores();
+            });
+
+            // Event listener para checkboxes
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('usuario-checkbox')) {
+                    actualizarContadores();
+                }
+            });
         });
     </script>
 @endsection
