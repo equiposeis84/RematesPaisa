@@ -11,6 +11,7 @@ class RolesController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
+        $filter = $request->get('filter', 'all'); // Nuevo parámetro de filtro
         
         $query = Roles::withCount('usuarios');
         
@@ -20,12 +21,31 @@ class RolesController extends Controller
                   ->orWhere('nombreRol', 'LIKE', "%{$search}%");
             });
         }
+
+        // Aplicar filtros por tipo de rol
+        if ($filter !== 'all') {
+            switch($filter) {
+                case 'admins':
+                    $query->where('idRol', 1); // Administradores
+                    break;
+                case 'clientes':
+                    $query->where('idRol', 2); // Clientes
+                    break;
+                case 'repartidores':
+                    $query->where('idRol', 3); // Repartidores
+                    break;
+                case 'custom':
+                    $query->where('idRol', '>', 3); // Roles personalizados
+                    break;
+            }
+        }
         
         $datos = $query->orderBy('idRol', 'asc')->paginate(10);
         
         return view('roles')->with('datos', $datos);
     }
 
+    // ... el resto de tus métodos se mantienen igual ...
     public function create()
     {
         return view('roles.create');

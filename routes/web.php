@@ -19,6 +19,7 @@ use App\Http\Controllers\ProveedorController;
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsuariosController; 
 
 //Agregar y mofificar en ClienteController.php para mandar a vista de inicio clientes
 // Route::get('/auth/login', [LoginController::class, 'show'])->name('login');
@@ -91,12 +92,11 @@ Route::delete('/roles/{idRol}', [App\Http\Controllers\RolesController::class, 'd
 Route::get('/roles/{idRol}/usuarios', [App\Http\Controllers\RolesController::class, 'getUsuariosParaRol'])->name('roles.usuarios');
 Route::post('/roles/{idRol}/asignar-usuarios', [App\Http\Controllers\RolesController::class, 'asignarUsuarios'])->name('roles.asignar-usuarios');
 // -----------------------------------------------------------------------------
-// RUTAS CRUD USUARIOS
-Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
-Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
-Route::put('/usuarios/{idUsuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
-Route::delete('/usuarios/{idUsuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
-
+// RUTAS CRUD USUARIOS 
+Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
+Route::post('/usuarios', [App\Http\Controllers\UsuariosController::class, 'store'])->name('usuarios.store');
+Route::put('/usuarios/{idUsuario}', [App\Http\Controllers\UsuariosController::class, 'update'])->name('usuarios.update');
+Route::delete('/usuarios/{idUsuario}', [App\Http\Controllers\UsuariosController::class, 'destroy'])->name('usuarios.destroy');
 
 // -----------------------------------------------------------------------------
 // RUTAS DE AUTENTICACIÓN Y REGISTRO (TU PARTE DEL PROYECTO)
