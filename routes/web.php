@@ -77,6 +77,7 @@ Route::post('/roles', [App\Http\Controllers\RolesController::class, 'store'])->n
 Route::get('/roles/{idRol}/edit', [App\Http\Controllers\RolesController::class, 'edit'])->name('roles.edit');
 Route::put('/roles/{idRol}', [App\Http\Controllers\RolesController::class, 'update'])->name('roles.update');
 Route::delete('/roles/{idRol}', [App\Http\Controllers\RolesController::class, 'destroy'])->name('roles.destroy');
+Route::put('/usuarios/{idUsuario}/cambiar-rol', [App\Http\Controllers\UsuariosController::class, 'cambiarRol'])->name('usuarios.cambiar-rol');
 
 
 // NUEVAS RUTAS PARA ASIGNAR USUARIOS
