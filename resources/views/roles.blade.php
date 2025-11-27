@@ -32,8 +32,15 @@
                 <!-- Formulario de búsqueda -->
                 <form name="roles" action="{{ route('roles.index') }}" method="GET">
                     <div class="text-end mb-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRol">
+                        <!-- Botones modificados -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+                            <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
+                        </button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalRol">
                             <i class="fa-solid fa-plus"></i> Nuevo Rol
+                        </button>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalAgregarAdmin">
+                            <i class="fa-solid fa-user-shield"></i> Agregar Administrador
                         </button>
                     </div>
                     <div class="row g-2 align-items-center">
@@ -52,8 +59,63 @@
                            <a href="{{ route('roles.index') }}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
                         </div>
                     </div>
+                    
+                    <!-- NUEVO: Botones de Filtro por Tipo de Rol -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="btn-group" role="group" aria-label="Filtros de roles">
+                                <a href="{{ route('roles.index', ['filter' => 'all'] + request()->except('filter')) }}" 
+                                   class="btn btn-outline-primary {{ request('filter', 'all') == 'all' ? 'active' : '' }}">
+                                    <i class="fas fa-layer-group"></i> Todos los Roles
+                                </a>
+                                <a href="{{ route('roles.index', ['filter' => 'admins'] + request()->except('filter')) }}" 
+                                   class="btn btn-outline-danger {{ request('filter') == 'admins' ? 'active' : '' }}">
+                                    <i class="fas fa-user-shield"></i> Administradores
+                                </a>
+                                <a href="{{ route('roles.index', ['filter' => 'clientes'] + request()->except('filter')) }}" 
+                                   class="btn btn-outline-success {{ request('filter') == 'clientes' ? 'active' : '' }}">
+                                    <i class="fas fa-users"></i> Clientes
+                                </a>
+                                <a href="{{ route('roles.index', ['filter' => 'repartidores'] + request()->except('filter')) }}" 
+                                   class="btn btn-outline-warning {{ request('filter') == 'repartidores' ? 'active' : '' }}">
+                                    <i class="fas fa-motorcycle"></i> Repartidores
+                                </a>
+                                <a href="{{ route('roles.index', ['filter' => 'custom'] + request()->except('filter')) }}" 
+                                   class="btn btn-outline-info {{ request('filter') == 'custom' ? 'active' : '' }}">
+                                    <i class="fas fa-cogs"></i> Roles Personalizados
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 
+                <!-- NUEVO: Indicador de filtro activo -->
+                @if(request('filter') && request('filter') != 'all')
+                    <div class="alert alert-secondary py-2">
+                        <small>
+                            <i class="fas fa-filter"></i> 
+                            <strong>Filtro activo:</strong> 
+                            @switch(request('filter'))
+                                @case('admins')
+                                    Mostrando solo <strong>Administradores</strong>
+                                    @break
+                                @case('clientes')
+                                    Mostrando solo <strong>Clientes</strong>
+                                    @break
+                                @case('repartidores')
+                                    Mostrando solo <strong>Repartidores</strong>
+                                    @break
+                                @case('custom')
+                                    Mostrando solo <strong>Roles Personalizados</strong>
+                                    @break
+                            @endswitch
+                            <a href="{{ route('roles.index', request()->except('filter')) }}" class="btn btn-sm btn-outline-secondary ms-2">
+                                <i class="fas fa-times"></i> Quitar filtro
+                            </a>
+                        </small>
+                    </div>
+                @endif
+
                 <!-- Tabla de roles -->
                 @if($datos->count() > 0)
                 <table class="table table-striped table-hover table-bordered">
@@ -74,9 +136,15 @@
                                 <td>
                                     <strong>{{ $rol->nombreRol }}</strong>
                                     @if($rol->idRol == 1)
-                                        <span class="badge bg-danger ms-1">Sistema</span>
+                                        <span class="badge bg-danger ms-1">Administrador</span>
+                                    @elseif($rol->idRol == 2)
+                                        <span class="badge bg-success ms-1">Cliente</span>
+                                    @elseif($rol->idRol == 3)
+                                        <span class="badge bg-warning ms-1">Repartidor</span>
+                                    @else
+                                        <span class="badge bg-info ms-1">Personalizado</span>
                                     @endif
-                                </td>  
+                                </td>
                                 <td>
                                     <span class="badge bg-secondary">
                                         <i class="fas fa-users"></i> 
@@ -119,7 +187,7 @@
                     <ul class="pagination justify-content-end">
                         <li class="page-item {{ $datos->onFirstPage() ? 'disabled' : '' }}">
                             <a class="page-link" 
-                               href="{{ $datos->previousPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+                               href="{{ $datos->previousPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}{{ request('filter') ? '&filter=' . request('filter') : '' }}">
                                 Atrás
                             </a>
                         </li>
@@ -127,7 +195,7 @@
                         @for ($i = 1; $i <= $datos->lastPage(); $i++)
                             <li class="page-item {{ $datos->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link" 
-                                   href="{{ $datos->url($i) }}{{ request('search') ? '&search=' . request('search') : '' }}">
+                                   href="{{ $datos->url($i) }}{{ request('search') ? '&search=' . request('search') : '' }}{{ request('filter') ? '&filter=' . request('filter') : '' }}">
                                     {{ $i }}
                                 </a>
                             </li>
@@ -135,7 +203,7 @@
                             
                         <li class="page-item {{ !$datos->hasMorePages() ? 'disabled' : '' }}">
                             <a class="page-link" 
-                               href="{{ $datos->nextPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}">
+                               href="{{ $datos->nextPageUrl() }}{{ request('search') ? '&search=' . request('search') : '' }}{{ request('filter') ? '&filter=' . request('filter') : '' }}">
                                 Siguiente
                             </a>
                         </li>
@@ -144,23 +212,155 @@
 
                 <div class="text-muted mt-2">
                     Mostrando {{ $datos->firstItem() }} a {{ $datos->lastItem() }} de {{ $datos->total() }} registros
+                    @if(request('filter') && request('filter') != 'all')
+                        (filtrado por {{ request('filter') }})
+                    @endif
                 </div>
 
                 @else
-                <div class="alert alert-info text-center mt-3">
-                    <i class="fas fa-info-circle"></i> 
-                    @if(request('search'))
-                        No se encontraron roles con "{{ request('search') }}"
-                    @else
-                        No hay roles registrados.
-                    @endif
+                <!-- Mensaje cuando no hay datos -->
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    No se encontraron roles que coincidan con los criterios de búsqueda.
                 </div>
                 @endif
             </div>
         </div>
     </div>
 
-    <!-- Modal para Nuevo Rol -->
+    <!-- Modal para Nuevo Usuario -->
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUsuarioLabel">Crear Nuevo Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('usuarios.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <small><i class="fas fa-info-circle"></i> 
+                            Complete los datos del nuevo usuario y asigne un rol.</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre Completo *</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required 
+                                           placeholder="Ej: Juan Pérez" maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required 
+                                           placeholder="Ej: usuario@ejemplo.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Contraseña *</label>
+                                    <input type="password" class="form-control" id="password" name="password" required 
+                                           placeholder="Mínimo 6 caracteres" minlength="6">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="idRol" class="form-label">Rol *</label>
+                                    <select class="form-select" id="idRol" name="idRol" required>
+                                        <option value="">Seleccione un rol</option>
+                                        @foreach($datos as $rol)
+                                            <option value="{{ $rol->idRol }}">{{ $rol->nombreRol }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Agregar Administrador -->
+    <div class="modal fade" id="modalAgregarAdmin" tabindex="-1" aria-labelledby="modalAgregarAdminLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalAgregarAdminLabel">Agregar Nuevo Administrador</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('usuarios.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <small><i class="fas fa-exclamation-triangle"></i> 
+                            <strong>Importante:</strong> Los administradores tienen acceso completo al sistema.</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="admin_nombre" class="form-label">Nombre Completo *</label>
+                                    <input type="text" class="form-control" id="admin_nombre" name="nombre" required 
+                                           placeholder="Ej: Administrador Principal" maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="admin_email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="admin_email" name="email" required 
+                                           placeholder="Ej: admin@empresa.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="admin_password" class="form-label">Contraseña *</label>
+                                    <input type="password" class="form-control" id="admin_password" name="password" required 
+                                           placeholder="Mínimo 6 caracteres" minlength="6">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rol fijo como Administrador (ID 1) -->
+                        <input type="hidden" name="idRol" value="1">
+                        
+                        <div class="alert alert-info">
+                            <small><i class="fas fa-info-circle"></i> 
+                            Este usuario será creado con el rol de <strong>Administrador</strong> y tendrá acceso completo al sistema.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Crear Administrador</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Nuevo Rol (existente) -->
     <div class="modal fade" id="modalRol" tabindex="-1" aria-labelledby="modalRolLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -199,7 +399,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Crear Rol</button>
+                        <button type="submit" class="btn btn-success">Crear Rol</button>
                     </div>
                 </form>
             </div>
@@ -393,10 +593,29 @@
                 });
             }
 
-            // Limpiar formulario de nuevo rol
-            const modalNuevo = document.getElementById('modalRol');
-            if (modalNuevo) {
-                modalNuevo.addEventListener('hidden.bs.modal', function () {
+            // Limpiar formularios cuando se cierran los modales
+            const modalNuevoUsuario = document.getElementById('modalUsuario');
+            if (modalNuevoUsuario) {
+                modalNuevoUsuario.addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('nombre').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('idRol').value = '';
+                });
+            }
+
+            const modalNuevoAdmin = document.getElementById('modalAgregarAdmin');
+            if (modalNuevoAdmin) {
+                modalNuevoAdmin.addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('admin_nombre').value = '';
+                    document.getElementById('admin_email').value = '';
+                    document.getElementById('admin_password').value = '';
+                });
+            }
+
+            const modalNuevoRol = document.getElementById('modalRol');
+            if (modalNuevoRol) {
+                modalNuevoRol.addEventListener('hidden.bs.modal', function () {
                     document.getElementById('idRol').value = '';
                     document.getElementById('nombreRol').value = '';
                 });
