@@ -6,28 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use App\Models\Roles;
 
-class UsuarioController extends Controller
+class UsuariosController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        
-        $query = Usuario::with('rol');
-        
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('nombre', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%")
-                  ->orWhereHas('rol', function($q) use ($search) {
-                      $q->where('nombreRol', 'LIKE', "%{$search}%");
-                  });
-            });
-        }
-        
-        $datos = $query->orderBy('idUsuario', 'asc')->paginate(10);
-        $roles = Roles::all();
-        
-        return view('usuarios')->with(compact('datos', 'roles'));
+        // Este método no debería usarse si no tenemos vista separada
+        // Redirigimos a roles como fallback
+        return redirect()->route('roles.index');
     }
 
     public function store(Request $request)
@@ -46,7 +31,8 @@ class UsuarioController extends Controller
             'idRol' => $request->idRol
         ]);
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado exitosamente');
+        // Redirigir de vuelta a la página de roles con mensaje de éxito
+        return redirect()->route('roles.index')->with('success', 'Usuario creado exitosamente');
     }
 
     public function update(Request $request, $idUsuario)
@@ -72,7 +58,7 @@ class UsuarioController extends Controller
 
         $usuario->update($data);
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado exitosamente');
+        return redirect()->route('roles.index')->with('success', 'Usuario actualizado exitosamente');
     }
 
     public function destroy($idUsuario)
@@ -80,9 +66,9 @@ class UsuarioController extends Controller
         try {
             $usuario = Usuario::findOrFail($idUsuario);
             $usuario->delete();
-            return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado exitosamente');
+            return redirect()->route('roles.index')->with('success', 'Usuario eliminado exitosamente');
         } catch (\Exception $e) {
-            return redirect()->route('usuarios.index')->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
+            return redirect()->route('roles.index')->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
         }
     }
 }
