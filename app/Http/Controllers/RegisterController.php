@@ -44,10 +44,11 @@ class RegisterController extends Controller
 
         // 2. Guardar en tabla USUARIOS
         Usuarios::create([
-            'nombreUsuario' => $*-.request->nombreUsuario,
+            'nombreUsuario' => $*-.request->nombreUsuario,  
             'passwordUsuario' => Hash::make($request->passwordUsuario),
             //'idRoles' => $request->idRoles // Usuarios por defecto (id = 2)
             'idRoles' => 2 // Usuarios por defecto (id = 2) 
+            'idCliente' => $cliente->idCliente
 
         ]);
 
