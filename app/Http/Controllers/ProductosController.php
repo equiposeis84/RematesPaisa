@@ -18,7 +18,7 @@ class ProductosController extends Controller
                 $q->where('nombreProducto', 'LIKE', "%{$search}%")
                 ->orWhere('idProductos', 'LIKE', "%{$search}%")
                   ->orWhere('categoriaProducto', 'LIKE', "%{$search}%")
-                  ->orWhere('idProveedores', 'LIKE', "%{$search}%");
+                  ->orWhere('NITProveedores', 'LIKE', "%{$search}%"); 
             });
         }
         
@@ -44,21 +44,21 @@ class ProductosController extends Controller
         return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente');
     }
 
-    public function edit($idProductos)
+    public function edit($idProducto) 
     {
-        $producto = Productos::findOrFail($idProductos);
-        return view('productos.edit', compact('producto'));
+        $producto = Productos::findOrFail($idProducto); 
+        return view('productos.edit', compact('producto')); 
     }
 
-    public function update(Request $request, $idProductos){
-        $producto = Productos::findOrFail($idProductos);
+    public function update(Request $request, $idProducto){ 
+        $producto = Productos::findOrFail($idProducto); 
         
         $request->validate([
             'nombreProducto' => 'required|string|max:45',
             'entradaProducto' => 'required|integer',
             'salidaProducto' => 'required|integer',
             'categoriaProducto' => 'required|string|max:45',
-            'idProveedores' => 'required|integer',
+            'NITProveedores' => 'required|integer', 
             'precioUnitario' => 'required|numeric|min:0'
         ]);
         
@@ -67,16 +67,16 @@ class ProductosController extends Controller
             'entradaProducto' => $request->entradaProducto,
             'salidaProducto' => $request->salidaProducto,
             'categoriaProducto' => $request->categoriaProducto,
-            'idProveedores' => $request->idProveedores,
+            'NITProveedores' => $request->NITProveedores, 
             'precioUnitario' => $request->precioUnitario
         ]);
         
         return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente');
     }
 
-    public function destroy($idProductos){
+    public function destroy($idProducto){ 
         try{
-            $producto = Productos::findOrFail($idProductos); 
+            $producto = Productos::findOrFail($idProducto); 
             $producto->delete();
             return redirect()->route('productos.index')->with('success', 'Producto eliminado exitosamente');
             

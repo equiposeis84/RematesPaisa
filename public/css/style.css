@@ -34,7 +34,7 @@ body{
   min-height: 100vh;
 }
 
-/* Barra lateral - MANTIENE TU DISEÑO ORIGINAL */
+/* Barra lateral */
 .sidebar{
   width:var(--sidebar-width);
   min-width:var(--sidebar-width);
@@ -47,6 +47,7 @@ body{
   justify-content:space-between;
   padding:18px 12px;
   box-shadow:2px 0 12px rgba(2,6,23,0.45);
+  z-index: 1000;
 }
 .este{
   display: block;
@@ -77,7 +78,7 @@ body{
 .main-nav ul,.secondary-nav ul{list-style:none}
 .main-nav li{margin:8px 6px}
 
-/* Contenido principal - SOLO AJUSTADO PARA CENTRAR TABLA */
+/* Contenido principal */
 .main-content {
   margin-left: var(--sidebar-width);
   padding: 30px;
@@ -211,11 +212,11 @@ body{
 }
 .has-submenu.open > .submenu-toggle .caret{transform:rotate(180deg);color:var(--color-primary)}
 
-/* CONTENEDOR DE TABLA - CENTRADO Y COMPACTO */
+/* CONTENEDOR DE TABLA */
 .table-container {
   width: 95%;
   max-width: 1400px;
-  margin: 20px auto; /* Centra horizontalmente */
+  margin: 20px auto;
   overflow-x: auto;
   background: var(--color-light);
   border-radius: var(--border-radius);
@@ -223,14 +224,14 @@ body{
   padding: 20px;
 }
 
-/* TABLA - COMPACTA CON LETRA GRANDE */
+/* TABLA*/
 table{
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem; /* LETRA MÁS GRANDE */
+  font-size: 0.9rem;
 }
 th,td{
-  padding: 14px 16px; /* Espaciado cómodo pero compacto */
+  padding: 14px 16px;
   text-align: center;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
@@ -271,7 +272,7 @@ td:last-child {
   flex-wrap: nowrap;
 }
 
-/* Botones - MÁS GRANDES PARA LETRA GRANDE */
+/* Botones*/
 .btn{
   display: inline-flex;
   align-items: center;
@@ -306,7 +307,7 @@ td:last-child {
   color: #08233a;
 }
 
-/* Filtros - CENTRADOS CON LA TABLA */
+/* Filtros */
 .filters{
   display: flex;
   gap: 12px;
@@ -319,7 +320,7 @@ td:last-child {
   box-shadow: var(--card-shadow);
   width: 95%;
   max-width: 1400px;
-  margin: 0 auto; /* Centrado */
+  margin: 0 auto;
 }
 .search-box{
   display: flex;
@@ -344,7 +345,7 @@ td:last-child {
 .filters .btn{
   padding: 10px 18px;
   border-radius: 6px;
-  background: #0f172a
+  background: #0f172a;
   color: var(--color-light);
   cursor: pointer;
   font-weight: 500;
@@ -363,7 +364,7 @@ td:last-child {
   font-size: 0.9rem;
 }
 
-/* Paginación - CENTRADA */
+/* Paginación*/
 .pagination{
   display: flex;
   gap: 8px;
@@ -372,22 +373,20 @@ td:last-child {
   padding: 15px;
   width: 95%;
   max-width: 1400px;
-  margin: 20px auto; /* Centrado */
-}
-.pagination button{
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--color-border);
-  background: var(--color-light);
-  font-size: 0.9rem;
-}
-.pagination button.active{
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+  margin: 20px auto;
 }
 
 /* Responsive */
+@media(max-width: 1200px){
+  /* Pantalla pequeña*/
+  .table-container, .filters, .pagination{
+    width: 92%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 @media(max-width: 900px){
   .dashboard-container{
     flex-direction: column;
@@ -413,5 +412,66 @@ td:last-child {
   th, td{
     padding: 10px;
     font-size: 0.9rem;
+  }
+}
+/* Mitad de pantalla */
+@media(max-width: 768px){
+  .main-content {
+    padding: 20px 15px;
+  }
+  
+  .table-container {
+    width: 100%;
+    margin: 15px auto;
+    padding: 15px;
+  }
+  
+  .filters {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .search-box {
+    max-width: 100%;
+    order: 1;
+  }
+  
+  /* Sidebar fija para que el contenedor se vea*/
+  .main-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .sidebar {
+    z-index: 1000;
+  }
+}
+
+/* Pantallas pequeñas */
+@media(max-width: 576px){
+  .main-content {
+    padding: 15px 10px;
+  }
+  
+  .table-container {
+    padding: 12px;
+    margin: 10px auto;
+  }
+  
+  th, td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .acciones {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    height: 28px;
   }
 }

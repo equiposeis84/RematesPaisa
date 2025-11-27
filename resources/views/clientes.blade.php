@@ -93,8 +93,10 @@
                                     <button type="button" class="btn btn-danger btn-sm" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalDeleteCliente"
-                                            data-id="{{ $item->idCliente }}">
-                                        <i class="fa-solid fa-trash-can"></i> Eliminar
+                                            data-id="{{ $item->idCliente }}"
+                                            data-empresa="{{ $item->NombreEmpresa}}">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+
                                     </button>
 
                                 </td>
@@ -242,28 +244,28 @@
         </div>
     </div>
     <!-- Modal para Eliminar Cliente -->
-                <div class="modal fade" id="modalDeleteCliente" tabindex="-1" aria-labelledby="modalDeleteClienteLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form id="formEliminarCliente" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <div class="modal-body">
-                                    <p>¿Está seguro de que desea eliminar este cliente?</p>
-                                    <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<div class="modal fade" id="modalDeleteCliente" tabindex="-1" aria-labelledby="modalDeleteClienteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEliminarCliente" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-body">
+                    <p>¿Está seguro de que desea eliminar al cliente <strong><span id="nombreClienteEliminar"></span></strong>?</p>
+                    <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
                       
 
     <!-- Modal para Editar Cliente -->
@@ -406,17 +408,26 @@
             });
         }
 
-        // Configurar modal de eliminación
+        // Configurar modal de eliminación - CORREGIDO
         const modalDelete = document.getElementById('modalDeleteCliente');
         if (modalDelete) {
             modalDelete.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const id = button.getAttribute('data-id');
+                const empresa = button.getAttribute('data-empresa'); // ESTA LÍNEA FALTABA
+                
+                console.log('ID:', id, 'Empresa:', empresa); // Para debug
+                
+                // Actualizar el nombre en el modal
+                const nombreSpan = document.getElementById('nombreClienteEliminar');
+                if (nombreSpan && empresa) {
+                    nombreSpan.textContent = empresa;
+                }
                 
                 // Actualizar el formulario de eliminación
                 document.getElementById('formEliminarCliente').action = `/clientes/${id}`;
             });
         }
-    }); 
+    });
 </script>
 @endsection
