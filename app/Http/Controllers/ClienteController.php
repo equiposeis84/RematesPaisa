@@ -17,7 +17,7 @@ class ClienteController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('nombreCliente', 'LIKE', "%{$search}%")
-                    ->orWhere('NitEmpresa', 'LIKE', "%{$search}%")
+                    ->orWhere('idCliente', 'LIKE', "%{$search}%")
                     ->orWhere('apellidoCliente', 'LIKE', "%{$search}%")
                     ->orWhere('emailCliente', 'LIKE', "%{$search}%")
                     ->orWhere('idCliente', 'LIKE', "%{$search}%")
@@ -34,9 +34,8 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'NitEmpresa'           => 'nullable|string|max:100',
+            'idCliente'           => 'required|string|max:100',
             'NombreEmpresa'        => 'required|string|max:100',
-            'idCliente'            => 'required|unique:cliente,idCliente',
             'nombreUsuario'        => 'required|string|max:40|unique:usuarios,nombreUsuario',
             'tipoDocumentoCliente' => 'required|string|max:20',
             'nombreCliente'        => 'required|string|max:100',
@@ -63,9 +62,8 @@ class ClienteController extends Controller
 
         // Crear cliente
         Cliente::create([
-            'NitEmpresa'           => $request->NitEmpresa,   // <-- LISTO
+            'idCliente'           => $request->idCliente,   // <-- LISTO
             'NombreEmpresa'        => $request->NombreEmpresa,
-            'idCliente'            => $request->idCliente,
             'tipoDocumentoCliente' => $request->tipoDocumentoCliente,
             'nombreCliente'        => $request->nombreCliente,
             'apellidoCliente'      => $request->apellidoCliente,
@@ -79,6 +77,7 @@ class ClienteController extends Controller
             'nombreUsuario'   => $request->emailCliente, // puedes usar email como usuario
             'passwordUsuario' => bcrypt($request->passwordUsuario),
             'idRoles'         => 1,
+            'idCliente'       => $request->idCliente,
         ]);
 
         return redirect()->route('clientes.index')
@@ -96,19 +95,20 @@ class ClienteController extends Controller
         $cliente = Cliente::findOrFail($idCliente);
 
         $request->validate([
+            'idCliente'           => 'required|string|max:100',
             'NombreEmpresa'        => 'required|string|max:100',
             'tipoDocumentoCliente' => 'required|string|max:20',
             'nombreCliente'        => 'required|string|max:100',
             'apellidoCliente'      => 'required|string|max:100',
             'direccionCliente'     => 'required|string|max:255',
             'telefonoCliente'      => 'required|string|max:45',
-            'emailCliente'         => 'required|email|unique:cliente,emailCliente,' . $idCliente . ',idCliente',
-            'NitEmpresa'           => 'nullable|string|max:100',
+            'emailCliente'         => 'required|email|unique:cliente,emailCliente,' . $idCliente . ',idCliente'
         ], [
             'emailCliente.unique'  => 'El email ya está en uso por otro cliente.',
         ]);
 
         $cliente->update([
+            'idCliente'           => $request->idCliente,
             'NombreEmpresa'        => $request->NombreEmpresa,
             'tipoDocumentoCliente' => $request->tipoDocumentoCliente,
             'nombreCliente'        => $request->nombreCliente,
@@ -116,7 +116,7 @@ class ClienteController extends Controller
             'direccionCliente'     => $request->direccionCliente,
             'telefonoCliente'      => $request->telefonoCliente,
             'emailCliente'         => $request->emailCliente,
-            'NitEmpresa'           => $request->NitEmpresa,
+
         ]);
 
         return redirect()->route('clientes.index')

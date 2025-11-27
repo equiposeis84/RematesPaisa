@@ -40,6 +40,7 @@ Route::put('/clientes/{idCliente}', [ClienteController::class,"update"])->name('
 Route::delete('/clientes/{idCliente}', [ClienteController::class,"destroy"])->name('clientes.destroy');
 
 
+
 // -----------------------------------------------------------------------------
 // RUTAS CRUD PRODUCTOS
 // -----------------------------------------------------------------------------
