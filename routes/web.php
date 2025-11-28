@@ -101,21 +101,11 @@ Route::get('/', function () {
     return view('index');
 });
 
-<<<<<<< HEAD
 //Rutas para roles
-=======
-
-// -----------------------------------------------------------------------------
-// RUTAS PARA ROLES
-// -----------------------------------------------------------------------------
-
-// Cliente (role 2)
->>>>>>> 4d5b91948a2ec94d35c21f5a3453a124164b06c6
 Route::get('/cliente', function () {
     return view('Clientes.CatalogoU'); 
 })->middleware(['auth', 'role:1']);
 
-<<<<<<< HEAD
 Route::middleware(['role:2'])->group(function () {
     Route::get('/resources/views/Clientes', [RepartidorController::class, 'index'])->name('repartidor.pedidos');
     // vistas de REPARTIDOR
@@ -125,19 +115,6 @@ Route::middleware(['role:3'])->group(function () {
         ->name('admin.panel');   // Vista del administrador
 });
 //Fin nuevos agregados por nicolas
-=======
-// Repartidor (role 3)
-//Route::middleware(['role:3'])->group(function () {
-//    Route::get('/resources/views/Clientes', [RepartidorController::class, 'index'])
-//        ->name('repartidor.pedidos');
-//});
-
-// Administrador (role 1)
-//Route::middleware(['role:1'])->group(function () {
-//    Route::get('/admin/panel', [AdminController::class, 'index'])
-//        ->name('admin.panel');  
-//});
->>>>>>> 4d5b91948a2ec94d35c21f5a3453a124164b06c6
 
 
 // Debes tener una ruta llamada 'admin.inicio' que muestre la vista admin:
