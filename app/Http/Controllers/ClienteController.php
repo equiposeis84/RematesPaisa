@@ -16,6 +16,10 @@ class ClienteController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('nombreCliente', 'LIKE', "%{$search}%")
+<<<<<<< HEAD
+=======
+                    ->orWhere('idCliente', 'LIKE', "%{$search}%")
+>>>>>>> 6acca2d5ca189ffb789ffba189f510767b6f6be7
                     ->orWhere('apellidoCliente', 'LIKE', "%{$search}%")
                     ->orWhere('emailCliente', 'LIKE', "%{$search}%")
                     ->orWhere('tipoDocumentoCliente', 'LIKE', "%{$search}%");
@@ -30,6 +34,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+<<<<<<< HEAD
             'idCliente'           => 'required|unique:cliente,idCliente',
             'nombreUsuario'   => 'required|string|max:40|unique:usuarios,nombreUsuario',
             'tipoDocumentoCliente'=> 'required|string|max:20',
@@ -72,6 +77,11 @@ class ClienteController extends Controller
         $cliente = Cliente::findOrFail($idCliente);
 
         $request->validate([
+=======
+            'idCliente'           => 'required|string|max:100',
+            'NombreEmpresa'        => 'required|string|max:100',
+            'nombreUsuario'        => 'required|string|max:40|unique:usuarios,nombreUsuario',
+>>>>>>> 6acca2d5ca189ffb789ffba189f510767b6f6be7
             'tipoDocumentoCliente' => 'required|string|max:20',
             'nombreCliente'        => 'required|string|max:100',
             'apellidoCliente'      => 'required|string|max:100',
@@ -80,7 +90,14 @@ class ClienteController extends Controller
             'direccionCliente'     => 'nullable|string|max:255',
         ]);
 
+<<<<<<< HEAD
         $cliente->update([
+=======
+        // Crear cliente
+        Cliente::create([
+            'idCliente'           => $request->idCliente,   // <-- LISTO
+            'NombreEmpresa'        => $request->NombreEmpresa,
+>>>>>>> 6acca2d5ca189ffb789ffba189f510767b6f6be7
             'tipoDocumentoCliente' => $request->tipoDocumentoCliente,
             'nombreCliente'        => $request->nombreCliente,
             'apellidoCliente'      => $request->apellidoCliente,
@@ -89,7 +106,59 @@ class ClienteController extends Controller
             'direccionCliente'     => $request->direccionCliente
         ]);
 
+<<<<<<< HEAD
         return redirect()->route('clientes.index')->with('success', 'Cliente actualizado exitosamente');
+=======
+        // Crear usuario asociado
+        Usuario::create([
+            'nombreUsuario'   => $request->emailCliente, // puedes usar email como usuario
+            'passwordUsuario' => bcrypt($request->passwordUsuario),
+            'idRoles'         => 1,
+            'idCliente'       => $request->idCliente,
+        ]);
+
+        return redirect()->route('clientes.index')
+                         ->with('success', 'Cliente creado exitosamente');
+    }
+
+    public function edit($idCliente)
+    {
+        $cliente = Cliente::findOrFail($idCliente);
+        return view('clientes.edit', compact('cliente'));
+    }
+
+    public function update(Request $request, $idCliente)
+    {
+        $cliente = Cliente::findOrFail($idCliente);
+
+        $request->validate([
+            'idCliente'           => 'required|string|max:100',
+            'NombreEmpresa'        => 'required|string|max:100',
+            'tipoDocumentoCliente' => 'required|string|max:20',
+            'nombreCliente'        => 'required|string|max:100',
+            'apellidoCliente'      => 'required|string|max:100',
+            'direccionCliente'     => 'required|string|max:255',
+            'telefonoCliente'      => 'required|string|max:45',
+            'emailCliente'         => 'required|email|unique:cliente,emailCliente,' . $idCliente . ',idCliente'
+        ], [
+            'emailCliente.unique'  => 'El email ya está en uso por otro cliente.',
+        ]);
+
+        $cliente->update([
+            'idCliente'           => $request->idCliente,
+            'NombreEmpresa'        => $request->NombreEmpresa,
+            'tipoDocumentoCliente' => $request->tipoDocumentoCliente,
+            'nombreCliente'        => $request->nombreCliente,
+            'apellidoCliente'      => $request->apellidoCliente,
+            'direccionCliente'     => $request->direccionCliente,
+            'telefonoCliente'      => $request->telefonoCliente,
+            'emailCliente'         => $request->emailCliente,
+
+        ]);
+
+        return redirect()->route('clientes.index')
+                         ->with('success', 'Cliente actualizado exitosamente');
+>>>>>>> 6acca2d5ca189ffb789ffba189f510767b6f6be7
     }
 
     public function destroy($idCliente)

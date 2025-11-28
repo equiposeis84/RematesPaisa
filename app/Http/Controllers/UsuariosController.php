@@ -10,7 +10,6 @@ class UsuariosController extends Controller
 {
     public function index(Request $request)
     {
-        // Este método no debería usarse si no tenemos vista separada
         // Redirigimos a roles como fallback
         return redirect()->route('roles.index');
     }
@@ -31,7 +30,6 @@ class UsuariosController extends Controller
             'idRol' => $request->idRol
         ]);
 
-        // Redirigir de vuelta a la página de roles con mensaje de éxito
         return redirect()->route('roles.index')->with('success', 'Usuario creado exitosamente');
     }
 
@@ -71,4 +69,18 @@ class UsuariosController extends Controller
             return redirect()->route('roles.index')->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
         }
     }
+    public function cambiarRol(Request $request, $idUsuario)
+{
+    $usuario = Usuario::findOrFail($idUsuario);
+    
+    $request->validate([
+        'idRol' => 'required|exists:roles,idRol'
+    ]);
+
+    $usuario->update([
+        'idRol' => $request->idRol
+    ]);
+
+    return redirect()->route('roles.index')->with('success', 'Rol del usuario actualizado exitosamente');
+}
 }
