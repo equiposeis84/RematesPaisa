@@ -5,47 +5,51 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Roles;
 use App\Models\Usuario;
-
+use Illuminate\Support\Facades\Log;
 class RolesController extends Controller
 {
     public function index(Request $request)
     {
         $search = $request->get('search');
-        $filter = $request->get('filter', 'all'); // Nuevo parámetro de filtro
+        $filter = $request->get('filter', 'all');
         
-        $query = Roles::withCount('usuarios');
+        // Cambiar: ahora consultamos usuarios en lugar de roles
+        $query = Usuario::with('rol');
         
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('idRol', 'LIKE', "%{$search}%")
-                  ->orWhere('nombreRol', 'LIKE', "%{$search}%");
+                $q->where('nombre', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhereHas('rol', function($q) use ($search) {
+                      $q->where('nombreRol', 'LIKE', "%{$search}%");
+                  });
             });
         }
 
-        // Aplicar filtros por tipo de rol
+        // Aplicar filtros por tipo de usuario
         if ($filter !== 'all') {
             switch($filter) {
                 case 'admins':
-                    $query->where('idRol', 1); // Administradores
+                    $query->where('idRol', 1);
                     break;
                 case 'clientes':
-                    $query->where('idRol', 2); // Clientes
+                    $query->where('idRol', 2);
                     break;
                 case 'repartidores':
-                    $query->where('idRol', 3); // Repartidores
+                    $query->where('idRol', 3);
                     break;
                 case 'custom':
-                    $query->where('idRol', '>', 3); // Roles personalizados
+                    $query->where('idRol', '>', 3);
                     break;
             }
         }
         
-        $datos = $query->orderBy('idRol', 'asc')->paginate(10);
+        $usuarios = $query->orderBy('idUsuario', 'asc')->paginate(10);
+        $roles = Roles::all(); // Para los dropdowns
         
-        return view('roles')->with('datos', $datos);
+        return view('roles')->with(compact('usuarios', 'roles'));
     }
 
-    // ... el resto de tus métodos se mantienen igual ...
     public function create()
     {
         return view('roles.create');
