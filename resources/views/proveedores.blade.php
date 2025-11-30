@@ -20,6 +20,19 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
+                <!-- Mostrar errores de validación -->
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 
                 <hr>
 
@@ -81,11 +94,10 @@
                                  <button type="button" class="btn btn-danger btn-sm"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEliminarProveedor"
-                                            data-id="{{ $item->NITProveedores }}">
+                                            data-id="{{ $item->NITProveedores }}"
+                                            data-nombre="{{ $item->nombreProveedor }}">
                                         <i class="fa-solid fa-trash"></i> Eliminar
                                     </button>
-
-                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -158,8 +170,10 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
-                                    <input type="text" class="form-control" id="NITProveedores" name="NITProveedores" required 
-                                           placeholder="Ej: 123456789">
+                                    <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" 
+                                           value="{{ old('NITProveedores') }}" required 
+                                           placeholder="Ej: 123456789" min="1">
+                                    <div class="form-text">Ingrese solo números (sin puntos, comas o espacios)</div>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +183,8 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="nombreProveedor" class="form-label">Nombre del Proveedor *</label>
-                                    <input type="text" class="form-control" id="nombreProveedor" name="nombreProveedor" required>
+                                    <input type="text" class="form-control" id="nombreProveedor" name="nombreProveedor" 
+                                           value="{{ old('nombreProveedor') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -177,13 +192,15 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="telefonoProveedor" class="form-label">Teléfono *</label>
-                                    <input type="text" class="form-control" id="telefonoProveedor" name="telefonoProveedor" required>
+                                    <input type="text" class="form-control" id="telefonoProveedor" name="telefonoProveedor" 
+                                           value="{{ old('telefonoProveedor') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="correoProveedor" class="form-label">Correo Electrónico *</label>
-                                    <input type="email" class="form-control" id="correoProveedor" name="correoProveedor" required>
+                                    <input type="email" class="form-control" id="correoProveedor" name="correoProveedor" 
+                                           value="{{ old('correoProveedor') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +231,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="edit_NITProveedores" class="form-label">NIT Proveedor *</label>
-                                    <input type="text" class="form-control" id="edit_NITProveedores" name="NITProveedores" readonly>
+                                    <input type="number" class="form-control" id="edit_NITProveedores" name="NITProveedores" readonly>
                                 </div>
                             </div>
                         </div>
@@ -250,6 +267,7 @@
             </div>
         </div>
     </div>
+
     <!-- Modal para Eliminar Proveedor -->
     <div class="modal fade" id="modalEliminarProveedor" tabindex="-1" aria-labelledby="modalEliminarProveedorLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -262,7 +280,8 @@
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">
-                        <p>¿Está seguro de que desea eliminar este proveedor?</p>
+                        <p>¿Está seguro de que desea eliminar al proveedor <strong><span id="nombreProveedorEliminar"></span></strong>?</p>
+                        <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -314,13 +333,24 @@
                     document.getElementById('correoProveedor').value = '';
                 });
             }
+
             // Configurar modal de eliminación
             const modalEliminar = document.getElementById('modalEliminarProveedor');
-            modalEliminar.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                document.getElementById('formEliminarProveedor').action = `/proveedores/${id}`;
-            });
+            if (modalEliminar) {
+                modalEliminar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    const nombre = button.getAttribute('data-nombre');
+                    
+                    // Actualizar el nombre en el modal
+                    const nombreSpan = document.getElementById('nombreProveedorEliminar');
+                    if (nombreSpan && nombre) {
+                        nombreSpan.textContent = nombre;
+                    }
+                    
+                    document.getElementById('formEliminarProveedor').action = `/proveedores/${id}`;
+                });
+            }
         });
     </script>
 @endsection

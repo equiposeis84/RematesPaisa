@@ -11,12 +11,10 @@ class Cliente extends Model
 
     protected $table = 'cliente';
     protected $primaryKey = 'idCliente';
-    public $incrementing = false; // Como es documento, NO debe autoincrementar
-    protected $keyType = 'string'; // Documento puede contener letras o ceros a la izquierda
-   
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
-        'NitEmpresa',
         'idCliente',
         'NombreEmpresa',
         'tipoDocumentoCliente',
@@ -24,7 +22,21 @@ class Cliente extends Model
         'apellidoCliente',
         'emailCliente',
         'telefonoCliente',
-        'direccionCliente'
+        'direccionCliente',
+        'idRol'
     ];
+
     public $timestamps = false;
+
+    // Relación con roles para obtener el nombre del rol
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'idRol', 'idRol');
+    }
+
+    // Accessor para obtener el nombre del rol
+    public function getNombreRolAttribute()
+    {
+        return $this->rol ? $this->rol->nombreRol : 'Sin Rol';
+    }
 }
