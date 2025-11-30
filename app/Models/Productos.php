@@ -9,16 +9,10 @@ class Productos extends Model
 {
     use HasFactory;
 
-    protected $table = 'productos'; 
-    
+    protected $table = 'productos';
     protected $primaryKey = 'idProductos';
     
-    public $incrementing = true;
-    
-    protected $keyType = 'integer';
-    
     protected $fillable = [
-        'idProductos',
         'nombreProducto',
         'entradaProducto',
         'salidaProducto',
@@ -28,4 +22,10 @@ class Productos extends Model
     ];
 
     public $timestamps = false;
+
+    // Relación con proveedor
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, 'NITProveedores', 'NITProveedores');
+    }
 }

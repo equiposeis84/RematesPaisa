@@ -88,7 +88,13 @@
                                 </td>
                                 <td>{{ $item->repartidorPedido ?? 'N/A' }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-sm" 
+                                    <!-- Botón para gestionar productos del pedido -->
+                                    <a href="{{ route('pedidos.productos.index', $item->idPedidos) }}" 
+                                       class="btn btn-info btn-sm mb-1">
+                                        <i class="fa-solid fa-cart-plus"></i> Productos
+                                    </a>
+                                    
+                                    <button type="button" class="btn btn-success btn-sm mb-1" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEditarPedido"
                                             data-id="{{ $item->idPedidos }}"
@@ -102,13 +108,13 @@
                                             data-repartidor="{{ $item->repartidorPedido }}">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-sm" 
+                                    
+                                    <button type="button" class="btn btn-danger btn-sm mb-1" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#modalEliminarPedido"
                                             data-id="{{ $item->idPedidos }}">
                                         <i class="fa-solid fa-trash"></i> Eliminar
                                     </button>
-                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -261,7 +267,8 @@
             </div>
         </div>
     </div>
-     <!-- Modal para Eliminar el pedido  -->
+
+    <!-- Modal para Eliminar Pedido -->
     <div class="modal fade" id="modalEliminarPedido" tabindex="-1" aria-labelledby="modalEliminarPedidoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -434,9 +441,9 @@
                     document.getElementById('repartidorPedido').value = '';
                 });
             }
-        });
-            // Modal para eliminar pedido
-                    const modalEliminar = document.getElementById('modalEliminarPedido');
+
+            // Configurar modal de eliminación
+            const modalEliminar = document.getElementById('modalEliminarPedido');
             if (modalEliminar) {
                 modalEliminar.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
@@ -446,5 +453,6 @@
                     document.getElementById('formEliminarPedido').action = `/pedidos/${id}`;
                 });
             }
+        });
     </script>
 @endsection

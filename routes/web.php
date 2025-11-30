@@ -1,10 +1,5 @@
 <?php
 
-// -----------------------------------------------------------------------------
-// ARCHIVO COMPLETO COMBINADO CON TODAS LAS RUTAS Y TODOS LOS COMENTARIOS ORIGINALES
-// -----------------------------------------------------------------------------
-
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductosController; 
@@ -13,22 +8,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuariosController; 
-
-//Agregar y mofificar en ClienteController.php para mandar a vista de inicio clientes
-// Route::get('/auth/login', [LoginController::class, 'show'])->name('login');
-
-
-// -----------------------------------------------------------------------------
-// RUTAS PRINCIPALES DEL SISTEMA (ANTIGUAS DEL PROYECTO)
-// -----------------------------------------------------------------------------
-
-
-//---
-//Route::get('/', function () {
-//    return view('welcome'); 
-//});
-//----
-
+use App\Http\Controllers\ProductosPedidoController;
 
 // -----------------------------------------------------------------------------
 // RUTAS CRUD CLIENTES
@@ -38,8 +18,6 @@ Route::post('/clientes', [ClienteController::class,"store"])->name('clientes.sto
 Route::get('/clientes/{idCliente}', [ClienteController::class,"edit"])->name('clientes.edit');
 Route::put('/clientes/{idCliente}', [ClienteController::class,"update"])->name('clientes.update');
 Route::delete('/clientes/{idCliente}', [ClienteController::class,"destroy"])->name('clientes.destroy');
-
-
 
 // -----------------------------------------------------------------------------
 // RUTAS CRUD PRODUCTOS
@@ -60,7 +38,12 @@ Route::get('/pedidos/{idPedidos}', [PedidosController::class,"edit"])->name('ped
 Route::put('/pedidos/{idPedidos}', [PedidosController::class,"update"])->name('pedidos.update');
 Route::delete('/pedidos/{idPedidos}', [PedidosController::class,"destroy"])->name('pedidos.destroy');
 
+// -----------------------------------------------------------------------------
+// RUTAS PARA PRODUCTOS EN PEDIDOS
 
+Route::get('/pedidos/{id}/productos', [ProductosPedidoController::class, 'index'])->name('pedidos.productos.index');
+Route::post('/pedidos/{id}/productos', [ProductosPedidoController::class, 'store'])->name('pedidos.productos.store');
+Route::delete('/pedidos/{idPedido}/productos/{idProducto}', [ProductosPedidoController::class, 'destroy'])->name('pedidos.productos.destroy');
 // -----------------------------------------------------------------------------
 // RUTAS CRUD PROVEEDORES
 // -----------------------------------------------------------------------------
@@ -94,28 +77,17 @@ Route::delete('/usuarios/{idUsuario}', [App\Http\Controllers\UsuariosController:
 // -----------------------------------------------------------------------------
 // RUTAS DE AUTENTICACIÓN Y REGISTRO (TU PARTE DEL PROYECTO)
 // -----------------------------------------------------------------------------
-
 Route::get('/auth/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // Rutas de prueba/redirección
-Route::get('/dashboard', function () {
-    return view('dashboard'); // crea esta vista simple o cambia a la que uses
-})->name('dashboard');
-
+Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 // Ruta admin de ejemplo (redirige al panel admin)
-Route::get('/admin', function () {
-    return redirect()->route('admin.inicio');
-})->middleware([]);
-
-
+Route::get('/admin', function () {return redirect()->route('admin.inicio');})->middleware([]);
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
-
-//Nuevos agregados por nicolas
-
 
 // -----------------------------------------------------------------------------
 // GRUPO DE VISTAS PARA USUARIOS (CATÁLOGO, CARRITO, ETC.)
