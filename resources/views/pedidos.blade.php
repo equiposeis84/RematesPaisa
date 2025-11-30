@@ -179,7 +179,7 @@
                     <h1 class="modal-title fs-5" id="modalPedidoLabel">Nuevo Pedido</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('pedidos.store') }}" method="POST">
+                <form action="{{ route('pedidos.store') }}" method="POST" id="formNuevoPedido">
                     @csrf
                     <div class="modal-body">
                         <!-- CAMPO PARA ID PEDIDO -->
@@ -220,41 +220,83 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="idCliente" class="form-label">ID Cliente *</label>
-                                    <input type="text" class="form-control" id="idCliente" name="idCliente" required 
-                                           placeholder="Ej: CL001">
+
+                        <!-- Información del Cliente -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">Información del Cliente</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="idCliente" class="form-label">Seleccionar Cliente *</label>
+                                            <select class="form-select" id="idCliente" name="idCliente" required>
+                                                <option value="">Seleccionar cliente...</option>
+                                                @foreach($clientes = \App\Models\Cliente::all() as $cliente)
+                                                    <option value="{{ $cliente->idCliente }}" 
+                                                            data-nombre="{{ $cliente->nombreCliente }}"
+                                                            data-apellido="{{ $cliente->apellidoCliente }}"
+                                                            data-empresa="{{ $cliente->NombreEmpresa }}"
+                                                            data-email="{{ $cliente->emailCliente }}"
+                                                            data-telefono="{{ $cliente->telefonoCliente }}"
+                                                            data-direccion="{{ $cliente->direccionCliente }}">
+                                                        {{ $cliente->idCliente }} - {{ $cliente->nombreCliente }} {{ $cliente->apellidoCliente }} ({{ $cliente->NombreEmpresa }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="infoCliente" class="mt-3" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Nombre:</strong> <span id="clienteNombre"></span></p>
+                                            <p><strong>Empresa:</strong> <span id="clienteEmpresa"></span></p>
+                                            <p><strong>Email:</strong> <span id="clienteEmail"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Teléfono:</strong> <span id="clienteTelefono"></span></p>
+                                            <p><strong>Dirección:</strong> <span id="clienteDireccion"></span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="valorPedido" class="form-label">Valor *</label>
-                                    <input type="number" step="0.01" class="form-control" id="valorPedido" name="valorPedido" required min="0">
+                                    <input type="number" step="0.01" class="form-control" id="valorPedido" name="valorPedido" required min="0" value="0">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="ivaPedido" class="form-label">IVA *</label>
-                                    <input type="number" step="0.01" class="form-control" id="ivaPedido" name="ivaPedido" required min="0">
+                                    <label for="ivaPedido" class="form-label">IVA (19%)</label>
+                                    <input type="number" step="0.01" class="form-control" id="ivaPedido" name="ivaPedido" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="totalPedido" class="form-label">Total *</label>
-                                    <input type="number" step="0.01" class="form-control" id="totalPedido" name="totalPedido" required min="0">
+                                    <label for="totalPedido" class="form-label">Total</label>
+                                    <input type="number" step="0.01" class="form-control" id="totalPedido" name="totalPedido" readonly>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="repartidorPedido" class="form-label">Repartidor</label>
-                                    <input type="text" class="form-control" id="repartidorPedido" name="repartidorPedido" 
-                                           placeholder="Nombre del repartidor">
+                                    <select class="form-select" id="repartidorPedido" name="repartidorPedido">
+                                        <option value="">Seleccionar repartidor...</option>
+                                        @foreach($repartidores = \App\Models\Usuario::where('idRol', 3)->get() as $repartidor)
+                                            <option value="{{ $repartidor->nombre }}">
+                                                {{ $repartidor->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -339,14 +381,49 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="edit_idCliente" class="form-label">ID Cliente *</label>
-                                    <input type="text" class="form-control" id="edit_idCliente" name="idCliente" required>
+
+                        <!-- Información del Cliente en Edición -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">Información del Cliente</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="edit_idCliente" class="form-label">Seleccionar Cliente *</label>
+                                            <select class="form-select" id="edit_idCliente" name="idCliente" required>
+                                                @foreach($clientes = \App\Models\Cliente::all() as $cliente)
+                                                    <option value="{{ $cliente->idCliente }}" 
+                                                            data-nombre="{{ $cliente->nombreCliente }}"
+                                                            data-apellido="{{ $cliente->apellidoCliente }}"
+                                                            data-empresa="{{ $cliente->NombreEmpresa }}"
+                                                            data-email="{{ $cliente->emailCliente }}"
+                                                            data-telefono="{{ $cliente->telefonoCliente }}"
+                                                            data-direccion="{{ $cliente->direccionCliente }}">
+                                                        {{ $cliente->idCliente }} - {{ $cliente->nombreCliente }} {{ $cliente->apellidoCliente }} ({{ $cliente->NombreEmpresa }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="editInfoCliente" class="mt-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Nombre:</strong> <span id="editClienteNombre"></span></p>
+                                            <p><strong>Empresa:</strong> <span id="editClienteEmpresa"></span></p>
+                                            <p><strong>Email:</strong> <span id="editClienteEmail"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Teléfono:</strong> <span id="editClienteTelefono"></span></p>
+                                            <p><strong>Dirección:</strong> <span id="editClienteDireccion"></span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -356,22 +433,30 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="edit_ivaPedido" class="form-label">IVA *</label>
-                                    <input type="number" step="0.01" class="form-control" id="edit_ivaPedido" name="ivaPedido" required min="0">
+                                    <label for="edit_ivaPedido" class="form-label">IVA (19%)</label>
+                                    <input type="number" step="0.01" class="form-control" id="edit_ivaPedido" name="ivaPedido" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="edit_totalPedido" class="form-label">Total *</label>
-                                    <input type="number" step="0.01" class="form-control" id="edit_totalPedido" name="totalPedido" required min="0">
+                                    <label for="edit_totalPedido" class="form-label">Total</label>
+                                    <input type="number" step="0.01" class="form-control" id="edit_totalPedido" name="totalPedido" readonly>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="edit_repartidorPedido" class="form-label">Repartidor</label>
-                                    <input type="text" class="form-control" id="edit_repartidorPedido" name="repartidorPedido">
+                                    <select class="form-select" id="edit_repartidorPedido" name="repartidorPedido">
+                                        <option value="">Seleccionar repartidor...</option>
+                                        @foreach($repartidores = \App\Models\Usuario::where('idRol', 3)->get() as $repartidor)
+                                            <option value="{{ $repartidor->nombre }}">
+                                                {{ $repartidor->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -387,8 +472,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto cerrar alertas después de 5 segundos
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto cerrar alertas después de 5 segundos
             setTimeout(function() {
                 const alerts = document.querySelectorAll('.alert');
                 alerts.forEach(function(alert) {
@@ -396,6 +481,61 @@
                     bsAlert.close();
                 });
             }, 5000);
+
+            // Función para calcular IVA y Total
+            function calcularTotales(valorInput, ivaInput, totalInput) {
+                const valor = parseFloat(valorInput.value) || 0;
+                const iva = valor * 0.19;
+                const total = valor + iva;
+                
+                ivaInput.value = iva.toFixed(2);
+                totalInput.value = total.toFixed(2);
+            }
+
+            // Calcular IVA y Total en nuevo pedido
+            const valorInput = document.getElementById('valorPedido');
+            const ivaInput = document.getElementById('ivaPedido');
+            const totalInput = document.getElementById('totalPedido');
+
+            if (valorInput) {
+                valorInput.addEventListener('input', function() {
+                    calcularTotales(valorInput, ivaInput, totalInput);
+                });
+                // Calcular inicialmente
+                calcularTotales(valorInput, ivaInput, totalInput);
+            }
+
+            // Calcular IVA y Total en editar pedido
+            const editValorInput = document.getElementById('edit_valorPedido');
+            const editIvaInput = document.getElementById('edit_ivaPedido');
+            const editTotalInput = document.getElementById('edit_totalPedido');
+
+            if (editValorInput) {
+                editValorInput.addEventListener('input', function() {
+                    calcularTotales(editValorInput, editIvaInput, editTotalInput);
+                });
+            }
+
+            // Mostrar información del cliente en nuevo pedido
+            const clienteSelect = document.getElementById('idCliente');
+            const infoCliente = document.getElementById('infoCliente');
+
+            if (clienteSelect) {
+                clienteSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.value !== '') {
+                        document.getElementById('clienteNombre').textContent = 
+                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
+                        document.getElementById('clienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('clienteEmail').textContent = selectedOption.getAttribute('data-email');
+                        document.getElementById('clienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
+                        document.getElementById('clienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
+                        infoCliente.style.display = 'block';
+                    } else {
+                        infoCliente.style.display = 'none';
+                    }
+                });
+            }
 
             // Configurar modal de edición
             const modalEditar = document.getElementById('modalEditarPedido');
@@ -423,6 +563,37 @@
                     document.getElementById('edit_totalPedido').value = total;
                     document.getElementById('edit_estadoPedido').value = estado;
                     document.getElementById('edit_repartidorPedido').value = repartidor || '';
+
+                    // Mostrar información del cliente seleccionado
+                    const editClienteSelect = document.getElementById('edit_idCliente');
+                    const selectedOption = Array.from(editClienteSelect.options).find(opt => opt.value === cliente);
+                    if (selectedOption) {
+                        document.getElementById('editClienteNombre').textContent = 
+                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
+                        document.getElementById('editClienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('editClienteEmail').textContent = selectedOption.getAttribute('data-email');
+                        document.getElementById('editClienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
+                        document.getElementById('editClienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
+                    }
+
+                    // Calcular valores iniciales
+                    calcularTotales(editValorInput, editIvaInput, editTotalInput);
+                });
+            }
+
+            // Mostrar información del cliente en edición
+            const editClienteSelect = document.getElementById('edit_idCliente');
+            if (editClienteSelect) {
+                editClienteSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.value !== '') {
+                        document.getElementById('editClienteNombre').textContent = 
+                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
+                        document.getElementById('editClienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('editClienteEmail').textContent = selectedOption.getAttribute('data-email');
+                        document.getElementById('editClienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
+                        document.getElementById('editClienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
+                    }
                 });
             }
 
@@ -435,10 +606,14 @@
                     document.getElementById('fechaPedido').value = '';
                     document.getElementById('horaPedido').value = '';
                     document.getElementById('idCliente').value = '';
-                    document.getElementById('valorPedido').value = '';
+                    document.getElementById('valorPedido').value = '0';
                     document.getElementById('ivaPedido').value = '';
                     document.getElementById('totalPedido').value = '';
                     document.getElementById('repartidorPedido').value = '';
+                    document.getElementById('infoCliente').style.display = 'none';
+                    
+                    // Recalcular valores
+                    calcularTotales(valorInput, ivaInput, totalInput);
                 });
             }
 

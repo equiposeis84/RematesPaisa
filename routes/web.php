@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductosController; 
-use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuariosController; 
+use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProductosPedidoController;
 
 // -----------------------------------------------------------------------------
@@ -32,11 +32,11 @@ Route::delete('/productos/{idProducto}', [ProductosController::class, 'destroy']
 // -----------------------------------------------------------------------------
 // RUTAS CRUD PEDIDOS
 // -----------------------------------------------------------------------------
-Route::get('/pedidos', [PedidosController::class,"index"])->name('pedidos.index');
-Route::post('/pedidos', [PedidosController::class,"store"])->name('pedidos.store');
-Route::get('/pedidos/{idPedidos}', [PedidosController::class,"edit"])->name('pedidos.edit');
-Route::put('/pedidos/{idPedidos}', [PedidosController::class,"update"])->name('pedidos.update');
-Route::delete('/pedidos/{idPedidos}', [PedidosController::class,"destroy"])->name('pedidos.destroy');
+Route::resource('pedidos', PedidosController::class);
+Route::get('/pedidos/{id}/cliente-info', [PedidosController::class, 'getClienteInfo'])->name('pedidos.cliente.info');
+Route::get('/pedidos/{id}/repartidor-info', [PedidosController::class, 'getRepartidorInfo'])->name('pedidos.repartidor.info');
+Route::get('/pedidos/{id}/calcular-valor', [PedidosController::class, 'calcularValorPedido'])->name('pedidos.calcular.valor');
+Route::put('/pedidos/{id}/actualizar-valor', [PedidosController::class, 'actualizarValorPedido'])->name('pedidos.actualizar.valor');
 
 // -----------------------------------------------------------------------------
 // RUTAS PARA PRODUCTOS EN PEDIDOS

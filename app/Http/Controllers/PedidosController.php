@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pedidos;
+use App\Models\Cliente;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; 
 
 class PedidosController extends Controller
 {
@@ -23,9 +24,17 @@ class PedidosController extends Controller
             });
         }
         
-        $datos = $query->orderBy('idPedidos', 'asc')->paginate(10);
+        $datos = $query->orderBy('idPedidos', 'desc')->paginate(10);
         
         return view('pedidos')->with('datos', $datos);
+    }
+
+    public function create()
+    {
+        $clientes = Cliente::all();
+        $repartidores = Usuario::where('idRol', 3)->get(); // Rol 3 para repartidores
+        
+        return view('pedidos.create', compact('clientes', 'repartidores'));
     }
 
     public function store(Request $request)
@@ -34,99 +43,107 @@ class PedidosController extends Controller
             'idPedidos' => 'required|unique:pedidos,idPedidos',
             'fechaPedido' => 'required|date',
             'horaPedido' => 'required',
-            'idCliente' => 'required|string|max:40',
+            'idCliente' => 'required|exists:cliente,idCliente',
             'valorPedido' => 'required|numeric|min:0',
-            'ivaPedido' => 'required|numeric|min:0',
-            'totalPedido' => 'required|numeric|min:0',
             'estadoPedido' => 'required|string|max:20',
             'repartidorPedido' => 'nullable|string|max:100'
-        ],[
-            'idPedidos.unique' => 'El ID del pedido ya existe en la base de datos.',
         ]);
 
+        // Calcular IVA (19%) y total automáticamente
+        $iva = $request->valorPedido * 0.19;
+        $total = $request->valorPedido + $iva;
 
-        $cliente = DB::table('cliente')->where('idCliente', $request->idCliente)->first();
-        
-        if (!$cliente) {
-           
-            return redirect()->route('pedidos.index')
-                ->with('error', 'El cliente con ID ' . $request->idCliente . ' no existe en la base de datos.')
-                ->withInput();
-        }
+        Pedidos::create([
+            'idPedidos' => $request->idPedidos,
+            'fechaPedido' => $request->fechaPedido,
+            'horaPedido' => $request->horaPedido,
+            'idCliente' => $request->idCliente,
+            'valorPedido' => $request->valorPedido,
+            'ivaPedido' => $iva,
+            'totalPedido' => $total,
+            'estadoPedido' => $request->estadoPedido,
+            'repartidorPedido' => $request->repartidorPedido
+        ]);
 
-        //Agregar try-catch para manejar errores
-        try {
-            Pedidos::create($request->all());
-            return redirect()->route('pedidos.index')->with('success', 'Pedido creado exitosamente');
-            
-        } catch (\Exception $e) {
-            return redirect()->route('pedidos.index')
-                ->with('error', 'Error al crear el pedido: ' . $e->getMessage())
-                ->withInput();
-        }
+        return redirect()->route('pedidos.index')
+                         ->with('success', 'Pedido creado exitosamente');
     }
 
-    
     public function edit($idPedidos)
     {
-        $pedido = Pedidos::findOrFail($idPedidos); 
-        return view('pedidos.edit', compact('pedido')); 
+        $pedido = Pedidos::findOrFail($idPedidos);
+        $clientes = Cliente::all();
+        $repartidores = Usuario::where('idRol', 3)->get();
+        
+        return view('pedidos.edit', compact('pedido', 'clientes', 'repartidores'));
     }
 
     public function update(Request $request, $idPedidos)
     {
-        
-        $cliente = DB::table('cliente')->where('idCliente', $request->idCliente)->first();
-        
-        if (!$cliente) {
-            return redirect()->route('pedidos.index')
-                ->with('error', 'El cliente con ID ' . $request->idCliente . ' no existe en la base de datos.')
-                ->withInput();
-        }
-
-        $pedidos = Pedidos::findOrFail($idPedidos);
+        $pedido = Pedidos::findOrFail($idPedidos);
         
         $request->validate([
             'fechaPedido' => 'required|date',
             'horaPedido' => 'required',
-            'idCliente' => 'required|string|max:40',
+            'idCliente' => 'required|exists:cliente,idCliente',
             'valorPedido' => 'required|numeric|min:0',
-            'ivaPedido' => 'required|numeric|min:0',
-            'totalPedido' => 'required|numeric|min:0',
             'estadoPedido' => 'required|string|max:20',
             'repartidorPedido' => 'nullable|string|max:100'
         ]);
+
+        // Calcular IVA (19%) y total automáticamente
+        $iva = $request->valorPedido * 0.19;
+        $total = $request->valorPedido + $iva;
         
-        try {
-            $pedidos->update([
-                'fechaPedido' => $request->fechaPedido,
-                'horaPedido' => $request->horaPedido,
-                'idCliente' => $request->idCliente,
-                'valorPedido' => $request->valorPedido,
-                'ivaPedido' => $request->ivaPedido,
-                'totalPedido' => $request->totalPedido,
-                'estadoPedido' => $request->estadoPedido,
-                'repartidorPedido' => $request->repartidorPedido
-            ]);
-            
-            return redirect()->route('pedidos.index')->with('success', 'Pedido actualizado exitosamente');
-            
-        } catch (\Exception $e) {
-            return redirect()->route('pedidos.index')
-                ->with('error', 'Error al actualizar el pedido: ' . $e->getMessage())
-                ->withInput();
-        }
+        $pedido->update([
+            'fechaPedido' => $request->fechaPedido,
+            'horaPedido' => $request->horaPedido,
+            'idCliente' => $request->idCliente,
+            'valorPedido' => $request->valorPedido,
+            'ivaPedido' => $iva,
+            'totalPedido' => $total,
+            'estadoPedido' => $request->estadoPedido,
+            'repartidorPedido' => $request->repartidorPedido
+        ]);
+        
+        return redirect()->route('pedidos.index')
+                         ->with('success', 'Pedido actualizado exitosamente');
     }
 
     public function destroy($idPedidos)
     {
         try {
-            $pedidos = Pedidos::findOrFail($idPedidos);
-            $pedidos->delete();
-            return redirect()->route('pedidos.index')->with('success', 'Pedido eliminado exitosamente');
+            $pedido = Pedidos::findOrFail($idPedidos);
+            $pedido->delete();
             
+            return redirect()->route('pedidos.index')
+                ->with('success', 'Pedido eliminado correctamente');
+                
         } catch (\Exception $e) {
-            return redirect()->route('pedidos.index')->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
+            return redirect()->route('pedidos.index')
+                ->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
         }
+    }
+
+    // Método para obtener información del cliente (para AJAX)
+    public function getClienteInfo($idCliente)
+    {
+        $cliente = Cliente::find($idCliente);
+        
+        if ($cliente) {
+            return response()->json([
+                'success' => true,
+                'cliente' => [
+                    'nombre' => $cliente->nombreCliente,
+                    'apellido' => $cliente->apellidoCliente,
+                    'empresa' => $cliente->NombreEmpresa,
+                    'email' => $cliente->emailCliente,
+                    'telefono' => $cliente->telefonoCliente,
+                    'direccion' => $cliente->direccionCliente
+                ]
+            ]);
+        }
+        
+        return response()->json(['success' => false]);
     }
 }
