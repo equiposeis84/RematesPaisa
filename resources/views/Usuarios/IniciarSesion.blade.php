@@ -10,13 +10,13 @@
         @csrf
 
         <div class="form-group">
-            <label for="nombreUsuario">Nombre de Usuario</label>
-            <input type="text" id="nombreUsuario" name="nombreUsuario" placeholder="usuario123" required>
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email">
         </div>
 
         <div class="form-group">
-            <label for="passwordUsuario">Contraseña</label>
-            <input type="password" id="passwordUsuario" name="passwordUsuario" placeholder="••••••••" required>
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password">
         </div>
 
         @if($errors->any())

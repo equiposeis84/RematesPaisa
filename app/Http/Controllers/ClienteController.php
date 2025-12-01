@@ -43,6 +43,8 @@ class ClienteController extends Controller
             'telefonoCliente'      => 'required|string|max:20',
             'direccionCliente'     => 'required|string|max:255',
             'passwordUsuario'      => 'required|string|min:6',
+            'nombreUsuario' => 'required|string|max:100|unique:usuarios,nombreUsuario',
+
         ], [
             'NombreEmpresa.required'        => 'El nombre de la empresa es obligatorio.',
             'idCliente.required'            => 'El ID del cliente es obligatorio.',
@@ -77,11 +79,14 @@ class ClienteController extends Controller
 
             // Crear usuario asociado - CORREGIDO con la estructura correcta de la tabla usuarios
             Usuario::create([
-                'nombre'   => $request->nombreCliente . ' ' . $request->apellidoCliente,
-                'email'    => $request->emailCliente,
-                'password' => bcrypt($request->passwordUsuario),
-                'idRol'    => 2, // Rol Cliente
-            ]);
+                        'nombreUsuario'    => $request->nombreUsuario,
+                        'email'            => $request->emailCliente,
+                        'passwordUsuario'  => bcrypt($request->passwordUsuario),
+                        'idRol'            => 2,
+                        'idCliente'        => $request->idCliente, // si la tabla lo tiene
+                    ]);
+
+
 
             DB::commit();
 

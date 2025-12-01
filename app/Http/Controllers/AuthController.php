@@ -3,63 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {
-    // Mostrar formulario (ya tienes la vista)
+    // Mostrar login
     public function showLogin()
     {
-        return view('auth.login');
+        return view('auth.IniciarSesion');
     }
 
     // Procesar login
     public function login(Request $request)
     {
+        // Validar datos
         $request->validate([
-            'nombreUsuario' => 'required|string',
-            'passwordUsuario' => 'required|string'
+            'nombreUsuario' => 'required',
+            'passwordUsuario' => 'required',
         ]);
 
+        // Buscar usuario por nombreUsuario
         $usuario = Usuario::where('nombreUsuario', $request->nombreUsuario)->first();
 
-        if (!$usuario) {
-            return back()->withErrors(['nombreUsuario' => 'Usuario no encontrado'])->withInput();
+        // Verificar si existe y comparar hash
+        if (!$usuario || !Hash::check($request->passwordUsuario, $usuario->passwordUsuario)) {
+            return back()->withErrors(['error' => 'Credenciales incorrectas']);
         }
 
-        $stored = $usuario->passwordUsuario;
+        // Iniciar sesión
+        Auth::login($usuario);
 
-        // Soporte para contraseñas hasheadas o en texto plano (transición)
-        $valid = false;
-        if (Hash::check($request->passwordUsuario, $stored)) {
-            $valid = true;
-        } elseif ($request->passwordUsuario === $stored) {
-            $valid = true;
-        }
+        // Regenerar sesión para evitar ataques
+        $request->session()->regenerate();
 
-        if (!$valid) {
-            return back()->withErrors(['passwordUsuario' => 'Contraseña incorrecta'])->withInput();
-        }
-
-        // Guardar usuario en session (sencillo)
-        Session::put('usuario', [
-            'nombreUsuario' => $usuario->nombreUsuario,
-            'idRoles' => $usuario->idRoles
-        ]);
-
-        // Redirigir según rol (ajusta los nombres de rol si tu DB usa otros valores)
-        if (strtolower($usuario->idRoles) === 'admin' || $usuario->idRoles == 1) {
-            return redirect()->route('admin.inicio');
-        }
-
+        // Redirigir a dashboard u otra ruta
         return redirect()->route('dashboard');
     }
 
-    public function logout()
+    // Logout
+    public function logout(Request $request)
     {
-        Session::forget('usuario');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

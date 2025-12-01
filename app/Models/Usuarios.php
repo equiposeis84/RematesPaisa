@@ -2,20 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
-    protected $table = 'usuarios'; // nombre exacto
+    use Notifiable;
 
-      protected $fillable = [
-        'nombreUsuario',
-        'passwordUsuario',
-        'idRoles'
+    protected $table = 'usuarios';
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'nombre',
+        'email',
+        'password',
+        'idRol',
     ];
 
-    public $timestamps = false;
-
-    // Importante: evitar hashing doble
-    protected $hidden = ['contrasena'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

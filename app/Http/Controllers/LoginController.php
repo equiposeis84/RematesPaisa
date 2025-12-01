@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
+
 
 class LoginController extends Controller
 {
@@ -22,6 +24,6 @@ class LoginController extends Controller
     Auth::login($usuario);
     $request->session()->regenerate();
 
-    return redirect()->intended('/');
+    return redirect()->intended('/resources/views/Clientes/CatalogoU.blade.php');
 }
 }

@@ -82,6 +82,14 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('login.post')
 Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+Route::get('/test', function() {
+    $user = App\Models\Usuario::where('idRol', 2)->first();
+    Auth::login($user);
+    return redirect('/resources/views/Clientes/CatalogoU.blade.php');
+});
+
+
+
 // Rutas de prueba/redirección
 Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 // Ruta admin de ejemplo (redirige al panel admin)
