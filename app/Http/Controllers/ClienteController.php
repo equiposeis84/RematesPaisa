@@ -7,6 +7,8 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+//Cliente ahora es usuario
+
 class ClienteController extends Controller
 {
     public function index(Request $request)

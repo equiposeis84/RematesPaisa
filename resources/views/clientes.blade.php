@@ -1,10 +1,10 @@
 @extends('welcome')
-@section('title', 'Clientes')
+@section('title', 'Usuarios')
 @section('content')
     <div class="container-sm d-flex justify-content-center mt-5">
         <div class="card">
             <div class="card-body" style="width: 1200px;">
-                <h3>Modulo Clientes</h3>
+                <h3>Modulo Usuarios</h3>
                 
                 <!-- Mostrar mensajes de éxito -->
                 @if(session('success'))
@@ -67,7 +67,7 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-primary">
                         <tr>
-                            <th>ID Cliente</th>
+                            <th>ID Usuario</th>
                             <th>Nombre Empresa</th>
                             <th>Tipo Doc.</th>
                             <th>Nombre</th>
@@ -168,9 +168,9 @@
                 <div class="alert alert-info text-center mt-3">
                     <i class="fas fa-info-circle"></i> 
                     @if(request('search'))
-                        No se encontraron clientes con "{{ request('search') }}"
+                        No se encontraron usuarios con "{{ request('search') }}"
                     @else
-                        No hay clientes registrados.
+                        No hay usuarios registrados.
                     @endif
                 </div>
                 @endif
@@ -183,7 +183,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalClienteLabel">Nuevo Cliente</h1>
+                    <h1 class="modal-title fs-5" id="modalClienteLabel">Nuevo Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('clientes.store') }}" method="POST">
@@ -200,7 +200,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="idCliente" class="form-label">ID Cliente *</label>
+                                    <label for="idCliente" class="form-label">ID Usuario *</label>
                                     <input type="text" class="form-control" id="idCliente" name="idCliente" 
                                            value="{{ old('idCliente') }}" required 
                                            placeholder="Ej: CL001">
@@ -214,12 +214,12 @@
                                     <label for="tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
                                     <select class="form-select" id="tipoDocumentoCliente" name="tipoDocumentoCliente" required>
                                         <option value="">Seleccionar...</option>
-                                        <option value="CC" {{ old('tipoDocumentoCliente') == 'CC' ? 'selected' : '' }}>Cédula (CC)</option>
-                                        <option value="CE" {{ old('tipoDocumentoCliente') == 'CE' ? 'selected' : '' }}>Cédula Extranjería (CE)</option>
-                                        <option value="PAS" {{ old('tipoDocumentoCliente') == 'PAS' ? 'selected' : '' }}>Pasaporte (PAS)</option>
-                                        <option value="RUC" {{ old('tipoDocumentoCliente') == 'RUC' ? 'selected' : '' }}>RUC</option>
-                                        <option value="DNI" {{ old('tipoDocumentoCliente') == 'DNI' ? 'selected' : '' }}>DNI</option>
-                                        <option value="NIT" {{ old('tipoDocumentoCliente') == 'NIT' ? 'selected' : '' }}>NIT</option>
+                                        <option value="CC">Cédula (CC)</option>
+                                        <option value="CE">Cédula Extranjería (CE)</option>
+                                        <option value="PAS">Pasaporte (PAS)</option>
+                                        <option value="RUC">RUC</option>
+                                        <option value="DNI">DNI</option>
+                                        <option value="NIT">NIT</option>
                                     </select>
                                 </div>
                             </div>
@@ -279,7 +279,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+                        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
                     </div>
                 </form>
             </div>
@@ -291,19 +291,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
+                    <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formEliminarCliente" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">
-                        <p>¿Está seguro de que desea eliminar al cliente <strong><span id="nombreClienteEliminar"></span></strong>?</p>
+                        <p>¿Está seguro de que desea eliminar al usuario <strong><span id="nombreClienteEliminar"></span></strong>?</p>
                         <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
+                        <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
                     </div>
                 </form>
             </div>
@@ -315,7 +315,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalEditarClienteLabel">Editar Cliente</h1>
+                    <h1 class="modal-title fs-5" id="modalEditarClienteLabel">Editar Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formEditarCliente" method="POST">
@@ -332,7 +332,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="edit_idCliente" class="form-label">ID Cliente *</label>
+                                    <label for="edit_idCliente" class="form-label">ID Usuario *</label>
                                     <input type="text" class="form-control" id="edit_idCliente" name="idCliente" readonly>
                                 </div>
                             </div>
@@ -392,7 +392,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Actualizar Cliente</button>
+                        <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
                     </div>
                 </form>
             </div>
