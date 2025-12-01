@@ -8,11 +8,10 @@ class Usuario extends Model
 {
     protected $table = 'usuarios'; // nombre exacto
 
-    protected $fillable = [
-        'nombre',
-        'correo',
-        'contrasena',
-        'rol'
+      protected $fillable = [
+        'nombreUsuario',
+        'passwordUsuario',
+        'idRoles'
     ];
 
     public $timestamps = false;

@@ -31,7 +31,7 @@ class Proveedor extends Model
     
     public $incrementing = false;
     
-    protected $keyType = 'integer';
+    protected $keyType = 'int';
     
     protected $fillable = [
         'NITProveedores',
@@ -41,5 +41,14 @@ class Proveedor extends Model
     ];
 
     public $timestamps = false;
+<<<<<<< HEAD
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+
+    // Relación con productos
+    public function productos()
+    {
+        return $this->hasMany(Productos::class, 'NITProveedores', 'NITProveedores');
+    }
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
 }

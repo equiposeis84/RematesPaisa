@@ -50,7 +50,7 @@
 =======
                 <nav class="main-nav">
                     <ul>
-                        <li class="sidebar-fixed"><a href="#" data-view="html/Catalogo.html"> <span class="nav-icon"> <i class="fa-solid fa-house"></i> </span>Inicio </a></li>
+                        <li class="sidebar-fixed"><a href="{{ route('welcome') }}"> <span class="nav-icon"> <i class="fa-solid fa-house"></i> </span>Inicio </a></li>
                         <li class="has-submenu sidebar-fixed">
                             <button class="submenu-toggle" aria-expanded="false" aria-controls="gestion-submenu">
                                 <span class="nav-icon"> <i class="fa-solid fa-gear"></i> </span>Gestión <span class="caret"> <i class="fa-solid fa-circle-chevron-down"></i> </span>
@@ -61,6 +61,7 @@
                                 <li><a href="{{route('pedidos.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-bag-shopping"></i> </span>Pedidos </a></li>
                                 <li><a href="{{route('proveedores.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-truck-fast"></i> </span>Proveedores </a></li>
                                 <li><a href="#" data-view="html/Reportes.html"> <span class="nav-icon"> <i class="fa-solid fa-arrow-up-from-ground-water"></i> </span>Reportes </a></li>
+                                <li><a href="{{route('roles.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-user-shield"></i> </span>Roles y Permisos </a></li>
                             </ul>
                         </li>
                     </ul>

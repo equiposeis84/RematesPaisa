@@ -21,6 +21,19 @@
                     </div>
                 @endif
                 
+                <!-- Mostrar errores de validación -->
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+                
                 <hr>
 
                 <!-- Formulario de búsqueda -->
@@ -75,7 +88,11 @@
                             <th>Dirección</th>
                             <th>Teléfono</th>
                             <th>Email</th>
+<<<<<<< HEAD
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+                            <th>Rol</th>
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -99,6 +116,17 @@
                                 <td>{{ $item->telefonoCliente }}</td>
                                 <td>{{ $item->emailCliente }}</td>
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+                                <td>
+                                    @if($item->idRol == 1)
+                                        <span class="badge bg-danger">Admin</span>
+                                    @elseif($item->idRol == 2)
+                                        <span class="badge bg-success">Cliente</span>
+                                    @elseif($item->idRol == 3)
+                                        <span class="badge bg-warning">Repartidor</span>
+                                    @else
+                                        <span class="badge bg-secondary">{{ $item->idRol }}</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
                                             data-bs-toggle="modal" 
@@ -130,10 +158,12 @@
                                             data-id="{{ $item->idCliente }}"
                                             data-empresa="{{ $item->NombreEmpresa}}">
                                         <i class="fa-solid fa-trash"></i> Eliminar
-
                                     </button>
+<<<<<<< HEAD
 
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                                 </td>
                             </tr>
                         @endforeach
@@ -215,8 +245,13 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="NombreEmpresa" class="form-label">Nombre Empresa *</label>
+<<<<<<< HEAD
                                     <input type="text" class="form-control" id="NombreEmpresa" name="NombreEmpresa" required>
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+                                    <input type="text" class="form-control" id="NombreEmpresa" name="NombreEmpresa" 
+                                           value="{{ old('NombreEmpresa') }}" required>
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -224,7 +259,8 @@
 <<<<<<< HEAD
 =======
                                     <label for="idCliente" class="form-label">ID Cliente *</label>
-                                    <input type="text" class="form-control" id="idCliente" name="idCliente" required 
+                                    <input type="text" class="form-control" id="idCliente" name="idCliente" 
+                                           value="{{ old('idCliente') }}" required 
                                            placeholder="Ej: CL001">
                                 </div>
                             </div>
@@ -237,6 +273,7 @@
                                     <label for="tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
                                     <select class="form-select" id="tipoDocumentoCliente" name="tipoDocumentoCliente" required>
                                         <option value="">Seleccionar...</option>
+<<<<<<< HEAD
                                         <option value="Cédula">Cédula</option>
                                         <option value="Pasaporte">Pasaporte</option>
                                         <option value="RUC">RUC</option>
@@ -250,13 +287,22 @@
                     
 =======
                                         <option value="NIT">NIT</option>
+=======
+                                        <option value="CC" {{ old('tipoDocumentoCliente') == 'CC' ? 'selected' : '' }}>Cédula (CC)</option>
+                                        <option value="CE" {{ old('tipoDocumentoCliente') == 'CE' ? 'selected' : '' }}>Cédula Extranjería (CE)</option>
+                                        <option value="PAS" {{ old('tipoDocumentoCliente') == 'PAS' ? 'selected' : '' }}>Pasaporte (PAS)</option>
+                                        <option value="RUC" {{ old('tipoDocumentoCliente') == 'RUC' ? 'selected' : '' }}>RUC</option>
+                                        <option value="DNI" {{ old('tipoDocumentoCliente') == 'DNI' ? 'selected' : '' }}>DNI</option>
+                                        <option value="NIT" {{ old('tipoDocumentoCliente') == 'NIT' ? 'selected' : '' }}>NIT</option>
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="telefonoCliente" class="form-label">Teléfono *</label>
-                                    <input type="text" class="form-control" id="telefonoCliente" name="telefonoCliente" required>
+                                    <input type="text" class="form-control" id="telefonoCliente" name="telefonoCliente" 
+                                           value="{{ old('telefonoCliente') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -266,13 +312,15 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="nombreCliente" class="form-label">Nombre *</label>
-                                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
+                                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" 
+                                           value="{{ old('nombreCliente') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="apellidoCliente" class="form-label">Apellido *</label>
-                                    <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" required>
+                                    <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" 
+                                           value="{{ old('apellidoCliente') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -284,7 +332,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="emailCliente" class="form-label">Email *</label>
-                                    <input type="email" class="form-control" id="emailCliente" name="emailCliente" required>
+                                    <input type="email" class="form-control" id="emailCliente" name="emailCliente" 
+                                           value="{{ old('emailCliente') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -302,8 +351,24 @@
                                     <input type="text" class="form-control" id="direccionCliente" name="direccionCliente">
 =======
                                     <label for="direccionCliente" class="form-label">Dirección *</label>
+<<<<<<< HEAD
                                     <input type="text" class="form-control" id="direccionCliente" name="direccionCliente" required>
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+                                    <input type="text" class="form-control" id="direccionCliente" name="direccionCliente" 
+                                           value="{{ old('direccionCliente') }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="passwordUsuario" class="form-label">Contraseña *</label>
+                                    <input type="password" class="form-control" id="passwordUsuario" name="passwordUsuario" 
+                                           required minlength="6">
+                                    <div class="form-text">Mínimo 6 caracteres</div>
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                                 </div>
                             </div>
                         </div>
@@ -317,32 +382,40 @@
         </div>
     </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
     <!-- Modal para Eliminar Cliente -->
-<div class="modal fade" id="modalDeleteCliente" tabindex="-1" aria-labelledby="modalDeleteClienteLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="modalDeleteCliente" tabindex="-1" aria-labelledby="modalDeleteClienteLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalDeleteClienteLabel">Eliminar Cliente</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEliminarCliente" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p>¿Está seguro de que desea eliminar al cliente <strong><span id="nombreClienteEliminar"></span></strong>?</p>
+                        <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
+                    </div>
+                </form>
             </div>
-            <form id="formEliminarCliente" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-body">
-                    <p>¿Está seguro de que desea eliminar al cliente <strong><span id="nombreClienteEliminar"></span></strong>?</p>
-                    <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar Cliente</button>
-                </div>
-            </form>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
                       
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
 
     <!-- Modal para Editar Cliente -->
     <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
@@ -357,6 +430,7 @@
                     @method('PUT')
                     <div class="modal-body">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <!-- CAMPO PARA NÚMERO DE DOCUMENTO (solo lectura) -->
                         <div class="row">
                             <div class="col-md-6">
@@ -367,6 +441,9 @@
                             </div>
 =======
       <!-- CAMPOS PRINCIPALES -->
+=======
+                        <!-- CAMPOS PRINCIPALES -->
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -388,8 +465,9 @@
                                 <div class="mb-3">
                                     <label for="edit_tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
                                     <select class="form-select" id="edit_tipoDocumentoCliente" name="tipoDocumentoCliente" required>
-                                        <option value="Cédula">Cédula</option>
-                                        <option value="Pasaporte">Pasaporte</option>
+                                        <option value="CC">Cédula (CC)</option>
+                                        <option value="CE">Cédula Extranjería (CE)</option>
+                                        <option value="PAS">Pasaporte (PAS)</option>
                                         <option value="RUC">RUC</option>
                                         <option value="DNI">DNI</option>
 <<<<<<< HEAD
@@ -521,57 +599,59 @@
     </script>
 =======
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000);
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
 
-        // Configurar modal de edición
-        const modalEditar = document.getElementById('modalEditarCliente');
-        if (modalEditar) {
-            modalEditar.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                const empresa = button.getAttribute('data-empresa');
-                const tipoDoc = button.getAttribute('data-tipodoc');
-                const nombre = button.getAttribute('data-nombre');
-                const apellido = button.getAttribute('data-apellido');
-                const direccion = button.getAttribute('data-direccion');
-                const telefono = button.getAttribute('data-telefono');
-                const email = button.getAttribute('data-email');
+            // Configurar modal de edición
+            const modalEditar = document.getElementById('modalEditarCliente');
+            if (modalEditar) {
+                modalEditar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    const empresa = button.getAttribute('data-empresa');
+                    const tipoDoc = button.getAttribute('data-tipodoc');
+                    const nombre = button.getAttribute('data-nombre');
+                    const apellido = button.getAttribute('data-apellido');
+                    const direccion = button.getAttribute('data-direccion');
+                    const telefono = button.getAttribute('data-telefono');
+                    const email = button.getAttribute('data-email');
 
-                document.getElementById('formEditarCliente').action = `/clientes/${id}`;
-                document.getElementById('edit_idCliente').value = id;
-                document.getElementById('edit_NombreEmpresa').value = empresa;
-                document.getElementById('edit_tipoDocumentoCliente').value = tipoDoc;
-                document.getElementById('edit_nombreCliente').value = nombre;
-                document.getElementById('edit_apellidoCliente').value = apellido;
-                document.getElementById('edit_direccionCliente').value = direccion;
-                document.getElementById('edit_telefonoCliente').value = telefono;
-                document.getElementById('edit_emailCliente').value = email;
-            });
-        }
+                    document.getElementById('formEditarCliente').action = `/clientes/${id}`;
+                    document.getElementById('edit_idCliente').value = id;
+                    document.getElementById('edit_NombreEmpresa').value = empresa;
+                    document.getElementById('edit_tipoDocumentoCliente').value = tipoDoc;
+                    document.getElementById('edit_nombreCliente').value = nombre;
+                    document.getElementById('edit_apellidoCliente').value = apellido;
+                    document.getElementById('edit_direccionCliente').value = direccion;
+                    document.getElementById('edit_telefonoCliente').value = telefono;
+                    document.getElementById('edit_emailCliente').value = email;
+                });
+            }
 
-        // Limpiar formulario de nuevo cliente cuando se cierra el modal
-        const modalNuevo = document.getElementById('modalCliente');
-        if (modalNuevo) {
-            modalNuevo.addEventListener('hidden.bs.modal', function () {
-                document.getElementById('NombreEmpresa').value = '';
-                document.getElementById('idCliente').value = '';
-                document.getElementById('tipoDocumentoCliente').value = '';
-                document.getElementById('nombreCliente').value = '';
-                document.getElementById('apellidoCliente').value = '';
-                document.getElementById('direccionCliente').value = '';
-                document.getElementById('telefonoCliente').value = '';
-                document.getElementById('emailCliente').value = '';
-            });
-        }
+            // Limpiar formulario de nuevo cliente cuando se cierra el modal
+            const modalNuevo = document.getElementById('modalCliente');
+            if (modalNuevo) {
+                modalNuevo.addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('NombreEmpresa').value = '';
+                    document.getElementById('idCliente').value = '';
+                    document.getElementById('tipoDocumentoCliente').value = '';
+                    document.getElementById('nombreCliente').value = '';
+                    document.getElementById('apellidoCliente').value = '';
+                    document.getElementById('direccionCliente').value = '';
+                    document.getElementById('telefonoCliente').value = '';
+                    document.getElementById('emailCliente').value = '';
+                    document.getElementById('passwordUsuario').value = '';
+                });
+            }
 
+<<<<<<< HEAD
         // Configurar modal de eliminación - CORREGIDO
         const modalDelete = document.getElementById('modalDeleteCliente');
         if (modalDelete) {
@@ -595,4 +675,26 @@
     });
 </script>
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+            // Configurar modal de eliminación
+            const modalDelete = document.getElementById('modalDeleteCliente');
+            if (modalDelete) {
+                modalDelete.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    const empresa = button.getAttribute('data-empresa');
+                    
+                    // Actualizar el nombre en el modal
+                    const nombreSpan = document.getElementById('nombreClienteEliminar');
+                    if (nombreSpan && empresa) {
+                        nombreSpan.textContent = empresa;
+                    }
+                    
+                    // Actualizar el formulario de eliminación
+                    document.getElementById('formEliminarCliente').action = `/clientes/${id}`;
+                });
+            }
+        });
+    </script>
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
 @endsection

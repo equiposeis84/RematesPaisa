@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 <<<<<<< HEAD
 =======
 use App\Models\Productos;
+<<<<<<< HEAD
 >>>>>>> 1992225baf11169504a8d35174321996067799e9
+=======
+use Illuminate\Support\Facades\DB;
+>>>>>>> 516688caa403d940564b5ec3d69001bde4adad27
 
 class ProveedorController extends Controller
 {
@@ -109,16 +113,35 @@ class ProveedorController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'NITProveedores' => 'required|unique:proveedores,NITProveedores',
+            'NITProveedores' => 'required|integer|unique:proveedores,NITProveedores',
             'nombreProveedor' => 'required|string|max:45',
             'telefonoProveedor' => 'required|string|max:45',
             'correoProveedor' => 'required|email|max:45'
         ],[
-             'NITProveedores.unique' => 'El NIT del proveedor ya existe en la base de datos.',
+            'NITProveedores.required' => 'El NIT del proveedor es obligatorio.',
+            'NITProveedores.integer' => 'El NIT debe ser un número entero.',
+            'NITProveedores.unique' => 'El NIT del proveedor ya existe en la base de datos.',
+            'nombreProveedor.required' => 'El nombre del proveedor es obligatorio.',
+            'telefonoProveedor.required' => 'El teléfono del proveedor es obligatorio.',
+            'correoProveedor.required' => 'El correo del proveedor es obligatorio.',
+            'correoProveedor.email' => 'El formato del correo no es válido.'
         ]);
 
-        Proveedor::create($request->all());
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado exitosamente');
+        try {
+            Proveedor::create([
+                'NITProveedores' => $request->NITProveedores,
+                'nombreProveedor' => $request->nombreProveedor,
+                'telefonoProveedor' => $request->telefonoProveedor,
+                'correoProveedor' => $request->correoProveedor
+            ]);
+
+            return redirect()->route('proveedores.index')->with('success', 'Proveedor creado exitosamente');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                            ->with('error', 'Error al crear el proveedor: ' . $e->getMessage())
+                            ->withInput();
+        }
     }
 
     public function edit($NITProveedores)
@@ -134,15 +157,27 @@ class ProveedorController extends Controller
             'nombreProveedor' => 'required|string|max:45',
             'telefonoProveedor' => 'required|string|max:45',
             'correoProveedor' => 'required|email|max:45'
+        ], [
+            'nombreProveedor.required' => 'El nombre del proveedor es obligatorio.',
+            'telefonoProveedor.required' => 'El teléfono del proveedor es obligatorio.',
+            'correoProveedor.required' => 'El correo del proveedor es obligatorio.',
+            'correoProveedor.email' => 'El formato del correo no es válido.'
         ]);
         
-        $proveedor->update([
-            'nombreProveedor' => $request->nombreProveedor,
-            'telefonoProveedor' => $request->telefonoProveedor,
-            'correoProveedor' => $request->correoProveedor
-        ]);
-        
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado exitosamente');
+        try {
+            $proveedor->update([
+                'nombreProveedor' => $request->nombreProveedor,
+                'telefonoProveedor' => $request->telefonoProveedor,
+                'correoProveedor' => $request->correoProveedor
+            ]);
+            
+            return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado exitosamente');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                            ->with('error', 'Error al actualizar el proveedor: ' . $e->getMessage())
+                            ->withInput();
+        }
     }
 
     public function destroy($NITProveedores)
@@ -151,7 +186,7 @@ class ProveedorController extends Controller
             // Buscar el proveedor
             $proveedor = Proveedor::findOrFail($NITProveedores);
             
-            // Verificar si hay productos asociados - CORREGIDO
+            // Verificar si hay productos asociados
             $productosAsociados = Productos::where('NITProveedores', $proveedor->NITProveedores)->exists();
             
             if ($productosAsociados) {
