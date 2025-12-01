@@ -58,8 +58,11 @@
                             <th>Nombre</th>
                             <th>Entrada</th>
                             <th>Salida</th>
+                            <th>Stock</th>
                             <th>Categoría</th>
-                            <th>NIT Proveedor</th>
+                            <th>NIT</th>
+                            <th>Proveedor</th>
+
                             <th>Precio Unitario</th>
                             <th>Acciones</th>
                         </tr>

@@ -24,7 +24,7 @@
                                 <span class="nav-icon"> <i class="fa-solid fa-gear"></i> </span>Gestión <span class="caret"> <i class="fa-solid fa-circle-chevron-down"></i> </span>
                             </button>
                             <ul id="gestion-submenu" class="submenu" show>
-                                <li><a href="{{route('clientes.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-users"></i> </span>Clientes </a></li>
+                                <li><a href="{{route('clientes.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-users"></i> </span>Usuarios </a></li>
                                 <li><a href="{{route('productos.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-box-archive"></i> </span> Productos </a></li>
                                 <li><a href="{{route('pedidos.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-bag-shopping"></i> </span>Pedidos </a></li>
                                 <li><a href="{{route('proveedores.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-truck-fast"></i> </span>Proveedores </a></li>
