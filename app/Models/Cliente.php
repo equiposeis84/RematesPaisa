@@ -1,11 +1,10 @@
+// app/Models/Cliente.php - ELIMINAR LA LLAVE EXTRA
 <?php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-// Cliente ahora es usuario
 
 class Cliente extends Model
 {
@@ -25,20 +24,40 @@ class Cliente extends Model
         'emailCliente',
         'telefonoCliente',
         'direccionCliente',
-        'idRol'
+        'password',
+        'idRol',
+        'idUsuario'
     ];
 
     public $timestamps = false;
 
-    // Relación con roles para obtener el nombre del rol
+    protected $hidden = ['password'];
+
+    // Métodos para autenticación (si vas a usar Cliente para login)
+    public function getAuthIdentifierName()
+    {
+        return 'idCliente';
+    }
+    
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+    
+    public function getEmailForPasswordReset()
+    {
+        return $this->emailCliente;
+    }
+
+    // Relación con Usuario
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'idUsuario', 'idUsuario');
+    }
+
+    // Relación con roles
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'idRol', 'idRol');
-    }
-
-    // Accessor para obtener el nombre del rol
-    public function getNombreRolAttribute()
-    {
-        return $this->rol ? $this->rol->nombreRol : 'Sin Rol';
     }
 }

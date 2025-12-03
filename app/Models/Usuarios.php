@@ -1,3 +1,4 @@
+// app/Models/Usuario.php - CORRECCIÓN
 <?php
 
 namespace App\Models;
@@ -10,7 +11,7 @@ class Usuario extends Authenticatable
     use Notifiable;
 
     protected $table = 'usuarios';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'idUsuario'; // CAMBIAR DE 'id' a 'idUsuario'
 
     protected $fillable = [
         'nombre',
@@ -23,4 +24,10 @@ class Usuario extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Si necesitas la relación con cliente
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class, 'idUsuario', 'idUsuario');
+    }
 }

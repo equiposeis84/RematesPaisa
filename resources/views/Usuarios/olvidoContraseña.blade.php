@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña - Remates El Paísa</title>
-    <link rel="stylesheet" href="../css/StyleSideBar.css">
-    <link rel="stylesheet" href="../css/StyleBase.css">
-    <link rel="stylesheet" href="../css/styleForms.css"> 
-</head>
-<body>
+@extends('layouts.usuario')
+
+@section('title', 'Iniciar Sesión - Remates El Paísa')
+
+@section('content')<!DOCTYPE html>
+
     <div class="dashboard-container">
         <aside class="sidebar">
              <div class="logo">
@@ -67,5 +62,4 @@
             </div>
         </main>
     </div>
-</body>
-</html>
+@endsection

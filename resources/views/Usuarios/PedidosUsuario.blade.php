@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Remates El Paísa</title>
-    <link rel="stylesheet" href="../css/StyleSideBar.css">
-    <link rel="stylesheet" href="../css/StyleBase.css">
-</head>
-<body>
+@extends('layouts.usuario')
+
+@section('title', 'Iniciar Sesión - Remates El Paísa')
+
+@section('content')
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
@@ -61,5 +56,4 @@
         </main>
     </div>
 
-</body>
-</html>
+@endsection
