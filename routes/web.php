@@ -27,6 +27,7 @@ Route::post('/productos', [ProductosController::class,"store"])->name('productos
 Route::get('/productos/{idProducto}', [ProductosController::class,"edit"])->name('productos.edit');
 Route::put('/productos/{idProducto}', [ProductosController::class,"update"])->name('productos.update');
 Route::delete('/productos/{idProducto}', [ProductosController::class, 'destroy'])->name('productos.destroy');
+Route::get('/productos/next-id', [ProductosController::class, 'getNextProductId'])->name('productos.next.id');
 
 
 // -----------------------------------------------------------------------------
@@ -47,11 +48,13 @@ Route::delete('/pedidos/{idPedido}/productos/{idProducto}', [ProductosPedidoCont
 // -----------------------------------------------------------------------------
 // RUTAS CRUD PROVEEDORES
 // -----------------------------------------------------------------------------
-Route::get('/proveedores', [ProveedorController::class,"index"])->name('proveedores.index');
-Route::post('/proveedores', [ProveedorController::class,"store"])->name('proveedores.store');
-Route::get('/proveedores/{idProveedor}', [ProveedorController::class,"edit"])->name('proveedores.edit');
-Route::put('/proveedores/{idProveedor}', [ProveedorController::class,"update"])->name('proveedores.update');
-Route::delete('/proveedores/{idProveedor}', [ProveedorController::class,"destroy"])->name('proveedores.destroy');
+Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
+Route::get('/proveedores/create', [ProveedorController::class, 'create'])->name('proveedores.create');
+Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
+Route::get('/proveedores/{NITProveedores}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
+Route::put('/proveedores/{NITProveedores}', [ProveedorController::class, 'update'])->name('proveedores.update');
+Route::delete('/proveedores/{NITProveedores}', [ProveedorController::class, 'destroy'])->name('proveedores.destroy');
+Route::get('/proveedores/get-siguiente-nit', [ProveedorController::class, 'getSiguienteNIT'])->name('proveedores.getSiguienteNIT');
 // -----------------------------------------------------------------------------
 // RUTAS CRUD ROLES
 // -----------------------------------------------------------------------------

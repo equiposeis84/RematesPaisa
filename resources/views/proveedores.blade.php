@@ -40,7 +40,7 @@
                 <form name="proveedores" action="{{ url('/proveedores') }}" method="GET">
                     <div class="text-end mb-3">
                         <!-- Botón para abrir modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor" id="btnNuevoProveedor">
                             <i class="fa-solid fa-plus"></i> Nuevo
                         </button>
                     </div>
@@ -165,15 +165,20 @@
                 <form action="{{ route('proveedores.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <!-- CAMPO PARA NIT PROVEEDOR -->
+                        <!-- CAMPO PARA NIT PROVEEDOR (AUTO GENERADO) -->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
-                                    <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" 
-                                           value="{{ old('NITProveedores') }}" required 
-                                           placeholder="Ej: 123456789" min="1">
-                                    <div class="form-text">Ingrese solo números (sin puntos, comas o espacios)</div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" 
+                                               value="{{ old('NITProveedores') }}" required readonly
+                                               placeholder="Se generará automáticamente">
+                                        <button type="button" class="btn btn-outline-secondary" id="btnGenerarNIT">
+                                            <i class="fas fa-sync-alt"></i> Regenerar
+                                        </button>
+                                    </div>
+                                    <div class="form-text">NIT generado automáticamente. Puedes usar el botón para regenerar si es necesario.</div>
                                 </div>
                             </div>
                         </div>
@@ -293,6 +298,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Auto cerrar alertas después de 5 segundos
         document.addEventListener('DOMContentLoaded', function() {
@@ -303,6 +309,43 @@
                     bsAlert.close();
                 });
             }, 5000);
+
+            // Función para obtener el siguiente NIT
+            function obtenerSiguienteNIT() {
+                fetch('{{ route("proveedores.getSiguienteNIT") }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('NITProveedores').value = data.siguienteNIT;
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener el NIT:', error);
+                        // Si hay error, usar un cálculo simple
+                        const totalProveedores = {{ $datos->total() }};
+                        document.getElementById('NITProveedores').value = totalProveedores + 1;
+                    });
+            }
+
+            // Configurar modal de nuevo proveedor
+            const modalProveedor = document.getElementById('modalProveedor');
+            if (modalProveedor) {
+                // Cuando se abre el modal, obtener el siguiente NIT
+                modalProveedor.addEventListener('show.bs.modal', function () {
+                    obtenerSiguienteNIT();
+                    
+                    // Limpiar otros campos
+                    document.getElementById('nombreProveedor').value = '';
+                    document.getElementById('telefonoProveedor').value = '';
+                    document.getElementById('correoProveedor').value = '';
+                });
+            }
+
+            // Botón para regenerar NIT
+            const btnGenerarNIT = document.getElementById('btnGenerarNIT');
+            if (btnGenerarNIT) {
+                btnGenerarNIT.addEventListener('click', function() {
+                    obtenerSiguienteNIT();
+                });
+            }
 
             // Configurar modal de edición
             const modalEditar = document.getElementById('modalEditarProveedor');
@@ -320,17 +363,6 @@
                     document.getElementById('edit_nombreProveedor').value = nombre;
                     document.getElementById('edit_telefonoProveedor').value = telefono;
                     document.getElementById('edit_correoProveedor').value = correo;
-                });
-            }
-
-            // Limpiar formulario de nuevo proveedor cuando se cierra el modal
-            const modalNuevo = document.getElementById('modalProveedor');
-            if (modalNuevo) {
-                modalNuevo.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('NITProveedores').value = '';
-                    document.getElementById('nombreProveedor').value = '';
-                    document.getElementById('telefonoProveedor').value = '';
-                    document.getElementById('correoProveedor').value = '';
                 });
             }
 

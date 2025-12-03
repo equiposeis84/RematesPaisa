@@ -29,7 +29,22 @@ class ProveedorController extends Controller
         return view('proveedores')->with('datos', $datos);
     }
 
-    public function store(Request $request){
+    public function create()
+    {
+        // Obtener el siguiente NIT disponible
+        $totalProveedores = Proveedor::count();
+        $siguienteNIT = $totalProveedores + 1;
+        
+        // Si ya existe el NIT, buscar el siguiente disponible
+        while (Proveedor::where('NITProveedores', $siguienteNIT)->exists()) {
+            $siguienteNIT++;
+        }
+        
+        return view('proveedores.create', compact('siguienteNIT'));
+    }
+
+    public function store(Request $request)
+    {
         $request->validate([
             'NITProveedores' => 'required|integer|unique:proveedores,NITProveedores',
             'nombreProveedor' => 'required|string|max:45',
@@ -68,7 +83,8 @@ class ProveedorController extends Controller
         return view('proveedores.edit', compact('proveedor'));
     }
 
-    public function update(Request $request, $NITProveedores){
+    public function update(Request $request, $NITProveedores)
+    {
         $proveedor = Proveedor::findOrFail($NITProveedores);
         
         $request->validate([
@@ -122,5 +138,19 @@ class ProveedorController extends Controller
             return redirect()->route('proveedores.index')
                 ->with('error', 'Error al eliminar el proveedor: ' . $e->getMessage());
         }
+    }
+
+    // Método para obtener el siguiente NIT disponible
+    public function getSiguienteNIT()
+    {
+        $totalProveedores = Proveedor::count();
+        $siguienteNIT = $totalProveedores + 1;
+        
+        // Si ya existe el NIT, buscar el siguiente disponible
+        while (Proveedor::where('NITProveedores', $siguienteNIT)->exists()) {
+            $siguienteNIT++;
+        }
+        
+        return response()->json(['siguienteNIT' => $siguienteNIT]);
     }
 }
