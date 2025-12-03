@@ -31,25 +31,3 @@ class Pedidos extends Model
 
     public $timestamps = false;
 }
-class detallePedidos extends Model
-{
-    use HasFactory;
-
-    protected $table = 'detalle_pedidos'; 
-    
-    protected $primaryKey = 'idDetallePedido';
-    
-    public $incrementing = true;
-    
-    protected $keyType = 'integer';
-    
-    protected $fillable = [
-        'idDetallePedido',
-        'idPedidos',
-        'idProducto',
-        'cantidadProducto',
-        'precioProducto'
-    ];
-
-    public $timestamps = false;
-}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Productos;
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
 class ProductosController extends Controller
@@ -24,7 +25,18 @@ class ProductosController extends Controller
         
         $datos = $query->orderBy('idProductos', 'asc')->paginate(10);
         
-        return view('productos')->with('datos', $datos);
+        // Obtener todos los proveedores para el modal
+        $proveedores = Proveedor::all();
+        
+        // Obtener el próximo ID
+        $lastProduct = Productos::orderBy('idProductos', 'desc')->first();
+        $nextId = $lastProduct ? $lastProduct->idProductos + 1 : 1;
+        
+        return view('productos')->with([
+            'datos' => $datos,
+            'proveedores' => $proveedores,
+            'nextId' => $nextId
+        ]);
     }
 
     public function store(Request $request){
@@ -34,10 +46,11 @@ class ProductosController extends Controller
             'entradaProducto' => 'required|integer',
             'salidaProducto' => 'required|integer',
             'categoriaProducto' => 'required|string|max:45',
-            'NITProveedores' => 'required|integer',
+            'NITProveedores' => 'required|integer|exists:proveedores,NITProveedores',
             'precioUnitario' => 'required|numeric|min:0'
         ],[
              'idProductos.unique' => 'El ID del producto ya existe en la base de datos.',
+             'NITProveedores.exists' => 'El NIT del proveedor no existe en la base de datos.',
         ]);
 
         Productos::create($request->all());
@@ -47,7 +60,9 @@ class ProductosController extends Controller
     public function edit($idProducto) 
     {
         $producto = Productos::findOrFail($idProducto); 
-        return view('productos.edit', compact('producto')); 
+        $proveedores = Proveedor::all();
+        
+        return view('productos.edit', compact('producto', 'proveedores')); 
     }
 
     public function update(Request $request, $idProducto){ 
@@ -58,7 +73,7 @@ class ProductosController extends Controller
             'entradaProducto' => 'required|integer',
             'salidaProducto' => 'required|integer',
             'categoriaProducto' => 'required|string|max:45',
-            'NITProveedores' => 'required|integer', 
+            'NITProveedores' => 'required|integer|exists:proveedores,NITProveedores', 
             'precioUnitario' => 'required|numeric|min:0'
         ]);
         

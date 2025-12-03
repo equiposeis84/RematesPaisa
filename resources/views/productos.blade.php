@@ -27,7 +27,7 @@
                 <form name="productos" action="{{ url('/productos') }}" method="GET">
                     <div class="text-end mb-3">
                         <!-- Botón para abrir modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto" id="btnNuevoProducto">
                             <i class="fa-solid fa-plus"></i> Nuevo
                         </button>
                     </div>
@@ -60,9 +60,8 @@
                             <th>Salida</th>
                             <th>Stock</th>
                             <th>Categoría</th>
-                            <th>NIT</th>
+                            <th>NIT Proveedor</th>
                             <th>Proveedor</th>
-
                             <th>Precio Unitario</th>
                             <th>Acciones</th>
                         </tr>
@@ -74,8 +73,10 @@
                                 <td>{{ $item->nombreProducto }}</td>  
                                 <td>{{ $item->entradaProducto }}</td>
                                 <td>{{ $item->salidaProducto }}</td>  
+                                <td>{{ $item->entradaProducto - $item->salidaProducto }}</td>
                                 <td>{{ $item->categoriaProducto }}</td>
                                 <td>{{ $item->NITProveedores }}</td>
+                                <td>{{ $item->proveedor->nombreProveedor ?? 'No encontrado' }}</td>
                                 <td>${{ number_format($item->precioUnitario, 2) }}</td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" 
@@ -164,13 +165,13 @@
                 <form action="{{ route('productos.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <!-- CAMPO PARA ID PRODUCTO -->
+                        <!-- CAMPO PARA ID PRODUCTO (AUTOGENERADO) -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="idProductos" class="form-label">ID Producto *</label>
-                                    <input type="text" class="form-control" id="idProductos" name="idProductos" required 
-                                           placeholder="Ej: 1001">
+                                    <input type="text" class="form-control" id="idProductos" name="idProductos" value="{{ $nextId }}" required readonly>
+                                    <div class="form-text">ID generado automáticamente</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -183,6 +184,10 @@
                                         <option value="Hogar">Hogar</option>
                                         <option value="Deportes">Deportes</option>
                                         <option value="Juguetes">Juguetes</option>
+                                        <option value="Alimentos">Alimentos</option>
+                                        <option value="Bebidas">Bebidas</option>
+                                        <option value="Limpieza">Limpieza</option>
+                                        <option value="Oficina">Oficina</option>
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </div>
@@ -202,19 +207,26 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="entradaProducto" class="form-label">Entrada *</label>
-                                    <input type="number" class="form-control" id="entradaProducto" name="entradaProducto" required min="0">
+                                    <input type="number" class="form-control" id="entradaProducto" name="entradaProducto" required min="0" value="0">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="salidaProducto" class="form-label">Salida *</label>
-                                    <input type="number" class="form-control" id="salidaProducto" name="salidaProducto" required min="0">
+                                    <input type="number" class="form-control" id="salidaProducto" name="salidaProducto" required min="0" value="0">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="NITProveedores" class="form-label">NIT Proveedor *</label>
-                                    <input type="number" class="form-control" id="NITProveedores" name="NITProveedores" required min="1">
+                                    <select class="form-select" id="NITProveedores" name="NITProveedores" required>
+                                        <option value="">Seleccionar proveedor...</option>
+                                        @foreach($proveedores as $proveedor)
+                                            <option value="{{ $proveedor->NITProveedores }}">
+                                                {{ $proveedor->NITProveedores }} - {{ $proveedor->nombreProveedor }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +234,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="precioUnitario" class="form-label">Precio Unitario *</label>
-                                    <input type="number" step="0.01" class="form-control" id="precioUnitario" name="precioUnitario" required min="0">
+                                    <input type="number" step="0.01" class="form-control" id="precioUnitario" name="precioUnitario" required min="0" value="0">
                                 </div>
                             </div>
                         </div>
@@ -265,11 +277,10 @@
                                         <option value="Hogar">Hogar</option>
                                         <option value="Deportes">Deportes</option>
                                         <option value="Juguetes">Juguetes</option>
-                                        <option value="Cocina">Cocina</option>
-                                        <option value="Infantil">Infantil</option>
-                                        <option value="Decoración">Decoración</option>
-                                        <option value="Jardín">Jardín</option>
-                                        <option value="Muebles">Muebles</option>
+                                        <option value="Alimentos">Alimentos</option>
+                                        <option value="Bebidas">Bebidas</option>
+                                        <option value="Limpieza">Limpieza</option>
+                                        <option value="Oficina">Oficina</option>
                                         <option value="Otros">Otros</option>
                                     </select>
                                 </div>
@@ -300,7 +311,14 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="edit_NITProveedores" class="form-label">NIT Proveedor *</label>
-                                    <input type="number" class="form-control" id="edit_NITProveedores" name="NITProveedores" required min="1">
+                                    <select class="form-select" id="edit_NITProveedores" name="NITProveedores" required>
+                                        <option value="">Seleccionar proveedor...</option>
+                                        @foreach($proveedores as $proveedor)
+                                            <option value="{{ $proveedor->NITProveedores }}">
+                                                {{ $proveedor->NITProveedores }} - {{ $proveedor->nombreProveedor }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -321,6 +339,7 @@
             </div>
         </div>
     </div>
+
     <!-- Modal para Eliminar Producto -->
     <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -334,6 +353,7 @@
                     @method('DELETE')
                     <div class="modal-body">
                         <p>¿Está seguro de que desea eliminar este producto?</p>
+                        <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -347,6 +367,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Auto cerrar alertas después de 5 segundos
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -354,6 +375,19 @@
                 bsAlert.close();
             });
         }, 5000);
+
+        // Configurar modal de nuevo producto para autogenerar ID
+        const modalNuevo = document.getElementById('modalProducto');
+        if (modalNuevo) {
+            modalNuevo.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('categoriaProducto').value = '';
+                document.getElementById('nombreProducto').value = '';
+                document.getElementById('entradaProducto').value = '0';
+                document.getElementById('salidaProducto').value = '0';
+                document.getElementById('NITProveedores').value = '';
+                document.getElementById('precioUnitario').value = '0';
+            });
+        }
 
         // Configurar modal de edición
         const modalEditar = document.getElementById('modalEditarProducto');
@@ -376,20 +410,6 @@
                 document.getElementById('edit_categoriaProducto').value = categoria;
                 document.getElementById('edit_NITProveedores').value = proveedor;
                 document.getElementById('edit_precioUnitario').value = precio;
-            });
-        }
-
-        // Limpiar formulario de nuevo producto cuando se cierra el modal
-        const modalNuevo = document.getElementById('modalProducto');
-        if (modalNuevo) {
-            modalNuevo.addEventListener('hidden.bs.modal', function () {
-                document.getElementById('idProductos').value = '';
-                document.getElementById('categoriaProducto').value = '';
-                document.getElementById('nombreProducto').value = '';
-                document.getElementById('entradaProducto').value = '';
-                document.getElementById('salidaProducto').value = '';
-                document.getElementById('NITProveedores').value = '';
-                document.getElementById('precioUnitario').value = '';
             });
         }
 

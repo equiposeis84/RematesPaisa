@@ -18,23 +18,22 @@ class PedidosController extends Controller
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('idPedidos', 'LIKE', "%{$search}%")
-                  ->orWhere('idCliente', 'LIKE', "%{$search}%")
-                  ->orWhere('estadoPedido', 'LIKE', "%{$search}%")
-                  ->orWhere('repartidorPedido', 'LIKE', "%{$search}%");
+                ->orWhere('idCliente', 'LIKE', "%{$search}%")
+                ->orWhere('estadoPedido', 'LIKE', "%{$search}%")
+                ->orWhere('repartidorPedido', 'LIKE', "%{$search}%");
             });
         }
         
-        $datos = $query->orderBy('idPedidos', 'desc')->paginate(10);
+        $datos = $query->orderBy('idPedidos', 'asc')->paginate(10);
         
-        return view('pedidos')->with('datos', $datos);
-    }
-
-    public function create()
-    {
-        $clientes = Cliente::all();
-        $repartidores = Usuario::where('idRol', 3)->get(); // Rol 3 para repartidores
+        // Obtener el próximo ID para el modal
+        $lastPedido = Pedidos::orderBy('idPedidos', 'desc')->first();
+        $nextId = $lastPedido ? $lastPedido->idPedidos + 1 : 1;
         
-        return view('pedidos.create', compact('clientes', 'repartidores'));
+        return view('pedidos')->with([
+            'datos' => $datos,
+            'nextId' => $nextId
+        ]);
     }
 
     public function store(Request $request)
@@ -66,16 +65,13 @@ class PedidosController extends Controller
         ]);
 
         return redirect()->route('pedidos.index')
-                         ->with('success', 'Pedido creado exitosamente');
+                        ->with('success', 'Pedido creado exitosamente');
     }
 
     public function edit($idPedidos)
     {
         $pedido = Pedidos::findOrFail($idPedidos);
-        $clientes = Cliente::all();
-        $repartidores = Usuario::where('idRol', 3)->get();
-        
-        return view('pedidos.edit', compact('pedido', 'clientes', 'repartidores'));
+        return view('pedidos.edit', compact('pedido'));
     }
 
     public function update(Request $request, $idPedidos)
@@ -107,7 +103,7 @@ class PedidosController extends Controller
         ]);
         
         return redirect()->route('pedidos.index')
-                         ->with('success', 'Pedido actualizado exitosamente');
+                        ->with('success', 'Pedido actualizado exitosamente');
     }
 
     public function destroy($idPedidos)
@@ -123,27 +119,5 @@ class PedidosController extends Controller
             return redirect()->route('pedidos.index')
                 ->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
         }
-    }
-
-    // Método para obtener información del cliente (para AJAX)
-    public function getClienteInfo($idCliente)
-    {
-        $cliente = Cliente::find($idCliente);
-        
-        if ($cliente) {
-            return response()->json([
-                'success' => true,
-                'cliente' => [
-                    'nombre' => $cliente->nombreCliente,
-                    'apellido' => $cliente->apellidoCliente,
-                    'empresa' => $cliente->NombreEmpresa,
-                    'email' => $cliente->emailCliente,
-                    'telefono' => $cliente->telefonoCliente,
-                    'direccion' => $cliente->direccionCliente
-                ]
-            ]);
-        }
-        
-        return response()->json(['success' => false]);
     }
 }

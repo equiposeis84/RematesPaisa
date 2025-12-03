@@ -182,13 +182,13 @@
                 <form action="{{ route('pedidos.store') }}" method="POST" id="formNuevoPedido">
                     @csrf
                     <div class="modal-body">
-                        <!-- CAMPO PARA ID PEDIDO -->
+                        <!-- CAMPO PARA ID PEDIDO (AUTOGENERADO) -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="idPedidos" class="form-label">ID Pedido *</label>
-                                    <input type="text" class="form-control" id="idPedidos" name="idPedidos" required 
-                                           placeholder="Ej: 1001">
+                                    <input type="text" class="form-control" id="idPedidos" name="idPedidos" value="{{ $nextId }}" required readonly>
+                                    <div class="form-text">ID generado automáticamente</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -601,7 +601,6 @@
             const modalNuevo = document.getElementById('modalPedido');
             if (modalNuevo) {
                 modalNuevo.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('idPedidos').value = '';
                     document.getElementById('estadoPedido').value = '';
                     document.getElementById('fechaPedido').value = '';
                     document.getElementById('horaPedido').value = '';
