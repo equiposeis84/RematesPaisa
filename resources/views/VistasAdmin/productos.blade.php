@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('VistasAdmin.welcome')
 @section('title', 'Productos')
 @section('content')
     <div class="container-sm d-flex justify-content-center mt-5">
@@ -60,7 +60,7 @@
                             <th>Salida</th>
                             <th>Stock</th>
                             <th>Categoría</th>
-                            <th>NIT Proveedor</th>
+                            <th>NIT</th>
                             <th>Proveedor</th>
                             <th>Precio Unitario</th>
                             <th>Acciones</th>

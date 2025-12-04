@@ -17,7 +17,7 @@ class ProductosPedidoController extends Controller
         // Obtener productos disponibles de la base de datos
         $productosDisponibles = Productos::all();
         
-        return view('productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
+        return view('VistasAdmin.productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
     }
 
     public function store(Request $request, $idPedido)

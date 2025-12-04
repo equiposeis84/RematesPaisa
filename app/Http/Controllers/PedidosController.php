@@ -30,7 +30,7 @@ class PedidosController extends Controller
         $lastPedido = Pedidos::orderBy('idPedidos', 'desc')->first();
         $nextId = $lastPedido ? $lastPedido->idPedidos + 1 : 1;
         
-        return view('pedidos')->with([
+        return view('VistasAdmin.pedidos')->with([
             'datos' => $datos,
             'nextId' => $nextId
         ]);
@@ -71,7 +71,7 @@ class PedidosController extends Controller
     public function edit($idPedidos)
     {
         $pedido = Pedidos::findOrFail($idPedidos);
-        return view('pedidos.edit', compact('pedido'));
+        return view('VistasAdmin.pedidos.edit', compact('pedido'));
     }
 
     public function update(Request $request, $idPedidos)

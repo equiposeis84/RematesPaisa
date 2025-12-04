@@ -1,7 +1,5 @@
-@extends('layouts.usuario')
-
-@section('title', 'Ayuda y Contacto - Remates El Paísa')
-
+@extends('VistasAdmin.welcome')
+@section('title', 'Productos del Pedido')
 @section('content')
 <header class="content-header">
     <h2>Ayuda y Contacto</h2>

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Remates El Paísa</title>
-    <link rel="stylesheet" href="../css/StyleSideBar.css">
-    <link rel="stylesheet" href="../css/StyleBase.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
     <div class="dashboard-container">

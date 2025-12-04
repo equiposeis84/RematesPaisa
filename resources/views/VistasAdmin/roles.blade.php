@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('VistasAdmin.welcome')
 @section('title', 'Gestión de Usuarios')
 @section('content')
     <div class="container-sm d-flex justify-content-center mt-5">

@@ -1,0 +1,71 @@
+:root{
+  --color-bg: #f6f8fa;
+  --color-text: #0f172a;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #475569;
+  --color-light: #ffffff;
+  --color-border: #e6eef7;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --sidebar-width: 280px;
+  --border-radius: 12px;
+  --card-shadow: 0 6px 20px rgba(8,24,44,0.06);
+  --transition: 180ms ease;
+}
+
+/* Barra lateral */
+.sidebar{
+  width:var(--sidebar-width);
+  min-width:var(--sidebar-width);
+  position:fixed;
+  height: 100%;
+  background:#0b1720;
+  color:var(--color-light);
+  display:block;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:18px 12px;
+  box-shadow:2px 0 12px rgba(2,6,23,0.45);
+  z-index: 1000;
+}
+.este{
+  display: block;
+  justify-content: center;
+  align-items: center;
+  height: 0%;
+}
+
+/* Altura de contenido sidebar */
+.space {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+}
+
+.secondary-nav li a{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.secondary-nav li i{
+  margin-right: 20px;
+}
+
+.logo{
+  padding:14px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  text-align:center
+}
+.logo h1{
+  font-size:1.3rem;
+  line-height:1;
+  color:#f8fafc
+}
+
+.main-nav ul,.secondary-nav ul{list-style:none}
+.main-nav li{margin:8px 6px}

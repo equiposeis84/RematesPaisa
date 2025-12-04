@@ -154,12 +154,14 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
 });
 
-
+//Ayuda y contacto
+Route::get('/ayuda-contacto', [App\Http\Controllers\AyudaContactoController::class, 'index'])->name('AyudaContacto.index');        
+Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
 // -----------------------------------------------------------------------------
 // RUTA BIENVENIDO
 // -----------------------------------------------------------------------------
 Route::get('/bienvenido', function () {
-    return view('welcome');
+    return view('VistasAdmin.welcome');
 })->name('welcome');
 
 

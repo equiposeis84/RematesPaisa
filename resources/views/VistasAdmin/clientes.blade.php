@@ -1,4 +1,4 @@
-@extends('welcome')
+@extends('VistasAdmin.welcome')
 @section('title', 'Usuarios')
 @section('content')
     <div class="container-sm d-flex justify-content-center mt-5">
@@ -68,7 +68,7 @@
                     <thead class="table-primary">
                         <tr>
                             <th>ID Usuario</th>
-                            <th>Nombre Empresa</th>
+                            <th>Empresa</th>
                             <th>Tipo Doc.</th>
                             <th>Nombre</th>
                             <th>Apellido</th>

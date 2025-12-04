@@ -32,7 +32,7 @@ class ProductosController extends Controller
         $lastProduct = Productos::orderBy('idProductos', 'desc')->first();
         $nextId = $lastProduct ? $lastProduct->idProductos + 1 : 1;
         
-        return view('productos')->with([
+        return view('VistasAdmin.productos')->with([
             'datos' => $datos,
             'proveedores' => $proveedores,
             'nextId' => $nextId
@@ -62,7 +62,7 @@ class ProductosController extends Controller
         $producto = Productos::findOrFail($idProducto); 
         $proveedores = Proveedor::all();
         
-        return view('productos.edit', compact('producto', 'proveedores')); 
+        return view('VistasAdmin.productos.edit', compact('producto', 'proveedores')); 
     }
 
     public function update(Request $request, $idProducto){ 

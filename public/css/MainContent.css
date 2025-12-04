@@ -1,4 +1,3 @@
-/* Variables de color y diseño */
 :root{
   --color-bg: #f6f8fa;
   --color-text: #0f172a;
@@ -16,7 +15,6 @@
   --transition: 180ms ease;
 }
 
-/* Reinicio básico */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
@@ -27,58 +25,12 @@ body{
   -moz-osx-font-smoothing:grayscale;
 }
 
-/* Contenedor principal */
 .dashboard-container{
   display: flex;
   width: 100%;
   min-height: 100vh;
 }
 
-/* Barra lateral */
-.sidebar{
-  width:var(--sidebar-width);
-  min-width:var(--sidebar-width);
-  position:fixed;
-  height: 100%;
-  background:#0b1720;
-  color:var(--color-light);
-  display:block;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:18px 12px;
-  box-shadow:2px 0 12px rgba(2,6,23,0.45);
-  z-index: 1000;
-}
-.este{
-  display: block;
-  justify-content: center;
-  align-items: center;
-  height: 0%;
-}
-
-/* Altura de contenido sidebar */
-.space {
-  display: block;
-  justify-content: center;
-  align-items: center;
-  height: 65%;
-}
-
-.logo{
-  padding:14px 10px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-  text-align:center
-}
-.logo h1{
-  font-size:1.3rem;
-  line-height:1;
-  color:#f8fafc
-}
-
-.main-nav ul,.secondary-nav ul{list-style:none}
-.main-nav li{margin:8px 6px}
-
-/* Contenido principal */
 .main-content {
   margin-left: var(--sidebar-width);
   padding: 30px;
@@ -116,7 +68,7 @@ body{
   color:rgba(209,219,230,0.95);
   text-decoration:none;
   font-weight:600;
-  transition:background var(--transition),color var(--transition)
+  transition:var(--transition),color var(--transition)
 }
 .main-nav a:hover{
   background:rgba(255,255,255,0.03);
@@ -128,52 +80,53 @@ body{
   color:#fff
 }
 
-.user-section{
-  padding:14px 8px;
-  border-top:1px solid rgba(255,255,255,0.03)
+.user-section {
+  padding: 20px 10px;
+  border-top: 1px solid rgba(255,255,255,0.03);
 }
-.user-info{
-  font-size:0.95rem;
-  padding:8px;
-  background:rgba(255,255,255,0.02);
-  border-radius:8px
+
+.user-info {
+  font-size: 0.95rem;
+  padding-top: 10px;
 }
 
 /* Navegación secundaria */
-.secondary-nav{margin-top:10px}
-.secondary-nav ul{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:stretch
+.secondary-nav {
+  margin-top: 10px;
 }
-.secondary-nav a{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:8px;
-  background:rgba(255,255,255,0.03);
-  color:rgba(209,219,230,0.95);
-  text-decoration:none;
-  font-weight:700;
-  width:100%;
-  justify-content:flex-start
+
+.secondary-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* opcional, para separar elementos */
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
-.secondary-nav a:hover{
-  background:rgba(255,255,255,0.06);
-  color:#fff
+
+.secondary-nav li {
+  display: flex;
+  gap: 5px;
 }
-.secondary-nav a.logout{
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.06);
-  padding:10px 12px
+
+.secondary-nav a {
+  display: flex;
+  align-items: center; /* <-- esto alinea ícono + texto */
+  gap: 8px; /* espacio entre icono y texto */
+  width: 100%;
+  color: rgba(209,219,230,0.95);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 6px 4px; /* para mejorar la zona clickeable */
+  border-radius: 8px;
 }
-.secondary-nav a.logout:hover{
-  background:rgba(255,0,0,0.08);
-  border-color:rgba(255,0,0,0.12);
-  color:#fff
+
+.secondary-nav a:hover {
+  background: rgba(59,130,246,0.08);
+  color: #fff;
 }
+
+
 
 /* Submenús */
 .has-submenu{position:relative}
@@ -226,6 +179,7 @@ body{
 
 /* TABLA*/
 table{
+  text-align: center;
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
@@ -239,6 +193,7 @@ th,td{
   text-overflow: ellipsis;
 }
 th{
+  text-align: center;
   background: var(--color-primary);
   color: var(--color-light);
   font-weight: 600;
@@ -255,7 +210,7 @@ th:nth-child(3), td:nth-child(3) { width: 1%; }
 th:nth-child(4), td:nth-child(4) { width: 10%; }
 th:nth-child(5), td:nth-child(5) { width: 10%; }
 th:nth-child(6), td:nth-child(6) { width: 18%; }
-th:nth-child(7), td:nth-child(7) { width: 12%; }
+th:nth-child(7), td:nth-child(7) { width: 5%; }
 th:nth-child(8), td:nth-child(8) { width: 18%; }
 th:nth-child(9), td:nth-child(9) { width: 5%;}
 th:nth-child(10), td:nth-child(10) { width: 16%; }

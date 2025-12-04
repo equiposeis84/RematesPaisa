@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remates El Paísa - Administración</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="/css/MainContent.css">
+    <link rel="stylesheet" href="/css/SidebarStyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,8 +29,8 @@
                                 <li><a href="{{route('productos.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-box-archive"></i> </span> Productos </a></li>
                                 <li><a href="{{route('pedidos.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-bag-shopping"></i> </span>Pedidos </a></li>
                                 <li><a href="{{route('proveedores.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-truck-fast"></i> </span>Proveedores </a></li>
-                                <li><a href="#" data-view="html/Reportes.html"> <span class="nav-icon"> <i class="fa-solid fa-arrow-up-from-ground-water"></i> </span>Reportes </a></li>
                                 <li><a href="{{route('roles.index')}}" data-view=""> <span class="nav-icon"> <i class="fa-solid fa-user-shield"></i> </span>Roles y Permisos </a></li>
+                                <li><a href="#" data-view="html/Reportes.html"> <span class="nav-icon"> <i class="fa-solid fa-arrow-up-from-ground-water"></i> </span>Reportes </a></li>
                             </ul>
                         </li>
                     </ul>
@@ -41,14 +42,33 @@
             </div>
 
             <div class="user-section">
-                <div class="user-info"><p><strong> Conectado como: Admin General</strong></p></div>
-                <nav class="secondary-nav">
-                    <ul>
-                        <li><a href="#" data-view="html/AyudayContacto.html"> <span class="nav-icon"> <i class="fa-solid fa-question-circle"></i> </span>Ayuda</a></li>
-                        <li><a href="../Usuario/index.html" class="logout" data-external> <span class="nav-icon"> <i class="fa-solid fa-right-from-bracket"></i> </span>Cerrar Sesión</a></li>
-                    </ul>
-                </nav>
-            </div>
+    <div class="user-info">
+        <p><strong> Conectado como:   Admin General</strong></p>
+    </div>
+
+    <nav class="secondary-nav">
+        <ul>
+            <li>
+                <a href="{{route('AyudaContacto.index')}}" data-view="">
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </span>
+                    <span class="nav-text">Ayuda y contacto</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="../Usuario/index.html" class="logout" data-external>
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+                    <span class="nav-text">Cerrar Sesión</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
         </aside>
 
         <!-- CONTENIDO PRINCIPAL-->

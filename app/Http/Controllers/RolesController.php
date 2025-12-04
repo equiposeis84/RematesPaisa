@@ -47,12 +47,12 @@ class RolesController extends Controller
         $usuarios = $query->orderBy('idUsuario', 'asc')->paginate(10);
         $roles = Roles::all(); // Para los dropdowns
         
-        return view('roles')->with(compact('usuarios', 'roles'));
+        return view('VistasAdmin.roles')->with(compact('usuarios', 'roles'));
     }
 
     public function create()
     {
-        return view('roles.create');
+        return view('VistasAdmin.roles.create');
     }
 
     public function store(Request $request)
@@ -71,7 +71,7 @@ class RolesController extends Controller
     public function edit($idRol)
     {
         $rol = Roles::findOrFail($idRol);
-        return view('roles.edit', compact('rol'));
+        return view('VistasAdmin.roles.edit', compact('rol'));
     }
 
     public function update(Request $request, $idRol)

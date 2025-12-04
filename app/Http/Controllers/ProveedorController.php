@@ -26,7 +26,7 @@ class ProveedorController extends Controller
         
         $datos = $query->orderBy('NITProveedores', 'asc')->paginate(10);
         
-        return view('proveedores')->with('datos', $datos);
+        return view('VistasAdmin.proveedores')->with('datos', $datos);
     }
 
     public function create()
@@ -40,7 +40,7 @@ class ProveedorController extends Controller
             $siguienteNIT++;
         }
         
-        return view('proveedores.create', compact('siguienteNIT'));
+        return view('VistasAdmin.proveedores.create', compact('siguienteNIT'));
     }
 
     public function store(Request $request)
@@ -80,7 +80,7 @@ class ProveedorController extends Controller
     public function edit($NITProveedores)
     {
         $proveedor = Proveedor::findOrFail($NITProveedores);
-        return view('proveedores.edit', compact('proveedor'));
+        return view('VistasAdmin.proveedores.edit', compact('proveedor'));
     }
 
     public function update(Request $request, $NITProveedores)

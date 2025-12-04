@@ -30,7 +30,7 @@ class ClienteController extends Controller
 
         $datos = $query->orderBy('idCliente', 'desc')->paginate(10);
 
-        return view('clientes')->with('datos', $datos);
+        return view('VistasAdmin.clientes')->with('datos', $datos);
     }
 
     public function store(Request $request)
@@ -44,13 +44,12 @@ class ClienteController extends Controller
             'emailCliente'         => 'required|email|unique:cliente,emailCliente',
             'telefonoCliente'      => 'required|string|max:20',
             'direccionCliente'     => 'required|string|max:255',
-            'passwordUsuario'      => 'required|string|min:6',
             'nombreUsuario' => 'required|string|max:100|unique:usuarios,nombreUsuario',
 
         ], [
-            'NombreEmpresa.required'        => 'El nombre de la empresa es obligatorio.',
             'idCliente.required'            => 'El ID del cliente es obligatorio.',
             'idCliente.unique'              => 'El ID del cliente ya está registrado.',
+            'NombreEmpresa.required'        => 'El nombre de la empresa es obligatorio.',
             'tipoDocumentoCliente.required' => 'El tipo de documento es obligatorio.',
             'nombreCliente.required'        => 'El nombre del cliente es obligatorio.',
             'apellidoCliente.required'      => 'El apellido del cliente es obligatorio.',
@@ -106,12 +105,12 @@ class ClienteController extends Controller
     public function edit($idCliente)
     {
         $cliente = Cliente::findOrFail($idCliente);
-        return view('clientes.edit', compact('cliente'));
+        return view('VistasAdmin.clientes.edit', compact('cliente'));
     }
 
     public function update(Request $request, $idCliente)
     {
-        $cliente = Cliente::findOrFail($idCliente);
+        $   cliente = Cliente::findOrFail($idCliente);
 
         $request->validate([
             'NombreEmpresa'        => 'required|string|max:100',
