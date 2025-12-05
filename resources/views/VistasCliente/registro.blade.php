@@ -5,24 +5,24 @@
 @section('content')
 
 
-<form method="POST" action="{{ route('clientes.store') }}">
+<form method="POST" action="{{ route('register.post') }}">
     @csrf
 
     <input type="hidden" name="idRol" value="2">
 
     <div class="form-group">
         <label for="NombreEmpresa">Nombre Empresa</label>
-        <input type="text" name="nombreEmpresa" required>
+        <input type="text" name="NombreEmpresa" required>
     </div>
 
     <div class="form-group">
         <label for="NitEmpresa">NIT Empresa</label>
-        <input type="text" name="nitEmpresa" required>
+        <input type="text" name="NITEmpresa" required>
     </div>
 
     <div class="form-group">
-        <label for="nombreUsuario">Nombre de Usuario</label>
-        <input type="text" id="nombreUsuario" name="nombreUsuario" required>
+        <label for="nombre">Nombre de usuario (para login)</label>
+        <input type="text" id="nombre" name="nombre" required>
     </div>
 
     <div class="form-group">
@@ -51,8 +51,13 @@
     </div>
 
     <div class="form-group">
-        <label for="emailCliente">Correo Electrónico</label>
+        <label for="emailCliente">Correo Electrónico (cliente)</label>
         <input type="email" id="emailCliente" name="emailCliente" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Correo para login</label>
+        <input type="email" id="email" name="email" required>
     </div>
 
     <div class="form-group">
@@ -66,13 +71,13 @@
     </div>
 
     <div class="form-group">
-        <label for="passwordUsuario">Contraseña</label>
-        <input type="password" id="passwordUsuario" name="passwordUsuario" required>
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
     </div>
 
     <div class="form-group">
-        <label for="confirm-password">Confirmar Contraseña</label>
-        <input type="password" id="confirm-password" name="confirm-password" required>
+        <label for="password_confirmation">Confirmar Contraseña</label>
+        <input type="password" id="password_confirmation" name="password_confirmation" required>
     </div>
 
     <button type="submit" class="btn">Registrarse</button>

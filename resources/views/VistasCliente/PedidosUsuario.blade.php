@@ -1,20 +1,9 @@
-<<<<<<< HEAD:resources/views/VistasCliente/PedidosUsuario.blade.php
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Remates El Paísa</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
-<body>
-=======
+    <div class="dashboard-container">
 @extends('layouts.usuario')
 
-@section('title', 'Iniciar Sesión - Remates El Paísa')
+@section('title', 'Pedidos - Remates El Paísa')
 
 @section('content')
->>>>>>> ae4aeb7fe5fd82c515c21c48bd3375cd88f69786:resources/views/Usuarios/PedidosUsuario.blade.php
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
@@ -67,5 +56,4 @@
         </header>
         </main>
     </div>
-
 @endsection

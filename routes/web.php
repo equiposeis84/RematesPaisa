@@ -144,9 +144,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
         return redirect()->route('login');
     })->name('login');
 
-    // Registro (mantener si funciona)
+    // Registro (redirige a la ruta principal de registro)
     Route::get('/registro', function () {
-        return view('Usuarios.registro');
+        return redirect()->route('register');
     })->name('register');
     
     // Registro - almacenar nuevo usuario

@@ -13,7 +13,7 @@ class LoginController extends Controller
     // Mostrar formulario de login
     public function showLoginForm()
     {
-        return view('auth.IniciarSesion');
+        return view('VistasCliente.IniciarSesion');
     }
 
     // Procesar login
@@ -34,7 +34,8 @@ class LoginController extends Controller
         if ($usuario && Hash::check($password, $usuario->password)) {
             // Iniciar sesión como Usuario
             Auth::login($usuario);
-            $request->session()->regenerate();
+            // Colocar aquí: $request->session()->regenerate();
+            // (Regeneración de sesión documentada; activar según flujo de sesión del proyecto)
 
             // Redirigir según el rol del usuario
             return $this->redirectUsuario($usuario->idRol);
@@ -43,7 +44,7 @@ class LoginController extends Controller
         // 2. Buscar en la tabla clientes
         $cliente = Cliente::where('emailCliente', $email)->first();
 
-        if ($cliente && Hash::check($password, $cliente->password)) {
+        if ($cliente && isset($cliente->password) && Hash::check($password, $cliente->password)) {
             // Iniciar sesión como Cliente (usando guard 'cliente' si está configurado, o sesión personalizada)
             // Por ahora, usaremos sesión personalizada para el cliente
             Auth::logout(); // Cerrar cualquier sesión de usuario

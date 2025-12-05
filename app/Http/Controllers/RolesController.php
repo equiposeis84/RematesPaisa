@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Roles;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 class RolesController extends Controller
 {
     public function index(Request $request)
@@ -105,6 +106,9 @@ class RolesController extends Controller
     // MÉTODO CORREGIDO: Obtener usuarios para asignar a rol
     public function getUsuariosParaRol($idRol)
     {
+        // Verificar que el usuario actual sea admin (idRol == 1)
+        $this->authorizeAdmin();
+
         \Log::info("Solicitando usuarios para rol: " . $idRol);
         
         try {
@@ -136,6 +140,9 @@ class RolesController extends Controller
     // MÉTODO: Asignar usuarios al rol
     public function asignarUsuarios(Request $request, $idRol)
     {
+        // Verificar que el usuario actual sea admin (idRol == 1)
+        $this->authorizeAdmin();
+
         $usuariosSeleccionados = $request->input('usuarios', []);
         
         // Actualizar los usuarios seleccionados
@@ -144,5 +151,34 @@ class RolesController extends Controller
         
         return redirect()->route('roles.index')
                ->with('success', 'Usuarios asignados al rol exitosamente');
+    }
+
+    /**
+     * Verifica que el usuario autenticado sea administrador (idRol == 1).
+     * Soporta autenticación via Auth::user() o sesión manual (session('user') o session('idRol')).
+     *
+     * Nota: en el flujo de login, después de autenticar al usuario, colocar
+     * `session()->regenerate();` para proteger contra fijación de sesión.
+     */
+    private function authorizeAdmin()
+    {
+        $idRol = null;
+
+        if (Auth::check()) {
+            $idRol = Auth::user()->idRol ?? null;
+        } elseif (session()->has('idRol')) {
+            $idRol = session('idRol');
+        } elseif (session()->has('user')) {
+            $user = session('user');
+            if (is_array($user)) {
+                $idRol = $user['idRol'] ?? null;
+            } elseif (is_object($user)) {
+                $idRol = $user->idRol ?? null;
+            }
+        }
+
+        if ($idRol != 1) {
+            abort(403, 'No autorizado.');
+        }
     }
 }

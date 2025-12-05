@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Usuario;
 
 class RegisterController extends Controller
 {
     public function showForm()
     {
-        return view('auth.register');
+        return view('VistasCliente.registro');
     }
 
     public function register(Request $request)
@@ -48,7 +49,7 @@ class RegisterController extends Controller
         Usuario::create([
             'nombre'   => $request->nombre,
             'email'    => $request->email,
-            'password' => $request->password,  // Se hashea automático por el modelo
+            'password' => Hash::make($request->password),  // Hash de contraseña
             'idRol'    => 2
         ]);
 

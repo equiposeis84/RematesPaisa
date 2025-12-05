@@ -1,21 +1,9 @@
-<<<<<<< HEAD:resources/views/VistasCliente/olvidoContraseña.blade.php
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña - Remates El Paísa</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">|
-</head>
-<body>
-=======
+    <div class="dashboard-container">
 @extends('layouts.usuario')
 
-@section('title', 'Iniciar Sesión - Remates El Paísa')
+@section('title', 'Recuperar Contraseña - Remates El Paísa')
 
-@section('content')<!DOCTYPE html>
-
->>>>>>> ae4aeb7fe5fd82c515c21c48bd3375cd88f69786:resources/views/Usuarios/olvidoContraseña.blade.php
+@section('content')
     <div class="dashboard-container">
         <aside class="sidebar">
              <div class="logo">
