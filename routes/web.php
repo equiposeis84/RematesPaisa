@@ -78,18 +78,21 @@ Route::put('/usuarios/{idUsuario}', [App\Http\Controllers\UsuariosController::cl
 Route::delete('/usuarios/{idUsuario}', [App\Http\Controllers\UsuariosController::class, 'destroy'])->name('usuarios.destroy');
 
 // -----------------------------------------------------------------------------
-// RUTAS DE AUTENTICACIÓN Y REGISTRO (TU PARTE DEL PROYECTO)
+// RUTAS DE AUTENTICACIÓN Y REGISTRO (TU PARTE DEL PROYECTO) newwww
 // -----------------------------------------------------------------------------
-Route::get('/auth/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/auth/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [App\Http\Controllers\LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
 
+// Ruta para catálogo de cliente (accesible después de login de cliente)
+Route::get('/cliente/catalogo', function () {
+    // Verificar que la sesión sea de cliente
+    if (session('user_type') == 'cliente') {
+        return view('Clientes.CatalogoU'); // Asegúrate de que esta vista exista
+    }
+    return redirect()->route('login');
+})->name('cliente.catalogo');
 
-Route::get('/test', function() {
-    $user = App\Models\Usuario::where('idRol', 2)->first();
-    Auth::login($user);
-    return redirect('/resources/views/Clientes/CatalogoU.blade.php');
-});
 
 
 
@@ -131,14 +134,17 @@ Route::prefix('usuario')->name('usuario.')->group(function () {
 // -----------------------------------------------------------------------------
 // GRUPO PARA AUTENTICACIÓN
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// GRUPO PARA AUTENTICACIÓN (actualizado)
+// -----------------------------------------------------------------------------
 Route::prefix('auth')->name('auth.')->group(function () {
     
-    // Login
+    // Login (redirigir a la nueva ruta)
     Route::get('/login', function () {
-        return view('Usuarios.IniciarSesion');
+        return redirect()->route('login');
     })->name('login');
 
-    // Registro
+    // Registro (mantener si funciona)
     Route::get('/registro', function () {
         return view('Usuarios.registro');
     })->name('register');
@@ -179,7 +185,7 @@ Route::get('/', function () {
 
 // Cliente (role 2)
 Route::get('/cliente', function () {
-    return view('Clientes.CatalogoU'); 
+    return redirect()->route('usuario.catalogo');
 })->middleware(['auth', 'role:1']);
 
 // Repartidor (role 3)

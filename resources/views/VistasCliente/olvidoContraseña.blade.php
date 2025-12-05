@@ -1,3 +1,4 @@
+<<<<<<< HEAD:resources/views/VistasCliente/olvidoContraseña.blade.php
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,6 +8,14 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">|
 </head>
 <body>
+=======
+@extends('layouts.usuario')
+
+@section('title', 'Iniciar Sesión - Remates El Paísa')
+
+@section('content')<!DOCTYPE html>
+
+>>>>>>> ae4aeb7fe5fd82c515c21c48bd3375cd88f69786:resources/views/Usuarios/olvidoContraseña.blade.php
     <div class="dashboard-container">
         <aside class="sidebar">
              <div class="logo">
@@ -65,5 +74,4 @@
             </div>
         </main>
     </div>
-</body>
-</html>
+@endsection

@@ -1,3 +1,10 @@
+@extends('layouts.usuario')
+
+@section('title', 'Iniciar Sesión - Remates El Paísa')
+
+@section('content')
+
+
 <form method="POST" action="{{ route('clientes.store') }}">
     @csrf
 
@@ -70,3 +77,5 @@
 
     <button type="submit" class="btn">Registrarse</button>
 </form>
+
+@endsection
