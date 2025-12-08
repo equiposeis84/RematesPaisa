@@ -17,7 +17,7 @@ class ProductosPedidoController extends Controller
         // Obtener productos disponibles de la base de datos
         $productosDisponibles = Productos::all();
         
-        return view('VistasAdmin.productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
+        return view('productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
     }
 
     public function store(Request $request, $idPedido)
@@ -91,7 +91,7 @@ class ProductosPedidoController extends Controller
         $totalProductos = ProductosPedido::where('idPedido', $idPedido)->sum('totalPagarDetalleProducto');
         
         $pedido = Pedidos::findOrFail($idPedido);
-        $iva = $totalProductos * 0.19; // 19% de IVA
+        $iva = $totalProductos * 0.19;
         $total = $totalProductos + $iva;
 
         $pedido->update([

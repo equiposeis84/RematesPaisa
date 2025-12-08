@@ -110,7 +110,7 @@ class ClienteController extends Controller
 
     public function update(Request $request, $idCliente)
     {
-        $   cliente = Cliente::findOrFail($idCliente);
+        $cliente = Cliente::findOrFail($idCliente);
 
         $request->validate([
             'NombreEmpresa'        => 'required|string|max:100',

@@ -1,4 +1,3 @@
-// app/Models/Cliente.php - ELIMINAR LA LLAVE EXTRA
 <?php
 
 namespace App\Models;
