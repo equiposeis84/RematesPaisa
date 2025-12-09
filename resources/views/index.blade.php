@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remates El Paísa </title>
+    <title>Remates El Paísa</title>
     <link rel="stylesheet" href="/css/MainContent.css">
     <link rel="stylesheet" href="/css/SidebarStyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,9 +19,8 @@
             <div class="este">
                 <nav class="main-nav">
                     <ul>
-                    
                         <li class="sidebar-fixed">
-                            <a href="#"> 
+                            <a href="/catalogo"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-store"></i> </span>Catálogo 
                             </a>
                         </li>
@@ -47,7 +46,12 @@
 
             <div class="user-section">
                 <div class="user-info">
-                    <p><strong>Invitado</strong></p>
+                    @if(session()->has('user_id'))
+                        <p><strong>{{ session('user_name') }}</strong></p>
+                        <p style="color: #777; font-size: 12px;">{{ session('user_email') }}</p>
+                    @else
+                        <p><strong>Invitado</strong></p>
+                    @endif
                 </div>
 
                 <nav class="secondary-nav">
@@ -62,12 +66,25 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('login') }}">
-                                <span class="nav-icon">
-                                    <i class="fa-solid fa-right-to-bracket"></i>
-                                </span>
-                                <span class="nav-text">Iniciar Sesión</span>
-                            </a>
+                            @if(session()->has('user_id'))
+                                <!-- FORMULARIO DE LOGOUT -->
+                                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">
+                                        <span class="nav-icon">
+                                            <i class="fa-solid fa-right-from-bracket"></i>
+                                        </span>
+                                        <span class="nav-text">Cerrar Sesión</span>
+                                    </a>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}">
+                                    <span class="nav-icon">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                    </span>
+                                    <span class="nav-text">Iniciar Sesión</span>
+                                </a>
+                            @endif
                         </li>
                     </ul>
                 </nav>
@@ -77,50 +94,12 @@
         <!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
             <section class="content-cards">
-                <!-- CONTENIDO DEL CATÁLOGO AQUÍ -->
-                <div class="container mt-4">
-                    <h2>Catálogo de Productos</h2>
-                    <p>Contenido del catálogo irá aquí...</p>
-                    
-                    <!-- SECCIÓN PRODUCTOS -->
-                    <div class="row" id="productos">
-                        <!-- Los productos se cargarán aquí -->
-                    </div>
-                    
-                    <!-- SECCIÓN OFERTAS -->
-                    <div class="row mt-5" id="ofertas">
-                        <!-- Las ofertas se cargarán aquí -->
-                    </div>
-                    
-                    <!-- SECCIÓN CATEGORÍAS -->
-                    <div class="row mt-5" id="categorias">
-                        <!-- Las categorías se cargarán aquí -->
-                    </div>
-                </div>
+                <!-- AQUÍ VA EL CONTENIDO DINÁMICO -->
+                @yield('content')
             </section>
         </main>
     </div>
 
-    <script>
-    // Simple submenu toggle
-    (function(){
-        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
-            btn.addEventListener('click', function(){
-                var parent = btn.closest('.has-submenu');
-                var submenu = parent.querySelector('.submenu');
-                var expanded = btn.getAttribute('aria-expanded') === 'true';
-                if (expanded) {
-                    btn.setAttribute('aria-expanded','false');
-                    submenu.hidden = true;
-                    parent.classList.remove('open');
-                } else {
-                    btn.setAttribute('aria-expanded','true');
-                    submenu.hidden = false;
-                    parent.classList.add('open');
-                }
-            });
-        });
-    })();
-    </script>
+    @yield('scripts')
 </body>
 </html>

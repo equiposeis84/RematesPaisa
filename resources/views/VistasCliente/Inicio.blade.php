@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remates El Paísa </title>
+    <title>Remates El Paísa - Catálogo</title>
     <link rel="stylesheet" href="/css/MainContent.css">
     <link rel="stylesheet" href="/css/SidebarStyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +19,6 @@
             <div class="este">
                 <nav class="main-nav">
                     <ul>
-                    
                         <li class="sidebar-fixed">
                             <a href="#"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-store"></i> </span>Catálogo 
@@ -47,7 +46,12 @@
 
             <div class="user-section">
                 <div class="user-info">
-                    <p><strong>Invitado</strong></p>
+                    @if(session()->has('user_id'))
+                        <p><strong>{{ session('user_name') }}</strong></p>
+                        <p style="color: #777; font-size: 12px;">{{ session('user_email') }}</p>
+                    @else
+                        <p><strong>Invitado</strong></p>
+                    @endif
                 </div>
 
                 <nav class="secondary-nav">
@@ -62,12 +66,26 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('login') }}">
-                                <span class="nav-icon">
-                                    <i class="fa-solid fa-right-to-bracket"></i>
-                                </span>
-                                <span class="nav-text">Iniciar Sesión</span>
-                            </a>
+                            @if(session()->has('user_id'))
+                                <!-- Botón para cerrar sesión -->
+                                <form action="{{ route('logout') }}" method="POST" id="logoutForm" style="display: inline;">
+                                    @csrf
+                                    <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()">
+                                        <span class="nav-icon">
+                                            <i class="fa-solid fa-right-from-bracket"></i>
+                                        </span>
+                                        <span class="nav-text">Cerrar Sesión</span>
+                                    </a>
+                                </form>
+                            @else
+                                <!-- Botón para iniciar sesión -->
+                                <a href="{{ route('login') }}">
+                                    <span class="nav-icon">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                    </span>
+                                    <span class="nav-text">Iniciar Sesión</span>
+                                </a>
+                            @endif
                         </li>
                     </ul>
                 </nav>
@@ -77,7 +95,6 @@
         <!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
             <section class="content-cards">
-                <!-- CONTENIDO DEL CATÁLOGO AQUÍ -->
                 <div class="container mt-4">
                     <h2>Catálogo de Productos</h2>
                     <p>Contenido del catálogo irá aquí...</p>
@@ -100,27 +117,5 @@
             </section>
         </main>
     </div>
-
-    <script>
-    // Simple submenu toggle
-    (function(){
-        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
-            btn.addEventListener('click', function(){
-                var parent = btn.closest('.has-submenu');
-                var submenu = parent.querySelector('.submenu');
-                var expanded = btn.getAttribute('aria-expanded') === 'true';
-                if (expanded) {
-                    btn.setAttribute('aria-expanded','false');
-                    submenu.hidden = true;
-                    parent.classList.remove('open');
-                } else {
-                    btn.setAttribute('aria-expanded','true');
-                    submenu.hidden = false;
-                    parent.classList.add('open');
-                }
-            });
-        });
-    })();
-    </script>
 </body>
 </html>
