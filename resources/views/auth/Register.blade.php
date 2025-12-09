@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #000000ff 0%, #717171ff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -27,7 +27,7 @@
             width: 100%;
         }
         .register-header {
-            background: #f5576c;
+            background: #626262ff;
             color: white;
             padding: 30px;
             text-align: center;
@@ -41,11 +41,11 @@
             border: 1px solid #e3e6f0;
         }
         .form-control:focus {
-            border-color: #f5576c;
+            border-color: #000000ff;
             box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25);
         }
         .btn-register {
-            background: #f5576c;
+            background: #000000ff;
             border: none;
             color: white;
             padding: 12px;
@@ -55,11 +55,11 @@
             transition: all 0.3s;
         }
         .btn-register:hover {
-            background: #e94a5f;
+            background: #1d00f9ff;
             transform: translateY(-2px);
         }
         .login-link {
-            color: #f5576c;
+            color: #1500ffff;
             text-decoration: none;
             font-weight: 500;
         }

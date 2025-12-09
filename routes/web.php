@@ -25,7 +25,7 @@ Route::get('/', function () {
         if ($role == 1) return redirect()->route('admin.inicio');
         else return redirect()->route('catalogo');
     }
-    return view('VistasCliente.inicio');
+    return view('index');
 });
 
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ function protegerRuta($roleRequerido = null) {
 Route::get('/catalogo', function () {
     $error = protegerRuta(); if ($error) return $error;
     if (session('user_type') == 1) return redirect()->route('admin.inicio');
-    return view('index');
+    return view('index'); // ← Ya está bien, apunta a index.blade.php
 })->name('catalogo');
 
 // Rutas específicas de cliente

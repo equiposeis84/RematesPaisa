@@ -1,5 +1,4 @@
-{{-- resources/views/auth/login.blade.php --}}
-<!DOCTYPE html>
+s<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #000000ff 0%, #38363eff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -27,7 +26,7 @@
             width: 100%;
         }
         .login-header {
-            background: #4e73df;
+            background: #878787ff;
             color: white;
             padding: 30px;
             text-align: center;
@@ -41,11 +40,11 @@
             border: 1px solid #e3e6f0;
         }
         .form-control:focus {
-            border-color: #4e73df;
+            border-color: #000000ff;
             box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
         }
         .btn-login {
-            background: #4e73df;
+            background: #000000ff;
             border: none;
             color: white;
             padding: 12px;
