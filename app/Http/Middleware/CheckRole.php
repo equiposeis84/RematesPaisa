@@ -1,86 +1,50 @@
 <?php
+// app/Http/Middleware/CheckRole.php
 
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CheckRole
 {
     /**
      * Handle an incoming request.
-     * Usage in routes: ->middleware('role:1') or ->middleware('role:1,2')
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string  ...$roles  Los roles permitidos (ej: "1" o "2,3")
+     * @return mixed
      */
-    public function handle($request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        $idRol = null;
-
-        if (Auth::check()) {
-            $idRol = Auth::user()->idRol ?? null;
-        } elseif (session()->has('idRol')) {
-            $idRol = session('idRol');
-        } elseif (session()->has('user')) {
-            $user = session('user');
-            if (is_array($user)) {
-                $idRol = $user['idRol'] ?? null;
-            } elseif (is_object($user)) {
-                $idRol = $user->idRol ?? null;
+        // 1. Verificar si el usuario está autenticado
+        if (!Session::has('user_id')) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión primero');
+        }
+        
+        // 2. Obtener el rol del usuario actual
+        $userRole = Session::get('user_type');
+        
+        // 3. Si solo viene un parámetro con comas (ej: "2,3"), convertirlo a array
+        if (count($roles) === 1 && str_contains($roles[0], ',')) {
+            $roles = explode(',', $roles[0]);
+        }
+        
+        // 4. Verificar si el usuario tiene alguno de los roles permitidos
+        if (!in_array($userRole, $roles)) {
+            // Acceso denegado - Redirigir según el rol actual
+            if ($userRole == 1) {
+                return redirect()->route('admin.inicio')
+                    ->with('error', 'No tienes acceso a esta sección');
+            } else {
+                return redirect()->route('catalogo')
+                    ->with('error', 'Acceso restringido. Solo administradores.');
             }
         }
-
-        // Normalizar roles permitidos (acepta '1,2' o múltiples args)
-        $allowed = [];
-        foreach ($roles as $r) {
-            foreach (explode(',', $r) as $part) {
-                $part = trim($part);
-                if ($part !== '') {
-                    $allowed[] = $part;
-                }
-            }
-        }
-
-        // Si no se especificaron roles, denegar por seguridad
-        if (empty($allowed)) {
-            abort(403, 'No autorizado.');
-        }
-
-        // Comparar como string para cubrir int/string
-        if (!in_array((string)$idRol, $allowed, true)) {
-            abort(403, 'No autorizado.');
-        }
-
+        
+        // 5. Si todo está bien, continuar
         return $next($request);
     }
 }
-        return back()->withErrors(['error' => 'Credenciales incorrectas']);
-    
-
-    // Redirigir según rol
-    private function redirectUsuario($idRol)
-    {
-
-    
-
-    {
-        switch ($idRol) {
-            case 1: // Admin
-                return redirect()->route('Admin.Catalogo');
-            case 2: // Empleado
-                return redirect()->route('Clientes.CatalogoU');
-
-            case 3: // Proveedor
-                return redirect()->route('Proveedores.CatalogoU');
-
-            default:
-                Auth::logout();
-                return redirect()->route('login')->withErrors(['error' => 'Rol de usuario no reconocido']);
-        }
-    }
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
-    }
-    }

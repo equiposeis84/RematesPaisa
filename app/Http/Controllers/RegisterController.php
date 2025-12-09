@@ -1,60 +1,60 @@
 <?php
+// app/Http/Controllers/RegisterController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Usuario;
+use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
 {
+    // Mostrar formulario de registro
     public function showForm()
     {
-        return view('VistasCliente.registro');
+        // Si ya está autenticado, redirigir
+        if (Session::has('user_id')) {
+            return redirect()->route('usuario.catalogo');
+        }
+        
+        return view('auth.register');
     }
-
+    
+    // Procesar registro
     public function register(Request $request)
     {
+        // 1. Validar datos
         $request->validate([
-            'NombreEmpresa'        => 'nullable|string|max:100',
-            'idCliente'            => 'required|string|max:40|unique:cliente,idCliente',
-            'tipoDocumentoCliente' => 'required|string|max:45',
-            'nombreCliente'        => 'required|string|max:45',
-            'apellidoCliente'      => 'required|string|max:45',
-            'direccionCliente'     => 'required|string|max:45',
-            'telefonoCliente'      => 'required|string|max:45',
-            'emailCliente'         => 'required|email|max:45|unique:cliente,emailCliente',
-
-            // Para tabla usuarios
-            'nombre'   => 'required|string|max:100',
-            'email'    => 'required|email|max:100|unique:usuarios,email',
-            'password' => 'required|min:6|confirmed',
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|min:6|confirmed', // confirmed valida password_confirmation
+            'password_confirmation' => 'required|min:6'
+        ], [
+            'email.unique' => 'Este email ya está registrado',
+            'password.confirmed' => 'Las contraseñas no coinciden'
         ]);
-
-        // 1. Guardar CLIENTE (datos personales)
-        Cliente::create([
-            'NombreEmpresa'        => $request->NombreEmpresa,
-            'idCliente'            => $request->idCliente,
-            'tipoDocumentoCliente' => $request->tipoDocumentoCliente,
-            'nombreCliente'        => $request->nombreCliente,
-            'apellidoCliente'      => $request->apellidoCliente,
-            'direccionCliente'     => $request->direccionCliente,
-            'telefonoCliente'      => $request->telefonoCliente,
-            'emailCliente'         => $request->emailCliente,
-            'idRol'                => 2 // Cliente
+        
+        // 2. Crear nuevo usuario
+        $user = User::create([
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // Encriptar contraseña
+            'idRol' => 2 // TODOS los nuevos usuarios son CLIENTES (rol 2)
         ]);
-
-        // 2. Guardar USUARIO (datos de login)
-        Usuario::create([
-            'nombre'   => $request->nombre,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),  // Hash de contraseña
-            'idRol'    => 2
-        ]);
-
-        return redirect()
-            ->route('login')
-            ->with('success', 'Registro completado correctamente.');
+        
+        // 3. Iniciar sesión automáticamente
+        if ($user) {
+            Session::put('user_id', $user->idUsuario);
+            Session::put('user_name', $user->nombre);
+            Session::put('user_email', $user->email);
+            Session::put('user_type', 2); // Cliente
+            Session::put('user_authenticated', true);
+            
+            return redirect()->route('usuario.catalogo')->with('success', '¡Registro exitoso! Bienvenido/a ' . $user->nombre);
+        }
+        
+        // 4. Si hay error, regresar
+        return back()->with('error', 'Error al registrar usuario');
     }
 }
