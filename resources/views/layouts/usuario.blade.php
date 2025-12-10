@@ -1,66 +1,87 @@
-(!-- Layout base para vistas de usuario: incluye sidebar y yield para contenido --)
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@yield('title', 'Remates El Paísa')</title>
-	<link rel="stylesheet" href="{{ asset('css/MainContent.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/SidebarStyle.css') }}">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-	<div class="dashboard-container">
-		<aside class="sidebar">
-			<div class="logo"><h1>Remates El Paísa</h1></div>
-			<div class="este">
-				<nav class="main-nav">
-					<ul>
-						<li class="sidebar-fixed"><a href="/">Catálogo</a></li>
-						<li class="sidebar-fixed"><a href="#">Mi Carrito</a></li>
-						<li class="sidebar-fixed"><a href="#">Mis Pedidos</a></li>
-					</ul>
-				</nav>
-			</div>
+@extends('layouts.usuario')
 
-			<div class="space"><div class="space-item"></div></div>
 
-			<div class="user-section">
-				<div class="user-info">
-					@if(session()->has('user_id'))
-						<p><strong>{{ session('user_name') }}</strong></p>
-						<p style="color: #777; font-size: 12px;">{{ session('user_email') }}</p>
-					@else
-						<p><strong>Invitado</strong></p>
-					@endif
-				</div>
+@section('content')
 
-				<nav class="secondary-nav">
-					<ul>
-						<li><a href="#">Ayuda y contacto</a></li>
-						<li>
-							@if(session()->has('user_id'))
-								<form action="{{ route('logout') }}" method="POST" style="display:inline">@csrf
-									<a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Cerrar Sesión</a>
-								</form>
-							@else
-								<a href="{{ route('login') }}">Iniciar Sesión</a>
-							@endif
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</aside>
+<style>
+    .auth-wrapper {
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
 
-		<main class="main-content">
-			<section class="content-cards">
-				@yield('content')
-			</section>
-		</main>
-	</div>
+    .auth-card {
+        width: 420px;
+    }
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-	@yield('scripts')
-</body>
-</html>
+    
+</style>
+
+<div class="auth-wrapper">
+
+    <div class="auth-card">
+
+        {{-- PEGAR AQUÍ TU FORMULARIO COMPLETO SIN CAMBIAR NI UNA LÍNEA --}}
+
+        <div class="register-card">
+            <div class="card-header">
+                <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
+                <p>Regístrate para continuar</p>
+            </div>
+
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+
+                <div class="input-group">
+                    <label for="nombre">
+                        <i class="fas fa-user"></i> Nombre Completo
+                    </label>
+                    <input id="nombre" type="text" name="name" value="{{ old('name') }}" required autofocus>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">
+                        <i class="fas fa-key"></i> Contraseña
+                    </label>
+                    <input id="password" type="password" name="password" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password_confirmation">
+                        <i class="fas fa-key"></i> Confirmar Contraseña
+                    </label>
+                    <input id="password_confirmation" type="password" name="password_confirmation" required>
+                </div>
+
+                <div class="terms">
+                    <input type="checkbox" required>
+                    <label>Acepto los <a href="#">Términos y Condiciones</a></label>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Registrarse
+                </button>
+
+                <div class="footer-links">
+                    <p>¿Ya tienes una cuenta?</p>
+                    <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Inicia Sesión aquí</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+@endsection
