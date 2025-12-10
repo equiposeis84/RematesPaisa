@@ -37,7 +37,7 @@
                             </button>
                             <ul id="gestion-submenu" class="submenu" show>
                                 <li>
-                                    <a href="{{route('clientes.index')}}" data-view="">
+                                   <a href="{{route('usuarios.index')}}" data-view="">
                                         <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
                                         Usuarios
                                     </a>

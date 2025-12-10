@@ -214,7 +214,153 @@ Route::delete('/pedidos/{pedido}', function (Request $request, $pedido) {
     return app(PedidosController::class)->destroy($request, $pedido); 
 })->name('pedidos.destroy');
 
-// ... (MANTÉN TODAS TUS OTRAS RUTAS ADMIN AQUÍ EXACTAMENTE COMO LAS TENÍAS) ...
+// -------------------------------------------------------------------------
+// CRUD PROVEEDORES (Admin) - AÑADIDAS
+// -------------------------------------------------------------------------
+Route::get('/proveedores', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->index($request); 
+})->name('proveedores.index');
+Route::post('/proveedores', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->store($request); 
+})->name('proveedores.store');
+Route::get('/proveedores/create', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->create($request); 
+})->name('proveedores.create');
+Route::get('/proveedores/{proveedor}', function (Request $request, $proveedor) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->show($request, $proveedor); 
+})->name('proveedores.show');
+Route::get('/proveedores/{proveedor}/edit', function (Request $request, $proveedor) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->edit($request, $proveedor); 
+})->name('proveedores.edit');
+Route::put('/proveedores/{proveedor}', function (Request $request, $proveedor) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->update($request, $proveedor); 
+})->name('proveedores.update');
+Route::delete('/proveedores/{proveedor}', function (Request $request, $proveedor) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->destroy($request, $proveedor); 
+})->name('proveedores.destroy');
+// -------------------------------------------------------------------------
+// RUTA PARA OBTENER SIGUIENTE NIT DE PROVEEDORES (Admin)
+// -------------------------------------------------------------------------
+Route::get('/proveedores/siguiente-nit', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(ProveedorController::class)->getSiguienteNIT($request); 
+})->name('proveedores.getSiguienteNIT');
+// -------------------------------------------------------------------------
+// CRUD ROLES (Admin) - AÑADIDAS
+// -------------------------------------------------------------------------
+Route::get('/roles', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->index($request); 
+})->name('roles.index');
+Route::post('/roles', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->store($request); 
+})->name('roles.store');
+Route::get('/roles/{rol}', function (Request $request, $rol) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->show($request, $rol); 
+})->name('roles.show');
+Route::get('/roles/{rol}/edit', function (Request $request, $rol) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->edit($request, $rol); 
+})->name('roles.edit');
+Route::put('/roles/{rol}', function (Request $request, $rol) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->update($request, $rol); 
+})->name('roles.update');
+Route::delete('/roles/{rol}', function (Request $request, $rol) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(RolesController::class)->destroy($request, $rol); 
+})->name('roles.destroy');
+
+// -------------------------------------------------------------------------
+// CRUD USUARIOS (Admin) - AÑADIDAS
+// -------------------------------------------------------------------------
+Route::get('/usuarios', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->index($request); 
+})->name('usuarios.index');
+Route::post('/usuarios', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->store($request); 
+})->name('usuarios.store');
+Route::get('/usuarios/{usuario}', function (Request $request, $usuario) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->show($request, $usuario); 
+})->name('usuarios.show');
+Route::get('/usuarios/{usuario}/edit', function (Request $request, $usuario) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->edit($request, $usuario); 
+})->name('usuarios.edit');
+Route::put('/usuarios/{usuario}', function (Request $request, $usuario) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->update($request, $usuario); 
+})->name('usuarios.update');
+Route::delete('/usuarios/{usuario}', function (Request $request, $usuario) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(UsuariosController::class)->destroy($request, $usuario); 
+})->name('usuarios.destroy');
+
+// -------------------------------------------------------------------------
+// CRUD AYUDA Y CONTACTO (Admin) - AÑADIDAS
+// -------------------------------------------------------------------------
+Route::get('/ayuda-contacto', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->index($request); 
+})->name('AyudaContacto.index');
+Route::post('/ayuda-contacto', function (Request $request) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->store($request); 
+})->name('AyudaContacto.store');
+Route::get('/ayuda-contacto/{ayudaContacto}', function (Request $request, $ayudaContacto) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->show($request, $ayudaContacto); 
+})->name('AyudaContacto.show');
+Route::get('/ayuda-contacto/{ayudaContacto}/edit', function (Request $request, $ayudaContacto) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->edit($request, $ayudaContacto); 
+})->name('AyudaContacto.edit');
+Route::put('/ayuda-contacto/{ayudaContacto}', function (Request $request, $ayudaContacto) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->update($request, $ayudaContacto); 
+})->name('AyudaContacto.update');
+Route::delete('/ayuda-contacto/{ayudaContacto}', function (Request $request, $ayudaContacto) { 
+    $error = protegerRuta(1); 
+    if ($error) return $error; 
+    return app(AyudaContactoController::class)->destroy($request, $ayudaContacto); 
+})->name('AyudaContacto.destroy');
 
 // =============================================================================
 // RUTAS COMPARTIDAS PARA TODOS LOS AUTENTICADOS
