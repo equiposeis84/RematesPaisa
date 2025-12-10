@@ -37,7 +37,7 @@
                             </button>
                             <ul id="gestion-submenu" class="submenu" show>
                                 <li>
-                                   <a href="{{route('usuarios.index')}}" data-view="">
+                                   <a href="{{route('clientes.index')}}" data-view="">
                                         <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
                                         Usuarios
                                     </a>
@@ -64,12 +64,6 @@
                                     <a href="{{route('roles.index')}}" data-view="">
                                         <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
                                         Roles y Permisos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-view="html/Reportes.html">
-                                        <span class="nav-icon"><i class="fa-solid fa-arrow-up-from-ground-water"></i></span>
-                                        Reportes
                                     </a>
                                 </li>
                             </ul>

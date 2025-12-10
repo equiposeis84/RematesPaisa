@@ -113,6 +113,100 @@ Route::get('/admin', function () {
 });
 
 // -------------------------------------------------------------------------
+// CRUD PEDIDOS (Admin)
+// -------------------------------------------------------------------------
+Route::prefix('pedidos')->name('pedidos.')->group(function () {
+    Route::get('/', function (Request $request) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->index($request); 
+    })->name('index');
+    
+    Route::post('/', function (Request $request) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->store($request); 
+    })->name('store');
+    
+    Route::get('/create', function (Request $request) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->create($request); 
+    })->name('create');
+    
+    Route::get('/{pedido}', function (Request $request, $pedido) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->show($request, $pedido); 
+    })->name('show');
+    
+    Route::get('/{pedido}/edit', function (Request $request, $pedido) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->edit($request, $pedido); 
+    })->name('edit');
+    
+    Route::put('/{pedido}', function (Request $request, $pedido) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->update($request, $pedido); 
+    })->name('update');
+    
+    Route::delete('/{pedido}', function (Request $request, $pedido) { 
+        $error = protegerRuta(1); 
+        if ($error) return $error; 
+        return app(PedidosController::class)->destroy($request, $pedido); 
+    })->name('destroy');
+    
+    // =========================================================================
+    // PRODUCTOS DE LOS PEDIDOS (Detalle de productos)
+    // =========================================================================
+    Route::prefix('{idPedido}/productos')->name('productos.')->group(function () {
+        Route::get('/', function (Request $request, $idPedido) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->index($idPedido);
+        })->name('index');
+        
+        Route::post('/', function (Request $request, $idPedido) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->store($request, $idPedido);
+        })->name('store');
+        
+        Route::get('/create', function (Request $request, $idPedido) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->create($idPedido);
+        })->name('create');
+        
+        Route::get('/{idProducto}', function (Request $request, $idPedido, $idProducto) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->show($idPedido, $idProducto);
+        })->name('show');
+        
+        Route::get('/{idProducto}/edit', function (Request $request, $idPedido, $idProducto) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->edit($idPedido, $idProducto);
+        })->name('edit');
+        
+        Route::put('/{idProducto}', function (Request $request, $idPedido, $idProducto) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->update($request, $idPedido, $idProducto);
+        })->name('update');
+        
+        Route::delete('/{idProducto}', function (Request $request, $idPedido, $idProducto) {
+            $error = protegerRuta(1);
+            if ($error) return $error;
+            return app(ProductosPedidoController::class)->destroy($idPedido, $idProducto);
+        })->name('destroy');
+    });
+});
+
+// -------------------------------------------------------------------------
 // CRUD CLIENTES (Admin)
 // -------------------------------------------------------------------------
 Route::get('/clientes', function (Request $request) { 
@@ -176,45 +270,6 @@ Route::get('/productos/next-id', function (Request $request) {
 })->name('productos.next.id');
 
 // -------------------------------------------------------------------------
-// CRUD PEDIDOS (Admin)
-// -------------------------------------------------------------------------
-Route::get('/pedidos', function (Request $request) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->index($request); 
-})->name('pedidos.index');
-Route::post('/pedidos', function (Request $request) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->store($request); 
-})->name('pedidos.store');
-Route::get('/pedidos/create', function (Request $request) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->create($request); 
-})->name('pedidos.create');
-Route::get('/pedidos/{pedido}', function (Request $request, $pedido) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->show($request, $pedido); 
-})->name('pedidos.show');
-Route::get('/pedidos/{pedido}/edit', function (Request $request, $pedido) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->edit($request, $pedido); 
-})->name('pedidos.edit');
-Route::put('/pedidos/{pedido}', function (Request $request, $pedido) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->update($request, $pedido); 
-})->name('pedidos.update');
-Route::delete('/pedidos/{pedido}', function (Request $request, $pedido) { 
-    $error = protegerRuta(1); 
-    if ($error) return $error; 
-    return app(PedidosController::class)->destroy($request, $pedido); 
-})->name('pedidos.destroy');
-
-// -------------------------------------------------------------------------
 // CRUD PROVEEDORES (Admin) - AÑADIDAS
 // -------------------------------------------------------------------------
 Route::get('/proveedores', function (Request $request) { 
@@ -252,14 +307,12 @@ Route::delete('/proveedores/{proveedor}', function (Request $request, $proveedor
     if ($error) return $error; 
     return app(ProveedorController::class)->destroy($request, $proveedor); 
 })->name('proveedores.destroy');
-// -------------------------------------------------------------------------
-// RUTA PARA OBTENER SIGUIENTE NIT DE PROVEEDORES (Admin)
-// -------------------------------------------------------------------------
 Route::get('/proveedores/siguiente-nit', function (Request $request) { 
     $error = protegerRuta(1); 
     if ($error) return $error; 
     return app(ProveedorController::class)->getSiguienteNIT($request); 
 })->name('proveedores.getSiguienteNIT');
+
 // -------------------------------------------------------------------------
 // CRUD ROLES (Admin) - AÑADIDAS
 // -------------------------------------------------------------------------
@@ -382,7 +435,7 @@ Route::get('/dashboard', function () {
 // RUTAS DE AUTENTICACIÓN
 // =============================================================================
 
-// Logout seguro (POST) - ESTA ES LA CLAVE
+// Logout seguro (POST)
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Logout temporal GET (para desarrollo)

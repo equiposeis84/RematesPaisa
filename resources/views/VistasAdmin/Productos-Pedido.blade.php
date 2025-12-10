@@ -126,13 +126,21 @@
                                 <td>${{ number_format($producto->ivaDetalleProducto, 2) }}</td>
                                 <td>${{ number_format($producto->totalDetalleProducto, 2) }}</td>
                                 <td>
-                                    <form action="{{ route('pedidos.productos.destroy', ['idPedido' => $pedido->idPedidos, 'idProducto' => $producto->idProductos]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este producto del pedido?')">
-                                            <i class="fa-solid fa-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('pedidos.productos.edit', ['idPedido' => $pedido->idPedidos, 'idProducto' => $producto->idProductos]) }}" 
+                                           class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-edit"></i> Editar
+                                        </a>
+                                        <form action="{{ route('pedidos.productos.destroy', ['idPedido' => $pedido->idPedidos, 'idProducto' => $producto->idProductos]) }}" 
+                                              method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" 
+                                                    onclick="return confirm('¿Eliminar este producto del pedido?')">
+                                                <i class="fa-solid fa-trash"></i> Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
