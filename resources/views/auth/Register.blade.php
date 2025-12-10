@@ -1,83 +1,24 @@
-{{-- resources/views/auth/register.blade.php --}}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Sistema</title>
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.usuario')
+
+@section('content')
     <style>
-        body {
-            background: linear-gradient(135deg, #000000ff 0%, #717171ff 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .register-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            max-width: 450px;
-            width: 100%;
-        }
-        .register-header {
-            background: #626262ff;
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .register-body {
-            padding: 30px;
-        }
-        .form-control {
-            border-radius: 8px;
-            padding: 12px 15px;
-            border: 1px solid #e3e6f0;
-        }
-        .form-control:focus {
-            border-color: #000000ff;
-            box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25);
-        }
-        .btn-register {
-            background: #000000ff;
-            border: none;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        .btn-register:hover {
-            background: #1d00f9ff;
-            transform: translateY(-2px);
-        }
-        .login-link {
-            color: #1500ffff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .login-link:hover {
-            text-decoration: underline;
-        }
-        .password-strength {
-            height: 5px;
-            border-radius: 3px;
-            margin-top: 5px;
-            transition: all 0.3s;
-        }
+        /* Estilos específicos de la página (mantener localizados para no romper otros layouts) */
+        body { background: linear-gradient(135deg, #000000ff 0%, #717171ff 100%); }
+        .register-card { background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; width: 100%; }
+        .register-header { background: #626262ff; color: white; padding: 30px; text-align: center; }
+        .register-body { padding: 30px; }
+        .form-control { border-radius: 8px; padding: 12px 15px; border: 1px solid #e3e6f0; }
+        .form-control:focus { border-color: #000000ff; box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25); }
+        .btn-register { background: #000000ff; border: none; color: white; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; transition: all 0.3s; }
+        .btn-register:hover { background: #1d00f9ff; transform: translateY(-2px); }
+        .login-link { color: #1500ffff; text-decoration: none; font-weight: 500; }
+        .login-link:hover { text-decoration: underline; }
+        .password-strength { height: 5px; border-radius: 3px; margin-top: 5px; transition: all 0.3s; }
         .strength-weak { background: #dc3545; width: 30%; }
         .strength-medium { background: #ffc107; width: 60%; }
         .strength-strong { background: #28a745; width: 100%; }
     </style>
-</head>
-<body>
+
     <div class="register-card">
         <div class="register-header">
             <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
@@ -195,77 +136,59 @@
             </form>
         </div>
     </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+@endsection
+
+@section('scripts')
     <script>
         // Auto-cerrar alerts
         setTimeout(() => {
             document.querySelectorAll('.alert').forEach(alert => {
-                let bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+                try { let bsAlert = new bootstrap.Alert(alert); bsAlert.close(); } catch(e) {}
             });
         }, 5000);
-        
+
         // Verificar fortaleza de contraseña
         function checkPasswordStrength(password) {
             const strengthBar = document.getElementById('passwordStrength');
             let strength = 0;
-            
+            if (!strengthBar) return;
             if (password.length >= 6) strength++;
             if (password.length >= 8) strength++;
             if (/[A-Z]/.test(password)) strength++;
             if (/[0-9]/.test(password)) strength++;
             if (/[^A-Za-z0-9]/.test(password)) strength++;
-            
             strengthBar.className = 'password-strength';
-            if (strength <= 2) {
-                strengthBar.classList.add('strength-weak');
-            } else if (strength <= 4) {
-                strengthBar.classList.add('strength-medium');
-            } else {
-                strengthBar.classList.add('strength-strong');
-            }
+            if (strength <= 2) { strengthBar.classList.add('strength-weak'); }
+            else if (strength <= 4) { strengthBar.classList.add('strength-medium'); }
+            else { strengthBar.classList.add('strength-strong'); }
         }
-        
-        // Verificar que las contraseñas coincidan
-        document.getElementById('password_confirmation').addEventListener('keyup', function() {
-            const password = document.getElementById('password').value;
-            const confirm = this.value;
-            const matchText = document.getElementById('passwordMatch');
-            
-            if (confirm === '') {
-                matchText.textContent = '';
-                matchText.className = 'form-text';
-            } else if (password === confirm) {
-                matchText.textContent = '✓ Las contraseñas coinciden';
-                matchText.className = 'form-text text-success';
-            } else {
-                matchText.textContent = '✗ Las contraseñas no coinciden';
-                matchText.className = 'form-text text-danger';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmInput = document.getElementById('password_confirmation');
+            if (confirmInput) {
+                confirmInput.addEventListener('keyup', function() {
+                    const password = document.getElementById('password').value;
+                    const confirm = this.value;
+                    const matchText = document.getElementById('passwordMatch');
+                    if (!matchText) return;
+                    if (confirm === '') { matchText.textContent = ''; matchText.className = 'form-text'; }
+                    else if (password === confirm) { matchText.textContent = '✓ Las contraseñas coinciden'; matchText.className = 'form-text text-success'; }
+                    else { matchText.textContent = '✗ Las contraseñas no coinciden'; matchText.className = 'form-text text-danger'; }
+                });
             }
-        });
-        
-        // Validación antes de enviar
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('password_confirmation').value;
-            const terms = document.getElementById('terms').checked;
-            
-            if (password !== confirm) {
-                e.preventDefault();
-                alert('Las contraseñas no coinciden');
-                return false;
+
+            const form = document.getElementById('registerForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const password = document.getElementById('password').value;
+                    const confirm = document.getElementById('password_confirmation').value;
+                    const terms = document.getElementById('terms').checked;
+                    if (password !== confirm) { e.preventDefault(); alert('Las contraseñas no coinciden'); return false; }
+                    if (!terms) { e.preventDefault(); alert('Debes aceptar los términos y condiciones'); return false; }
+                    return true;
+                });
             }
-            
-            if (!terms) {
-                e.preventDefault();
-                alert('Debes aceptar los términos y condiciones');
-                return false;
-            }
-            
-            return true;
         });
     </script>
-</body>
-</html>
+@endsection
