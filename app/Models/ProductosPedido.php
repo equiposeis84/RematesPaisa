@@ -11,7 +11,6 @@ class ProductosPedido extends Model
 
     protected $table = 'detalleproductos';
     
-    // Como es una tabla con clave primaria compuesta, desactivamos la clave primaria automática
     protected $primaryKey = null;
     public $incrementing = false;
     
@@ -27,19 +26,16 @@ class ProductosPedido extends Model
 
     public $timestamps = false;
 
-    // Relación con el pedido
     public function pedido()
     {
         return $this->belongsTo(Pedidos::class, 'idPedido', 'idPedidos');
     }
 
-    // Relación con el producto
     public function producto()
     {
         return $this->belongsTo(Productos::class, 'idProductos', 'idProductos');
     }
 
-    // Método para obtener un identificador único para este registro
     public function getUniqueKeyAttribute()
     {
         return $this->idPedido . '_' . $this->idProductos;

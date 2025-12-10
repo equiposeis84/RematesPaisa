@@ -77,6 +77,12 @@ class ProveedorController extends Controller
         }
     }
 
+    public function show($NITProveedores)
+    {
+        $proveedor = Proveedor::findOrFail($NITProveedores);
+        return view('VistasAdmin.proveedores.show', compact('proveedor'));
+    }
+
     public function edit($NITProveedores)
     {
         $proveedor = Proveedor::findOrFail($NITProveedores);
@@ -140,17 +146,32 @@ class ProveedorController extends Controller
         }
     }
 
-    // Método para obtener el siguiente NIT disponible
-    public function getSiguienteNIT()
+    /**
+     * Obtener el siguiente NIT disponible
+     */
+    public function getSiguienteNIT(Request $request)
     {
-        $totalProveedores = Proveedor::count();
-        $siguienteNIT = $totalProveedores + 1;
-        
-        // Si ya existe el NIT, buscar el siguiente disponible
-        while (Proveedor::where('NITProveedores', $siguienteNIT)->exists()) {
-            $siguienteNIT++;
+        try {
+            // Obtener el máximo NIT actual
+            $maxNIT = Proveedor::max('NITProveedores');
+            
+            // Si no hay proveedores, empezar desde 1
+            $siguienteNIT = $maxNIT ? ($maxNIT + 1) : 1;
+            
+            // Verificar que el NIT no exista ya
+            while (Proveedor::where('NITProveedores', $siguienteNIT)->exists()) {
+                $siguienteNIT++;
+            }
+            
+            return response()->json([
+                'siguienteNIT' => $siguienteNIT,
+                'success' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al obtener el siguiente NIT',
+                'success' => false
+            ], 500);
         }
-        
-        return response()->json(['siguienteNIT' => $siguienteNIT]);
     }
 }

@@ -89,7 +89,7 @@
                                 <td>{{ $item->repartidorPedido ?? 'N/A' }}</td>
                                 <td>
                                     <!-- Botón para gestionar productos del pedido -->
-                                    <a href="{{ route('pedidos.productos.index', $item->idPedidos) }}" 
+                                    <a href="{{ route('pedidos.productos.index', $item->idPedidos) }}"  
                                        class="btn btn-info btn-sm mb-1">
                                         <i class="fa-solid fa-cart-plus"></i> Productos
                                     </a>

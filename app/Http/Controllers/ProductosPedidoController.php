@@ -12,12 +12,68 @@ class ProductosPedidoController extends Controller
     public function index($idPedido)
     {
         $pedido = Pedidos::findOrFail($idPedido);
-        $productos = ProductosPedido::where('idPedido', $idPedido)->get();
+        $productos = ProductosPedido::where('idPedido', $idPedido)->with('producto')->get();
         
-        // Obtener productos disponibles de la base de datos
         $productosDisponibles = Productos::all();
         
-        return view('productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
+        return view('VistasAdmin.productos-pedido', compact('pedido', 'productos', 'productosDisponibles'));
+    }
+
+    public function show($idPedido, $idProducto)
+    {
+        $pedido = Pedidos::findOrFail($idPedido);
+        $producto = ProductosPedido::where('idPedido', $idPedido)
+            ->where('idProductos', $idProducto)
+            ->with('producto')
+            ->firstOrFail();
+        
+        return view('VistasAdmin.productos-pedido.show', compact('pedido', 'producto'));
+    }
+
+    public function create($idPedido)
+    {
+        $pedido = Pedidos::findOrFail($idPedido);
+        $productosDisponibles = Productos::all();
+        
+        return view('VistasAdmin.productos-pedido.create', compact('pedido', 'productosDisponibles'));
+    }
+
+    public function edit($idPedido, $idProducto)
+    {
+        $pedido = Pedidos::findOrFail($idPedido);
+        $producto = ProductosPedido::where('idPedido', $idPedido)
+            ->where('idProductos', $idProducto)
+            ->with('producto')
+            ->firstOrFail();
+        $productosDisponibles = Productos::all();
+        
+        return view('VistasAdmin.productos-pedido.edit', compact('pedido', 'producto', 'productosDisponibles'));
+    }
+
+    public function update(Request $request, $idPedido, $idProducto)
+    {
+        $request->validate([
+            'cantidad' => 'required|integer|min:1'
+        ]);
+
+        $productoPedido = ProductosPedido::where('idPedido', $idPedido)
+            ->where('idProductos', $idProducto)
+            ->firstOrFail();
+
+        $subtotal = $productoPedido->valorUnitarioDetalleProducto * $request->cantidad;
+        $iva = $subtotal * 0.19;
+        
+        $productoPedido->update([
+            'cantidadDetalleProducto' => $request->cantidad,
+            'totalPagarDetalleProducto' => $subtotal,
+            'ivaDetalleProducto' => $iva,
+            'totalDetalleProducto' => $subtotal + $iva
+        ]);
+
+        $this->actualizarTotalPedido($idPedido);
+
+        return redirect()->route('pedidos.productos.index', $idPedido)
+            ->with('success', 'Producto actualizado exitosamente');
     }
 
     public function store(Request $request, $idPedido)
@@ -27,16 +83,13 @@ class ProductosPedidoController extends Controller
             'cantidad' => 'required|integer|min:1'
         ]);
 
-        // Obtener el producto seleccionado
         $producto = Productos::findOrFail($request->idProducto);
 
-        // Verificar si el producto ya está en el pedido
         $productoExistente = ProductosPedido::where('idPedido', $idPedido)
             ->where('idProductos', $request->idProducto)
             ->first();
 
         if ($productoExistente) {
-            // Actualizar cantidad si el producto ya existe
             $nuevaCantidad = $productoExistente->cantidadDetalleProducto + $request->cantidad;
             $subtotal = $nuevaCantidad * $productoExistente->valorUnitarioDetalleProducto;
             $iva = $subtotal * 0.19;
@@ -48,7 +101,6 @@ class ProductosPedidoController extends Controller
                 'totalDetalleProducto' => $subtotal + $iva
             ]);
         } else {
-            // Crear nuevo producto en el pedido
             $subtotal = $producto->precioUnitario * $request->cantidad;
             $iva = $subtotal * 0.19;
             
@@ -63,7 +115,6 @@ class ProductosPedidoController extends Controller
             ]);
         }
 
-        // Actualizar el total del pedido
         $this->actualizarTotalPedido($idPedido);
 
         return redirect()->route('pedidos.productos.index', $idPedido)
@@ -72,14 +123,12 @@ class ProductosPedidoController extends Controller
 
     public function destroy($idPedido, $idProducto)
     {
-        // Buscar el producto por idPedido e idProductos
         $productoPedido = ProductosPedido::where('idPedido', $idPedido)
             ->where('idProductos', $idProducto)
             ->firstOrFail();
 
         $productoPedido->delete();
 
-        // Actualizar el total del pedido
         $this->actualizarTotalPedido($idPedido);
 
         return redirect()->route('pedidos.productos.index', $idPedido)

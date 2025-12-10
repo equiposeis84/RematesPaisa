@@ -36,6 +36,12 @@ class PedidosController extends Controller
         ]);
     }
 
+    public function show(Request $request, $idPedidos)
+    {
+        $pedido = Pedidos::findOrFail($idPedidos);
+        return view('VistasAdmin.pedidos.show', compact('pedido'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
