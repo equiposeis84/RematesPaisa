@@ -7,6 +7,8 @@ use App\Models\Roles;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class RolesController extends Controller
 {
     public function index(Request $request)
@@ -14,7 +16,7 @@ class RolesController extends Controller
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         
-        // Cambiar: ahora consultamos usuarios en lugar de roles
+        // Consultamos usuarios
         $query = Usuario::with('rol');
         
         if ($search) {
@@ -103,63 +105,85 @@ class RolesController extends Controller
         }
     }
 
-    // MÉTODO CORREGIDO: Obtener usuarios para asignar a rol
-    public function getUsuariosParaRol($idRol)
+    // MÉTODO PARA CREAR UN NUEVO USUARIO (desde el modal de roles)
+    public function storeUsuario(Request $request)
     {
-        // Verificar que el usuario actual sea admin (idRol == 1)
-        $this->authorizeAdmin();
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|unique:usuario,email',
+            'password' => 'required|min:6',
+            'idRol' => 'required|exists:roles,idRol'
+        ]);
 
-        \Log::info("Solicitando usuarios para rol: " . $idRol);
+        Usuario::create([
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'idRol' => $request->idRol
+        ]);
+
+        return redirect()->route('roles.index')->with('success', 'Usuario creado exitosamente');
+    }
+
+    // MÉTODO PARA EDITAR UN USUARIO
+    public function updateUsuario(Request $request, $idUsuario)
+    {
+        $usuario = Usuario::findOrFail($idUsuario);
         
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|unique:usuario,email,' . $idUsuario . ',idUsuario',
+            'idRol' => 'required|exists:roles,idRol'
+        ]);
+
+        $data = [
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'idRol' => $request->idRol
+        ];
+
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'min:6'
+            ]);
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $usuario->update($data);
+
+        return redirect()->route('roles.index')->with('success', 'Usuario actualizado exitosamente');
+    }
+
+    // MÉTODO PARA ELIMINAR UN USUARIO
+    public function destroyUsuario($idUsuario)
+    {
         try {
-            $usuarios = Usuario::with('rol')->get();
-            
-            \Log::info("Usuarios encontrados: " . $usuarios->count());
-            
-            $usuariosMapeados = $usuarios->map(function($usuario) use ($idRol) {
-                return [
-                    'idUsuario' => $usuario->idUsuario,
-                    'nombre' => $usuario->nombre,
-                    'email' => $usuario->email,
-                    'idRol' => $usuario->idRol,
-                    'rol_actual' => $usuario->rol ? $usuario->rol->nombreRol : 'Sin rol',
-                    'seleccionado' => $usuario->idRol == $idRol
-                ];
-            });
-            
-            \Log::info("Usuarios mapeados: " . json_encode($usuariosMapeados));
-            
-            return response()->json($usuariosMapeados);
-            
+            $usuario = Usuario::findOrFail($idUsuario);
+            $usuario->delete();
+            return redirect()->route('roles.index')->with('success', 'Usuario eliminado exitosamente');
         } catch (\Exception $e) {
-            \Log::error("Error al obtener usuarios: " . $e->getMessage());
-            return response()->json([], 500);
+            if ($e->getCode() == '23000') {
+                return redirect()->route('roles.index')
+                    ->with('error', 'No se puede eliminar el usuario porque está asociado a otros registros.');
+            }
+            return redirect()->route('roles.index')
+                ->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
         }
     }
 
-    // MÉTODO: Asignar usuarios al rol
-    public function asignarUsuarios(Request $request, $idRol)
+    // MÉTODO PARA CAMBIAR ROL DE UN USUARIO (simplificado)
+    public function cambiarRol(Request $request, $idUsuario)
     {
-        // Verificar que el usuario actual sea admin (idRol == 1)
-        $this->authorizeAdmin();
+        $request->validate([
+            'idRol' => 'required|exists:roles,idRol'
+        ]);
 
-        $usuariosSeleccionados = $request->input('usuarios', []);
-        
-        // Actualizar los usuarios seleccionados
-        Usuario::whereIn('idUsuario', $usuariosSeleccionados)
-               ->update(['idRol' => $idRol]);
-        
-        return redirect()->route('roles.index')
-               ->with('success', 'Usuarios asignados al rol exitosamente');
+        $usuario = Usuario::findOrFail($idUsuario);
+        $usuario->update(['idRol' => $request->idRol]);
+
+        return redirect()->route('roles.index')->with('success', 'Rol cambiado exitosamente');
     }
 
-    /**
-     * Verifica que el usuario autenticado sea administrador (idRol == 1).
-     * Soporta autenticación via Auth::user() o sesión manual (session('user') o session('idRol')).
-     *
-     * Nota: en el flujo de login, después de autenticar al usuario, colocar
-     * `session()->regenerate();` para proteger contra fijación de sesión.
-     */
     private function authorizeAdmin()
     {
         $idRol = null;

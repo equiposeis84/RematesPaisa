@@ -2,31 +2,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
-    // Mostrar formulario de login
     public function showLoginForm()
     {
-        // Si ya tiene sesión, redirigir según rol
         if (Session::has('user_id')) {
             $userType = Session::get('user_type');
             
             if ($userType == 1) {
                 return redirect()->route('admin.inicio');
-            } else { // Rol 2 o 3
-                return redirect('/catalogo'); // Redirige a la ruta /catalogo
+            } else {
+                return redirect('/catalogo');
             }
         }
         
-        // Si no tiene sesión, mostrar login
         return view('auth.login');
     }
     
-    // Procesar login
     public function login(Request $request)
     {
         $request->validate([
@@ -34,40 +31,53 @@ class LoginController extends Controller
             'password' => 'required|min:6'
         ]);
         
-        $user = DB::table('usuarios')->where('email', $request->email)->first();
+        // OPCIÓN A: Usar Eloquent (Mejor)
+        $user = Usuario::where('email', $request->email)->first();
         
-        if ($user && Hash::check($request->password, $user->password)) {
-            // Crear sesión
-            Session::put('user_id', $user->idUsuario);
-            Session::put('user_name', $user->nombre);
-            Session::put('user_email', $user->email);
-            Session::put('user_type', $user->idRol);
-            Session::put('user_authenticated', true);
+        // OPCIÓN B: Usar DB
+        // $user = DB::table('usuarios')->where('email', $request->email)->first();
+        
+        \Log::info('Intento de login', [
+            'email' => $request->email,
+            'user_found' => $user ? 'Sí' : 'No',
+            'password_provided' => $request->password
+        ]);
+        
+        if ($user) {
+            \Log::info('Hash de la base de datos', ['hash' => $user->password]);
+            \Log::info('Hash check result', ['check' => Hash::check($request->password, $user->password)]);
             
-            // DEBUG: Mostrar en consola
-            \Log::info('Login exitoso', [
-                'user_id' => $user->idUsuario,
-                'user_name' => $user->nombre,
-                'user_type' => $user->idRol
-            ]);
-            
-            // Redirigir según rol
-            if ($user->idRol == 1) { // Administrador
-                return redirect()->route('admin.inicio')->with('success', '¡Bienvenido Administrador!');
-            } else { // Cliente o Repartidor (2 o 3)
-                // Redirige a la ruta CATÁLOGO
-                return redirect('/catalogo')->with('success', '¡Bienvenido ' . $user->nombre . '!');
+            if (Hash::check($request->password, $user->password)) {
+                Session::put('user_id', $user->idUsuario);
+                Session::put('user_name', $user->nombre);
+                Session::put('user_email', $user->email);
+                Session::put('user_type', $user->idRol);
+                Session::put('user_authenticated', true);
+                
+                \Log::info('Login exitoso', [
+                    'user_id' => $user->idUsuario,
+                    'email' => $user->email,
+                    'rol' => $user->idRol
+                ]);
+                
+                if ($user->idRol == 1) {
+                    return redirect()->route('admin.inicio')->with('success', '¡Bienvenido Administrador!');
+                } else {
+                    return redirect('/catalogo')->with('success', '¡Bienvenido ' . $user->nombre . '!');
+                }
             }
         }
         
-        \Log::warning('Login fallido', ['email' => $request->email]);
+        \Log::warning('Login fallido', [
+            'email' => $request->email,
+            'existe_usuario' => $user ? 'Sí' : 'No'
+        ]);
         
         return back()->withErrors([
             'email' => 'Credenciales incorrectas'
         ])->withInput($request->only('email'));
     }
     
-    // Cerrar sesión
     public function logout(Request $request)
     {
         Session::flush();

@@ -1,16 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuario;
 use App\Models\Roles;
+use Illuminate\Support\Facades\Hash;
 
 class UsuariosController extends Controller
 {
     public function index(Request $request)
     {
-        // Redirigimos a roles como fallback
         return redirect()->route('roles.index');
     }
 
@@ -18,16 +17,22 @@ class UsuariosController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'email' => 'required|email|unique:usuarios,email',
+            'email' => 'required|email|unique:usuarios,email', // usuarios (plural)
             'password' => 'required|min:6',
             'idRol' => 'required|exists:roles,idRol'
         ]);
 
-        Usuario::create([
+        $usuario = Usuario::create([
             'nombre' => $request->nombre,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'idRol' => $request->idRol
+        ]);
+
+        \Log::info('Usuario creado desde admin', [
+            'id' => $usuario->idUsuario,
+            'email' => $usuario->email,
+            'rol' => $usuario->idRol
         ]);
 
         return redirect()->route('roles.index')->with('success', 'Usuario creado exitosamente');
@@ -39,7 +44,7 @@ class UsuariosController extends Controller
         
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'email' => 'required|email|unique:usuarios,email,' . $idUsuario . ',idUsuario',
+            'email' => 'required|email|unique:usuarios,email,' . $idUsuario . ',idUsuario', // usuarios (plural)
             'idRol' => 'required|exists:roles,idRol'
         ]);
 
@@ -49,9 +54,8 @@ class UsuariosController extends Controller
             'idRol' => $request->idRol
         ];
 
-        // Solo actualizar password si se proporciona
         if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+            $data['password'] = Hash::make($request->password);
         }
 
         $usuario->update($data);
@@ -69,18 +73,19 @@ class UsuariosController extends Controller
             return redirect()->route('roles.index')->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
         }
     }
-    public function cambiarRol(Request $request, $idUsuario)
-{
-    $usuario = Usuario::findOrFail($idUsuario);
     
-    $request->validate([
-        'idRol' => 'required|exists:roles,idRol'
-    ]);
+    public function cambiarRol(Request $request, $idUsuario)
+    {
+        $usuario = Usuario::findOrFail($idUsuario);
+        
+        $request->validate([
+            'idRol' => 'required|exists:roles,idRol'
+        ]);
 
-    $usuario->update([
-        'idRol' => $request->idRol
-    ]);
+        $usuario->update([
+            'idRol' => $request->idRol
+        ]);
 
-    return redirect()->route('roles.index')->with('success', 'Rol del usuario actualizado exitosamente');
-}
+        return redirect()->route('roles.index')->with('success', 'Rol del usuario actualizado exitosamente');
+    }
 }

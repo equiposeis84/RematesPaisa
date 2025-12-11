@@ -567,96 +567,111 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto cerrar alertas después de 5 segundos
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.alert');
-                alerts.forEach(function(alert) {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                });
-            }, 5000);
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto cerrar alertas después de 5 segundos
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
 
-           // Configurar modal de cambiar rol
+        // Configurar modal de cambiar rol
         const modalCambiarRol = document.getElementById('modalCambiarRol');
         if (modalCambiarRol) {
-        modalCambiarRol.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-        const id = button.getAttribute('data-id');
-        const nombre = button.getAttribute('data-nombre');
-        const email = button.getAttribute('data-email');
-        const rolActual = button.getAttribute('data-rolactual');
-        
-        // Obtener el nombre del rol actual
-        const rolActualNombre = document.querySelector(`[data-rolactual="${rolActual}"]`)?.textContent || 'Desconocido';
+            modalCambiarRol.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const email = button.getAttribute('data-email');
+                const rolActual = button.getAttribute('data-rolactual');
+                
+                // Obtener el nombre del rol actual
+                const rolActualElement = document.querySelector(`tr[data-id="${id}"] .badge`);
+                const rolActualNombre = rolActualElement ? rolActualElement.textContent : 'Desconocido';
 
-        // Usar la ruta específica para cambiar rol
-        document.getElementById('formCambiarRol').action = `/usuarios/${id}/cambiar-rol`;
-        document.getElementById('nombreUsuarioCambiar').textContent = nombre;
-        document.getElementById('emailUsuarioCambiar').textContent = email;
-        document.getElementById('rolActualUsuario').textContent = rolActualNombre;
-        document.getElementById('nuevo_idRol').value = rolActual; // Seleccionar rol actual por defecto
+                // CORRECCIÓN: Usar la ruta correcta para cambiar rol
+                document.getElementById('formCambiarRol').action = `/roles/usuarios/${id}/cambiar-rol`;
+                document.getElementById('nombreUsuarioCambiar').textContent = nombre;
+                document.getElementById('emailUsuarioCambiar').textContent = email;
+                document.getElementById('rolActualUsuario').textContent = rolActualNombre;
+                document.getElementById('nuevo_idRol').value = rolActual; // Seleccionar rol actual por defecto
+            });
+        }
+
+        // Configurar modal de edición de usuario
+        const modalEditarUsuario = document.getElementById('modalEditarUsuario');
+        if (modalEditarUsuario) {
+            modalEditarUsuario.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const email = button.getAttribute('data-email');
+                const idRol = button.getAttribute('data-idrol');
+
+                // CORRECCIÓN: Usar la ruta correcta para editar usuario desde roles
+                document.getElementById('formEditarUsuario').action = `/roles/usuarios/${id}`;
+                document.getElementById('edit_nombre').value = nombre;
+                document.getElementById('edit_email').value = email;
+                document.getElementById('edit_idRol').value = idRol;
+            });
+        }
+
+        // Configurar modal de eliminación de usuario
+        const modalEliminarUsuario = document.getElementById('modalEliminarUsuario');
+        if (modalEliminarUsuario) {
+            modalEliminarUsuario.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+
+                // CORRECCIÓN: Usar la ruta correcta para eliminar usuario desde roles
+                document.getElementById('formEliminarUsuario').action = `/roles/usuarios/${id}`;
+                document.getElementById('nombreUsuarioEliminar').textContent = nombre;
+            });
+        }
+
+        // CORRECCIÓN: Actualizar el formulario de nuevo usuario para usar la ruta correcta
+        const formNuevoUsuario = document.querySelector('form[action="{{ route("usuarios.store") }}"]');
+        if (formNuevoUsuario) {
+            formNuevoUsuario.action = "{{ route('roles.usuarios.store') }}";
+        }
+
+        // CORRECCIÓN: Actualizar el formulario de nuevo administrador para usar la ruta correcta
+        const formNuevoAdmin = document.querySelector('form#modalAgregarAdmin form');
+        if (formNuevoAdmin) {
+            formNuevoAdmin.action = "{{ route('roles.usuarios.store') }}";
+        }
+
+        // Limpiar formularios cuando se cierran los modales
+        const modalNuevoUsuario = document.getElementById('modalUsuario');
+        if (modalNuevoUsuario) {
+            modalNuevoUsuario.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('nombre').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('idRol').value = '';
+            });
+        }
+
+        const modalNuevoAdmin = document.getElementById('modalAgregarAdmin');
+        if (modalNuevoAdmin) {
+            modalNuevoAdmin.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('admin_nombre').value = '';
+                document.getElementById('admin_email').value = '';
+                document.getElementById('admin_password').value = '';
+            });
+        }
+
+        const modalNuevoRol = document.getElementById('modalRol');
+        if (modalNuevoRol) {
+            modalNuevoRol.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('idRol').value = '';
+                document.getElementById('nombreRol').value = '';
+            });
+        }
     });
-}
-
-            // Configurar modal de edición de usuario
-            const modalEditarUsuario = document.getElementById('modalEditarUsuario');
-            if (modalEditarUsuario) {
-                modalEditarUsuario.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const id = button.getAttribute('data-id');
-                    const nombre = button.getAttribute('data-nombre');
-                    const email = button.getAttribute('data-email');
-                    const idRol = button.getAttribute('data-idrol');
-
-                    document.getElementById('formEditarUsuario').action = `/usuarios/${id}`;
-                    document.getElementById('edit_nombre').value = nombre;
-                    document.getElementById('edit_email').value = email;
-                    document.getElementById('edit_idRol').value = idRol;
-                });
-            }
-
-            // Configurar modal de eliminación de usuario
-            const modalEliminarUsuario = document.getElementById('modalEliminarUsuario');
-            if (modalEliminarUsuario) {
-                modalEliminarUsuario.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const id = button.getAttribute('data-id');
-                    const nombre = button.getAttribute('data-nombre');
-
-                    document.getElementById('formEliminarUsuario').action = `/usuarios/${id}`;
-                    document.getElementById('nombreUsuarioEliminar').textContent = nombre;
-                });
-            }
-
-            // Limpiar formularios cuando se cierran los modales
-            const modalNuevoUsuario = document.getElementById('modalUsuario');
-            if (modalNuevoUsuario) {
-                modalNuevoUsuario.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('nombre').value = '';
-                    document.getElementById('email').value = '';
-                    document.getElementById('password').value = '';
-                    document.getElementById('idRol').value = '';
-                });
-            }
-
-            const modalNuevoAdmin = document.getElementById('modalAgregarAdmin');
-            if (modalNuevoAdmin) {
-                modalNuevoAdmin.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('admin_nombre').value = '';
-                    document.getElementById('admin_email').value = '';
-                    document.getElementById('admin_password').value = '';
-                });
-            }
-
-            const modalNuevoRol = document.getElementById('modalRol');
-            if (modalNuevoRol) {
-                modalNuevoRol.addEventListener('hidden.bs.modal', function () {
-                    document.getElementById('idRol').value = '';
-                    document.getElementById('nombreRol').value = '';
-                });
-            }
-        });
-    </script>
+</script>
 @endsection
