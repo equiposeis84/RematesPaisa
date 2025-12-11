@@ -66,6 +66,12 @@
                                         Roles y Permisos
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('usuarios.auth.index')}}" data-view="">
+                                        <span class="nav-icon"><i class="fa-solid fa-key"></i></span>
+                                        Autenticación
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

@@ -14,6 +14,7 @@ use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProductosPedidoController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\AyudaContactoController;
+use App\Http\Controllers\UsuariosAuthController;
 
 // =============================================================================
 // RUTAS PÚBLICAS (ACCESIBLES SIN AUTENTICACIÓN)
@@ -69,6 +70,16 @@ Route::prefix('usuario')->name('usuario.')->group(function () {
 
 Route::get('/admin/inicio', fn() => (protegerRuta(1) ?: view('VistasAdmin.welcome')))->name('admin.inicio');
 Route::get('/admin', fn() => redirect()->route('admin.inicio'));
+
+// -------------------------------------------------------------------------
+// GESTIÓN DE AUTENTICACIÓN DE USUARIOS (NUEVO MÓDULO)
+// -------------------------------------------------------------------------
+Route::prefix('admin/usuarios-auth')->name('usuarios.auth.')->group(function () {
+    Route::get('/', [UsuariosAuthController::class, 'index'])->name('index');
+    Route::post('/{idUsuario}/verificar', [UsuariosAuthController::class, 'verificarPassword'])->name('verificar');
+    Route::post('/generar-hash', [UsuariosAuthController::class, 'generarHash'])->name('generar.hash');
+    Route::post('/verificar-global', [UsuariosAuthController::class, 'verificarGlobal'])->name('verificar.global');
+});
 
 // -------------------------------------------------------------------------
 // GESTIÓN DE USUARIOS Y ROLES
