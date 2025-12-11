@@ -1,0 +1,4 @@
+Cosas por añadir para la revision de mañana
+-tablas visibles para el usario y el cliente (catalogo, pedidos, etc)
+-arreglar la validacion de la seguridad, al interactuar con las flechas del navegador la sesion sigue activa pese a retroceder y avanzar en la pestañas
+-La base de datos se actualizo por compelot, enlazar correctamente todos los datos al administrador
