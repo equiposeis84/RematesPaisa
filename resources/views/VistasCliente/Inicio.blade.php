@@ -35,6 +35,11 @@
                             <a href="#"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
                             </a>
+                        </li>                       
+                        <li class="sidebar-fixed">
+                            <a href="#"> 
+                                <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
+                            </a>
                         </li>
                     </ul>
                 </nav>
