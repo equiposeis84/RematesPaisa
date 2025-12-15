@@ -37,9 +37,9 @@
                             </button>
                             <ul id="gestion-submenu" class="submenu" show>
                                 <li>
-                                   <a href="{{route('clientes.index')}}" data-view="">
-                                        <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
-                                        Usuarios
+                                    <a href="{{route('roles.index')}}" data-view="">
+                                        <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
+                                        Usuarios y roles
                                     </a>
                                 </li>
                                 <li>
@@ -58,12 +58,6 @@
                                     <a href="{{route('proveedores.index')}}" data-view="">
                                         <span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span>
                                         Proveedores
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{route('roles.index')}}" data-view="">
-                                        <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
-                                        Roles y Permisos
                                     </a>
                                 </li>
                                 <li class="nav-item">

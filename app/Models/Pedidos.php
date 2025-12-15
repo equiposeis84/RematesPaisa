@@ -21,7 +21,7 @@ class Pedidos extends Model
         'idPedidos',
         'fechaPedido',
         'horaPedido',
-        'idCliente',
+        'documento',
         'valorPedido',
         'ivaPedido',
         'totalPedido',
@@ -30,4 +30,16 @@ class Pedidos extends Model
     ];
 
     public $timestamps = false;
+
+    // Relación con usuario (cliente)
+    public function cliente()
+    {
+        return $this->belongsTo(Usuario::class, 'documento', 'documento');
+    }
+
+    // Relación con productos del pedido
+    public function productos()
+    {
+        return $this->hasMany(ProductosPedido::class, 'idPedido', 'idPedidos');
+    }
 }

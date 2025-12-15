@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pedidos;
-use App\Models\Cliente;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PedidosController extends Controller
 {
@@ -18,7 +18,7 @@ class PedidosController extends Controller
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('idPedidos', 'LIKE', "%{$search}%")
-                ->orWhere('idCliente', 'LIKE', "%{$search}%")
+                ->orWhere('documento', 'LIKE', "%{$search}%")
                 ->orWhere('estadoPedido', 'LIKE', "%{$search}%")
                 ->orWhere('repartidorPedido', 'LIKE', "%{$search}%");
             });
@@ -42,13 +42,19 @@ class PedidosController extends Controller
         return view('VistasAdmin.pedidos.show', compact('pedido'));
     }
 
+    public function create(Request $request)
+    {
+        // Solo para mantener compatibilidad con rutas existentes
+        return $this->index($request);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'idPedidos' => 'required|unique:pedidos,idPedidos',
             'fechaPedido' => 'required|date',
             'horaPedido' => 'required',
-            'idCliente' => 'required|exists:cliente,idCliente',
+            'documento' => 'required|exists:usuarios,documento',
             'valorPedido' => 'required|numeric|min:0',
             'estadoPedido' => 'required|string|max:20',
             'repartidorPedido' => 'nullable|string|max:100'
@@ -62,7 +68,7 @@ class PedidosController extends Controller
             'idPedidos' => $request->idPedidos,
             'fechaPedido' => $request->fechaPedido,
             'horaPedido' => $request->horaPedido,
-            'idCliente' => $request->idCliente,
+            'documento' => $request->documento,
             'valorPedido' => $request->valorPedido,
             'ivaPedido' => $iva,
             'totalPedido' => $total,
@@ -87,7 +93,7 @@ class PedidosController extends Controller
         $request->validate([
             'fechaPedido' => 'required|date',
             'horaPedido' => 'required',
-            'idCliente' => 'required|exists:cliente,idCliente',
+            'documento' => 'required|exists:usuarios,documento',
             'valorPedido' => 'required|numeric|min:0',
             'estadoPedido' => 'required|string|max:20',
             'repartidorPedido' => 'nullable|string|max:100'
@@ -100,7 +106,7 @@ class PedidosController extends Controller
         $pedido->update([
             'fechaPedido' => $request->fechaPedido,
             'horaPedido' => $request->horaPedido,
-            'idCliente' => $request->idCliente,
+            'documento' => $request->documento,
             'valorPedido' => $request->valorPedido,
             'ivaPedido' => $iva,
             'totalPedido' => $total,
@@ -125,5 +131,14 @@ class PedidosController extends Controller
             return redirect()->route('pedidos.index')
                 ->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
         }
+    }
+
+    // Método para obtener clientes (usuarios con rol 2 - Cliente)
+    public function getClientes()
+    {
+        return Usuario::where('idRol', 2)
+            ->whereNotNull('documento')
+            ->orderBy('nombre')
+            ->get();
     }
 }

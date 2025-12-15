@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+
+// Controladores
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductosController; 
 use App\Http\Controllers\ProveedorController;
@@ -15,21 +17,6 @@ use App\Http\Controllers\ProductosPedidoController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\AyudaContactoController;
 use App\Http\Controllers\UsuariosAuthController;
-
-// =============================================================================
-// RUTAS PÚBLICAS (ACCESIBLES SIN AUTENTICACIÓN)
-// =============================================================================
-
-Route::get('/', function () { 
-    return session()->has('user_id') 
-        ? (session('user_type') == 1 ? redirect()->route('admin.inicio') : redirect()->route('catalogo'))
-        : view('index');
-});
-
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 // =============================================================================
 // FUNCIÓN DE PROTECCIÓN REUTILIZABLE
@@ -47,6 +34,24 @@ function protegerRuta($roleRequerido = null) {
     
     return null;
 }
+
+// =============================================================================
+// RUTAS PÚBLICAS (SIN AUTENTICACIÓN)
+// =============================================================================
+
+// Página principal
+Route::get('/', function () { 
+    return session()->has('user_id') 
+        ? (session('user_type') == 1 ? redirect()->route('admin.inicio') : redirect()->route('catalogo'))
+        : view('index');
+})->name('home');
+
+// Autenticación
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+
+Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 // =============================================================================
 // RUTAS PARA CLIENTES/REPARTIDORES (Rol 2 o 3)
@@ -72,7 +77,41 @@ Route::get('/admin/inicio', fn() => (protegerRuta(1) ?: view('VistasAdmin.welcom
 Route::get('/admin', fn() => redirect()->route('admin.inicio'));
 
 // -------------------------------------------------------------------------
-// GESTIÓN DE AUTENTICACIÓN DE USUARIOS (NUEVO MÓDULO)
+// GESTIÓN COMPLETA DE USUARIOS Y ROLES (NUEVO SISTEMA)
+// -------------------------------------------------------------------------
+Route::prefix('roles')->name('roles.')->group(function () {
+    // Vista principal con pestañas
+    Route::get('/', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->index($request)))->name('index');
+    
+    // CRUD de Roles (rutas normales)
+    Route::post('/', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->store($request)))->name('store');
+    Route::put('/{idRol}', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->update($request, $idRol)))->name('update');
+    Route::delete('/{idRol}', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->destroy($idRol)))->name('destroy');
+    
+    // Rutas alternativas para compatibilidad
+    Route::post('/store', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->store($request)))->name('storeRol');
+    Route::put('/{idRol}/update', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->update($request, $idRol)))->name('updateRol');
+    Route::delete('/{idRol}/delete', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->destroy($idRol)))->name('destroyRol');
+    
+    // CRUD de Usuarios (dentro del controlador de roles) - RUTAS NUEVAS
+    Route::post('/usuarios/store', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->storeUsuario($request)))->name('usuarios.store');
+    Route::put('/usuarios/{idUsuario}', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->updateUsuario($request, $idUsuario)))->name('usuarios.update');
+    Route::delete('/usuarios/{idUsuario}', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->destroyUsuario($idUsuario)))->name('usuarios.destroy');
+    
+    // Acciones rápidas
+    Route::put('/usuarios/{idUsuario}/cambiar-rol', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->cambiarRol($request, $idUsuario)))->name('usuarios.cambiar-rol');
+    Route::put('/usuarios/{idUsuario}/toggle-estado', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->toggleEstado($idUsuario)))->name('usuarios.toggleEstado');
+    
+    // Detalles de usuario
+    Route::get('/usuarios/{idUsuario}', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->verUsuario($idUsuario)))->name('usuarios.show');
+    
+    // Rutas antiguas para compatibilidad (mantener por si acaso)
+    Route::post('/usuarios', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->storeUsuario($request)))->name('usuarios.store.alternative');
+    Route::put('/usuarios/{idUsuario}/update', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->updateUsuario($request, $idUsuario)))->name('usuarios.update.alternative');
+});
+
+// -------------------------------------------------------------------------
+// AUTENTICACIÓN DE USUARIOS (módulo existente)
 // -------------------------------------------------------------------------
 Route::prefix('admin/usuarios-auth')->name('usuarios.auth.')->group(function () {
     Route::get('/', [UsuariosAuthController::class, 'index'])->name('index');
@@ -82,23 +121,7 @@ Route::prefix('admin/usuarios-auth')->name('usuarios.auth.')->group(function () 
 });
 
 // -------------------------------------------------------------------------
-// GESTIÓN DE USUARIOS Y ROLES
-// -------------------------------------------------------------------------
-Route::prefix('roles')->name('roles.')->group(function () {
-    Route::get('/', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->index($request)))->name('index');
-    Route::post('/', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->store($request)))->name('store');
-    Route::get('/{idRol}/edit', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->edit($idRol)))->name('edit');
-    Route::put('/{idRol}', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->update($request, $idRol)))->name('update');
-    Route::delete('/{idRol}', fn(Request $request, $idRol) => (protegerRuta(1) ?: app(RolesController::class)->destroy($idRol)))->name('destroy');
-    
-    Route::post('/usuarios/store', fn(Request $request) => (protegerRuta(1) ?: app(RolesController::class)->storeUsuario($request)))->name('usuarios.store');
-    Route::put('/usuarios/{idUsuario}', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->updateUsuario($request, $idUsuario)))->name('usuarios.update');
-    Route::delete('/usuarios/{idUsuario}', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->destroyUsuario($idUsuario)))->name('usuarios.destroy');
-    Route::put('/usuarios/{idUsuario}/cambiar-rol', fn(Request $request, $idUsuario) => (protegerRuta(1) ?: app(RolesController::class)->cambiarRol($request, $idUsuario)))->name('usuarios.cambiar-rol');
-});
-
-// -------------------------------------------------------------------------
-// CRUD PEDIDOS
+// CRUD PEDIDOS (existente - mantener)
 // -------------------------------------------------------------------------
 Route::prefix('pedidos')->name('pedidos.')->group(function () {
     Route::get('/', fn(Request $request) => (protegerRuta(1) ?: app(PedidosController::class)->index($request)))->name('index');
@@ -121,7 +144,7 @@ Route::prefix('pedidos')->name('pedidos.')->group(function () {
 });
 
 // -------------------------------------------------------------------------
-// CRUD CLIENTES
+// CRUD CLIENTES (mantener para compatibilidad)
 // -------------------------------------------------------------------------
 Route::get('/clientes', fn(Request $request) => (protegerRuta(1) ?: app(ClienteController::class)->index($request)))->name('clientes.index');
 Route::post('/clientes', fn(Request $request) => (protegerRuta(1) ?: app(ClienteController::class)->store($request)))->name('clientes.store');
@@ -130,7 +153,7 @@ Route::put('/clientes/{idCliente}', fn(Request $request, $idCliente) => (protege
 Route::delete('/clientes/{idCliente}', fn(Request $request, $idCliente) => (protegerRuta(1) ?: app(ClienteController::class)->destroy($request, $idCliente)))->name('clientes.destroy');
 
 // -------------------------------------------------------------------------
-// CRUD PRODUCTOS
+// CRUD PRODUCTOS (existente - mantener)
 // -------------------------------------------------------------------------
 Route::get('/productos', fn(Request $request) => (protegerRuta(1) ?: app(ProductosController::class)->index($request)))->name('productos.index');
 Route::post('/productos', fn(Request $request) => (protegerRuta(1) ?: app(ProductosController::class)->store($request)))->name('productos.store');
@@ -140,7 +163,7 @@ Route::delete('/productos/{idProducto}', fn(Request $request, $idProducto) => (p
 Route::get('/productos/next-id', fn(Request $request) => (protegerRuta(1) ?: app(ProductosController::class)->getNextProductId($request)))->name('productos.next.id');
 
 // -------------------------------------------------------------------------
-// CRUD PROVEEDORES
+// CRUD PROVEEDORES (existente - mantener)
 // -------------------------------------------------------------------------
 Route::get('/proveedores', fn(Request $request) => (protegerRuta(1) ?: app(ProveedorController::class)->index($request)))->name('proveedores.index');
 Route::post('/proveedores', fn(Request $request) => (protegerRuta(1) ?: app(ProveedorController::class)->store($request)))->name('proveedores.store');
@@ -152,7 +175,7 @@ Route::delete('/proveedores/{proveedor}', fn(Request $request, $proveedor) => (p
 Route::get('/proveedores/siguiente-nit', fn(Request $request) => (protegerRuta(1) ?: app(ProveedorController::class)->getSiguienteNIT($request)))->name('proveedores.getSiguienteNIT');
 
 // -------------------------------------------------------------------------
-// CRUD USUARIOS (rutas alternativas)
+// CRUD USUARIOS (rutas alternativas - mantener compatibilidad)
 // -------------------------------------------------------------------------
 Route::get('/usuarios', fn(Request $request) => (protegerRuta(1) ?: app(UsuariosController::class)->index($request)))->name('usuarios.index');
 Route::post('/usuarios', fn(Request $request) => (protegerRuta(1) ?: app(UsuariosController::class)->store($request)))->name('usuarios.store');
@@ -162,7 +185,7 @@ Route::put('/usuarios/{usuario}', fn(Request $request, $usuario) => (protegerRut
 Route::delete('/usuarios/{usuario}', fn(Request $request, $usuario) => (protegerRuta(1) ?: app(UsuariosController::class)->destroy($request, $usuario)))->name('usuarios.destroy');
 
 // -------------------------------------------------------------------------
-// CRUD AYUDA Y CONTACTO
+// CRUD AYUDA Y CONTACTO (existente - mantener)
 // -------------------------------------------------------------------------
 Route::get('/ayuda-contacto', fn(Request $request) => (protegerRuta(1) ?: app(AyudaContactoController::class)->index($request)))->name('AyudaContacto.index');
 Route::post('/ayuda-contacto', fn(Request $request) => (protegerRuta(1) ?: app(AyudaContactoController::class)->store($request)))->name('AyudaContacto.store');
@@ -239,4 +262,12 @@ Route::get('/debug-routes', function() {
         'action' => $route->getActionName(),
     ])->toArray());
     echo '</pre>';
+});
+
+// =============================================================================
+// RUTAS DE FALLBACK (404)
+// =============================================================================
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
 });

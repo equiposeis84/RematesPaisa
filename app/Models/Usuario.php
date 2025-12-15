@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Usuario extends Model
 {
@@ -11,38 +12,38 @@ class Usuario extends Model
 
     protected $table = 'usuarios';
     protected $primaryKey = 'idUsuario';
-    public $timestamps = true;
+    public $incrementing = true;
+    protected $keyType = 'integer';
     
     protected $fillable = [
         'nombre',
         'email',
         'password',
-        'idRol'
+        'idRol',
+        'tipoDocumento',
+        'documento',
+        'direccion',
+        'telefono',
+        'activo'
     ];
 
     protected $hidden = [
         'password'
     ];
 
-    // Relación con el rol
+    public $timestamps = false;
+
+    // Relación con rol
     public function rol()
     {
         return $this->belongsTo(Roles::class, 'idRol', 'idRol');
     }
 
-    // Métodos helper para verificar roles
-    public function esAdmin()
+    // Mutator para hash de password
+    public function setPasswordAttribute($value)
     {
-        return $this->idRol == 1;
-    }
-
-    public function esCliente()
-    {
-        return $this->idRol == 2;
-    }
-
-    public function esRepartidor()
-    {
-        return $this->idRol == 3;
+        if (!empty($value)) {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 }

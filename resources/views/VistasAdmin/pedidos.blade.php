@@ -36,7 +36,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" 
-                                       placeholder="Buscar por ID, cliente, estado o repartidor" 
+                                       placeholder="Buscar por ID, documento, estado o repartidor" 
                                        name="search"
                                        value="{{ request('search') }}">
                             </div>
@@ -57,7 +57,7 @@
                             <th>ID Pedido</th>
                             <th>Fecha</th>
                             <th>Hora</th>
-                            <th>ID Cliente</th>
+                            <th>Documento Cliente</th>
                             <th>Valor</th>
                             <th>IVA</th>
                             <th>Total</th>
@@ -72,7 +72,15 @@
                                 <td>{{ $item->idPedidos }}</td> 
                                 <td>{{ $item->fechaPedido }}</td>  
                                 <td>{{ $item->horaPedido }}</td>
-                                <td>{{ $item->idCliente }}</td>  
+                                <td>
+                                    {{ $item->documento }}
+                                    @php
+                                        $cliente = \App\Models\Usuario::where('documento', $item->documento)->first();
+                                    @endphp
+                                    @if($cliente)
+                                        <br><small class="text-muted">{{ $cliente->nombre }}</small>
+                                    @endif
+                                </td>  
                                 <td>${{ number_format($item->valorPedido, 2) }}</td>
                                 <td>${{ number_format($item->ivaPedido, 2) }}</td>
                                 <td>${{ number_format($item->totalPedido, 2) }}</td>
@@ -100,7 +108,7 @@
                                             data-id="{{ $item->idPedidos }}"
                                             data-fecha="{{ $item->fechaPedido }}"
                                             data-hora="{{ $item->horaPedido }}"
-                                            data-cliente="{{ $item->idCliente }}"
+                                            data-documento="{{ $item->documento }}"
                                             data-valor="{{ $item->valorPedido }}"
                                             data-iva="{{ $item->ivaPedido }}"
                                             data-total="{{ $item->totalPedido }}"
@@ -230,18 +238,22 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="idCliente" class="form-label">Seleccionar Cliente *</label>
-                                            <select class="form-select" id="idCliente" name="idCliente" required>
+                                            <label for="documento" class="form-label">Seleccionar Cliente *</label>
+                                            <select class="form-select" id="documento" name="documento" required>
                                                 <option value="">Seleccionar cliente...</option>
-                                                @foreach($clientes = \App\Models\Cliente::all() as $cliente)
-                                                    <option value="{{ $cliente->idCliente }}" 
-                                                            data-nombre="{{ $cliente->nombreCliente }}"
-                                                            data-apellido="{{ $cliente->apellidoCliente }}"
-                                                            data-empresa="{{ $cliente->NombreEmpresa }}"
-                                                            data-email="{{ $cliente->emailCliente }}"
-                                                            data-telefono="{{ $cliente->telefonoCliente }}"
-                                                            data-direccion="{{ $cliente->direccionCliente }}">
-                                                        {{ $cliente->idCliente }} - {{ $cliente->nombreCliente }} {{ $cliente->apellidoCliente }} ({{ $cliente->NombreEmpresa }})
+                                                @php
+                                                    $clientes = \App\Models\Usuario::where('idRol', 2)
+                                                        ->whereNotNull('documento')
+                                                        ->orderBy('nombre')
+                                                        ->get();
+                                                @endphp
+                                                @foreach($clientes as $cliente)
+                                                    <option value="{{ $cliente->documento }}" 
+                                                            data-nombre="{{ $cliente->nombre }}"
+                                                            data-email="{{ $cliente->email }}"
+                                                            data-telefono="{{ $cliente->telefono }}"
+                                                            data-direccion="{{ $cliente->direccion }}">
+                                                        {{ $cliente->documento }} - {{ $cliente->nombre }} ({{ $cliente->email }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -252,7 +264,6 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p><strong>Nombre:</strong> <span id="clienteNombre"></span></p>
-                                            <p><strong>Empresa:</strong> <span id="clienteEmpresa"></span></p>
                                             <p><strong>Email:</strong> <span id="clienteEmail"></span></p>
                                         </div>
                                         <div class="col-md-6">
@@ -291,7 +302,10 @@
                                     <label for="repartidorPedido" class="form-label">Repartidor</label>
                                     <select class="form-select" id="repartidorPedido" name="repartidorPedido">
                                         <option value="">Seleccionar repartidor...</option>
-                                        @foreach($repartidores = \App\Models\Usuario::where('idRol', 3)->get() as $repartidor)
+                                        @php
+                                            $repartidores = \App\Models\Usuario::where('idRol', 3)->get();
+                                        @endphp
+                                        @foreach($repartidores as $repartidor)
                                             <option value="{{ $repartidor->nombre }}">
                                                 {{ $repartidor->nombre }}
                                             </option>
@@ -391,17 +405,21 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="edit_idCliente" class="form-label">Seleccionar Cliente *</label>
-                                            <select class="form-select" id="edit_idCliente" name="idCliente" required>
-                                                @foreach($clientes = \App\Models\Cliente::all() as $cliente)
-                                                    <option value="{{ $cliente->idCliente }}" 
-                                                            data-nombre="{{ $cliente->nombreCliente }}"
-                                                            data-apellido="{{ $cliente->apellidoCliente }}"
-                                                            data-empresa="{{ $cliente->NombreEmpresa }}"
-                                                            data-email="{{ $cliente->emailCliente }}"
-                                                            data-telefono="{{ $cliente->telefonoCliente }}"
-                                                            data-direccion="{{ $cliente->direccionCliente }}">
-                                                        {{ $cliente->idCliente }} - {{ $cliente->nombreCliente }} {{ $cliente->apellidoCliente }} ({{ $cliente->NombreEmpresa }})
+                                            <label for="edit_documento" class="form-label">Seleccionar Cliente *</label>
+                                            <select class="form-select" id="edit_documento" name="documento" required>
+                                                @php
+                                                    $clientes = \App\Models\Usuario::where('idRol', 2)
+                                                        ->whereNotNull('documento')
+                                                        ->orderBy('nombre')
+                                                        ->get();
+                                                @endphp
+                                                @foreach($clientes as $cliente)
+                                                    <option value="{{ $cliente->documento }}" 
+                                                            data-nombre="{{ $cliente->nombre }}"
+                                                            data-email="{{ $cliente->email }}"
+                                                            data-telefono="{{ $cliente->telefono }}"
+                                                            data-direccion="{{ $cliente->direccion }}">
+                                                        {{ $cliente->documento }} - {{ $cliente->nombre }} ({{ $cliente->email }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -412,7 +430,6 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p><strong>Nombre:</strong> <span id="editClienteNombre"></span></p>
-                                            <p><strong>Empresa:</strong> <span id="editClienteEmpresa"></span></p>
                                             <p><strong>Email:</strong> <span id="editClienteEmail"></span></p>
                                         </div>
                                         <div class="col-md-6">
@@ -451,7 +468,10 @@
                                     <label for="edit_repartidorPedido" class="form-label">Repartidor</label>
                                     <select class="form-select" id="edit_repartidorPedido" name="repartidorPedido">
                                         <option value="">Seleccionar repartidor...</option>
-                                        @foreach($repartidores = \App\Models\Usuario::where('idRol', 3)->get() as $repartidor)
+                                        @php
+                                            $repartidores = \App\Models\Usuario::where('idRol', 3)->get();
+                                        @endphp
+                                        @foreach($repartidores as $repartidor)
                                             <option value="{{ $repartidor->nombre }}">
                                                 {{ $repartidor->nombre }}
                                             </option>
@@ -517,16 +537,14 @@
             }
 
             // Mostrar información del cliente en nuevo pedido
-            const clienteSelect = document.getElementById('idCliente');
+            const clienteSelect = document.getElementById('documento');
             const infoCliente = document.getElementById('infoCliente');
 
             if (clienteSelect) {
                 clienteSelect.addEventListener('change', function() {
                     const selectedOption = this.options[this.selectedIndex];
                     if (selectedOption.value !== '') {
-                        document.getElementById('clienteNombre').textContent = 
-                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
-                        document.getElementById('clienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('clienteNombre').textContent = selectedOption.getAttribute('data-nombre');
                         document.getElementById('clienteEmail').textContent = selectedOption.getAttribute('data-email');
                         document.getElementById('clienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
                         document.getElementById('clienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
@@ -545,7 +563,7 @@
                     const id = button.getAttribute('data-id');
                     const fecha = button.getAttribute('data-fecha');
                     const hora = button.getAttribute('data-hora');
-                    const cliente = button.getAttribute('data-cliente');
+                    const documento = button.getAttribute('data-documento');
                     const valor = button.getAttribute('data-valor');
                     const iva = button.getAttribute('data-iva');
                     const total = button.getAttribute('data-total');
@@ -557,7 +575,7 @@
                     document.getElementById('edit_idPedidos').value = id;
                     document.getElementById('edit_fechaPedido').value = fecha;
                     document.getElementById('edit_horaPedido').value = hora;
-                    document.getElementById('edit_idCliente').value = cliente;
+                    document.getElementById('edit_documento').value = documento;
                     document.getElementById('edit_valorPedido').value = valor;
                     document.getElementById('edit_ivaPedido').value = iva;
                     document.getElementById('edit_totalPedido').value = total;
@@ -565,12 +583,10 @@
                     document.getElementById('edit_repartidorPedido').value = repartidor || '';
 
                     // Mostrar información del cliente seleccionado
-                    const editClienteSelect = document.getElementById('edit_idCliente');
-                    const selectedOption = Array.from(editClienteSelect.options).find(opt => opt.value === cliente);
+                    const editClienteSelect = document.getElementById('edit_documento');
+                    const selectedOption = Array.from(editClienteSelect.options).find(opt => opt.value === documento);
                     if (selectedOption) {
-                        document.getElementById('editClienteNombre').textContent = 
-                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
-                        document.getElementById('editClienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('editClienteNombre').textContent = selectedOption.getAttribute('data-nombre');
                         document.getElementById('editClienteEmail').textContent = selectedOption.getAttribute('data-email');
                         document.getElementById('editClienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
                         document.getElementById('editClienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
@@ -582,14 +598,12 @@
             }
 
             // Mostrar información del cliente en edición
-            const editClienteSelect = document.getElementById('edit_idCliente');
+            const editClienteSelect = document.getElementById('edit_documento');
             if (editClienteSelect) {
                 editClienteSelect.addEventListener('change', function() {
                     const selectedOption = this.options[this.selectedIndex];
                     if (selectedOption.value !== '') {
-                        document.getElementById('editClienteNombre').textContent = 
-                            selectedOption.getAttribute('data-nombre') + ' ' + selectedOption.getAttribute('data-apellido');
-                        document.getElementById('editClienteEmpresa').textContent = selectedOption.getAttribute('data-empresa');
+                        document.getElementById('editClienteNombre').textContent = selectedOption.getAttribute('data-nombre');
                         document.getElementById('editClienteEmail').textContent = selectedOption.getAttribute('data-email');
                         document.getElementById('editClienteTelefono').textContent = selectedOption.getAttribute('data-telefono');
                         document.getElementById('editClienteDireccion').textContent = selectedOption.getAttribute('data-direccion');
@@ -604,7 +618,7 @@
                     document.getElementById('estadoPedido').value = '';
                     document.getElementById('fechaPedido').value = '';
                     document.getElementById('horaPedido').value = '';
-                    document.getElementById('idCliente').value = '';
+                    document.getElementById('documento').value = '';
                     document.getElementById('valorPedido').value = '0';
                     document.getElementById('ivaPedido').value = '';
                     document.getElementById('totalPedido').value = '';
