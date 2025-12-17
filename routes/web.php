@@ -20,6 +20,21 @@ use App\Http\Controllers\UsuariosAuthController;
 use App\Http\Controllers\CatalogoController;
 
 // =============================================================================
+// FUNCIÓN PARA VERIFICAR ADMIN
+// =============================================================================
+function verificarAdmin() {
+    if (!session()->has('user_id')) {
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión');
+    }
+    
+    if (session('user_type') != 1) {
+        return redirect()->route('catalogo')->with('error', 'Acceso restringido a administradores');
+    }
+    
+    return null;
+}
+
+// =============================================================================
 // RUTAS PÚBLICAS (SIN AUTENTICACIÓN)
 // =============================================================================
 
@@ -115,19 +130,6 @@ Route::get('/admin', function () {
     if ($error) return $error;
     return redirect()->route('admin.inicio');
 });
-
-// Función para verificar admin (sin usar middleware incorrecto)
-function verificarAdmin() {
-    if (!session()->has('user_id')) {
-        return redirect()->route('login')->with('error', 'Debes iniciar sesión');
-    }
-    
-    if (session('user_type') != 1) {
-        return redirect()->route('catalogo')->with('error', 'Acceso restringido a administradores');
-    }
-    
-    return null;
-}
 
 // -------------------------------------------------------------------------
 // GESTIÓN COMPLETA DE USUARIOS Y ROLES (SOLO ADMIN)
@@ -235,10 +237,10 @@ Route::prefix('roles')->name('roles.')->group(function () {
 // AUTENTICACIÓN DE USUARIOS (módulo existente - SOLO ADMIN)
 // -------------------------------------------------------------------------
 Route::prefix('admin/usuarios-auth')->name('usuarios.auth.')->group(function () {
-    Route::get('/', function () {
+    Route::get('/', function (Request $request) { // CORREGIDO: Agregar Request $request
         $error = verificarAdmin();
         if ($error) return $error;
-        return app(UsuariosAuthController::class)->index();
+        return app(UsuariosAuthController::class)->index($request); // CORREGIDO: Pasar $request
     })->name('index');
     
     Route::post('/{idUsuario}/verificar', function (Request $request, $idUsuario) {

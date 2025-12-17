@@ -11,14 +11,15 @@ class UsuariosAuthController extends Controller
     /**
      * Mostrar la vista de autenticación de usuarios
      */
-    public function index(Request $request)
+    public function index(Request $request = null) // Hacer $request opcional
     {
         // Verificar que el usuario sea admin (idRol == 1)
         if (!session()->has('user_id') || session('user_type') != 1) {
             return redirect()->route('login')->with('error', 'Acceso restringido a administradores');
         }
         
-        $search = $request->get('search');
+        // Manejar el caso cuando $request es null
+        $search = $request ? $request->get('search') : '';
         
         $query = Usuario::with('rol')->orderBy('idUsuario', 'asc');
         
@@ -31,7 +32,7 @@ class UsuariosAuthController extends Controller
         
         $usuarios = $query->paginate(10);
         
-        return view('VistasAdmin.usuarios-auth', compact('usuarios'));
+        return view('VistasAdmin.usuarios-auth', compact('usuarios', 'search'));
     }
     
     /**
