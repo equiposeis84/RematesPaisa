@@ -34,9 +34,9 @@
                         
                         <li class="sidebar-fixed">
                             @if(session()->has('user_id') && session('user_type') != 1)
-                              <a href="{{ route('usuario.mis-pedidos') }}"> 
-    <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
-</a>
+                                                        <a href="{{ route('usuario.mis-pedidos') }}"> 
+                                <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
+                            </a>
                             @else
                                 <a href="{{ route('login') }}" class="text-warning"> 
                                     <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
