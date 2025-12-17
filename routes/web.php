@@ -18,6 +18,8 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\AyudaContactoController;
 use App\Http\Controllers\UsuariosAuthController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ClientePedidoController;
+use App\Http\Controllers\CheckoutController;
 
 // =============================================================================
 // FUNCIÓN PARA VERIFICAR ADMIN
@@ -100,7 +102,7 @@ Route::prefix('usuario')->name('usuario.')->group(function () {
         return view('catalogo')->with('activeTab', 'ayuda');
     })->name('ayuda.contacto');
     
-    // Pedidos (SOLO para usuarios registrados)
+     // Pedidos (SOLO para usuarios registrados) 
     Route::get('/pedidos', function () {
         if (!session()->has('user_id')) {
             return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver tus pedidos');
@@ -112,6 +114,43 @@ Route::prefix('usuario')->name('usuario.')->group(function () {
         
         return view('catalogo')->with('activeTab', 'pedidos');
     })->name('pedidos');
+    
+    
+    
+    // Mis pedidos (con CheckoutController)
+    Route::get('/mis-pedidos', [CheckoutController::class, 'misPedidos'])->name('mis-pedidos');
+    
+    
+   // Ruta para obtener detalles de pedido (modal)
+Route::get('/pedido/{id}/detalles', function($id) {
+    if (!session()->has('user_id') || session('user_type') == 1) {
+        return response()->json(['error' => 'Acceso no autorizado'], 403);
+    }
+    
+    // Verificar que el pedido pertenezca al usuario
+    $usuario = DB::table('usuarios')->where('idUsuario', session('user_id'))->first();
+    $pedido = DB::table('pedidos')->where('idPedidos', $id)->first();
+    
+    if (!$pedido || $pedido->documento != $usuario->documento) {
+        return response()->json(['error' => 'Pedido no encontrado o no autorizado'], 404);
+    }
+    
+    $productos = DB::table('productos_pedido')
+        ->join('productos', 'productos_pedido.idProducto', '=', 'productos.idProducto')
+        ->where('productos_pedido.idPedido', $id)
+        ->select('productos.nombreProducto', 'productos_pedido.cantidad', 
+                 'productos_pedido.precio_unitario', 'productos_pedido.subtotal')
+        ->get();
+    
+    $totalProductos = $productos->sum('subtotal');
+    
+    return response()->json([
+        'success' => true,
+        'pedido' => $pedido,
+        'productos' => $productos,
+        'totalProductos' => $totalProductos
+    ]);
+    })->name('pedido.detalles');
 });
 
 // =============================================================================
@@ -564,6 +603,17 @@ Route::prefix('ayuda-contacto')->name('AyudaContacto.')->group(function () {
     })->name('destroy');
 });
 
+// -------------------------------------------------------------------------
+// Rutas catalogo cliente 
+// -------------------------------------------------------------------------
+Route::get('/catalogo', [CatalogoController::class, 'index'])->name('catalogo');
+Route::get('/catalogo/producto/{id}', [CatalogoController::class, 'show'])->name('catalogo.show');
+Route::post('/catalogo/add', [CatalogoController::class, 'addToCart'])->name('catalogo.add');
+Route::get('/catalogo/cart/get', [CatalogoController::class, 'getCart'])->name('catalogo.cart.get');
+Route::post('/catalogo/cart/update', [CatalogoController::class, 'updateCart'])->name('catalogo.cart.update');
+Route::post('/catalogo/cart/remove/{id}', [CatalogoController::class, 'removeFromCart'])->name('catalogo.cart.remove');
+Route::post('/catalogo/cart/clear', [CatalogoController::class, 'clearCart'])->name('catalogo.cart.clear');
+
 // =============================================================================
 // RUTAS COMPARTIDAS
 // =============================================================================
@@ -600,7 +650,81 @@ Route::get('/limpiar-sesion', function() {
     session()->flush();
     return redirect('/')->with('success', 'Sesión limpiada correctamente');
 });
+// =============================================================================
+// RUTAS CHECKOUT Y PEDIDOS DE CLIENTES
+// =============================================================================
 
+Route::get('/checkout', function() {
+    if (!session()->has('user_id')) {
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión para realizar un pedido');
+    }
+    
+    if (session('user_type') == 1) {
+        return redirect()->route('admin.inicio')->with('error', 'Acceso restringido a administradores');
+    }
+    
+    return app(CheckoutController::class)->checkout(request());
+})->name('pedidos.checkout');
+
+Route::post('/pedidos/procesar', function(Request $request) {
+    if (!session()->has('user_id')) {
+        return response()->json(['error' => 'No autenticado'], 401);
+    }
+    
+    if (session('user_type') == 1) {
+        return response()->json(['error' => 'Acceso denegado'], 403);
+    }
+    
+    return app(CheckoutController::class)->procesar($request);
+})->name('pedidos.procesar');
+Route::get('/debug-pedido-detalles', function() {
+    if (!session()->has('user_id')) {
+        return 'No hay sesión';
+    }
+    
+    $usuario = \App\Models\Usuario::find(session('user_id'));
+    
+    echo '<h1>Debug Pedidos y Detalles</h1>';
+    
+    // Ver pedidos
+    $pedidos = \App\Models\Pedidos::where('documento', $usuario->documento)->get();
+    
+    echo '<h3>Pedidos encontrados: ' . $pedidos->count() . '</h3>';
+    
+    foreach ($pedidos as $pedido) {
+        echo "<h4>Pedido #{$pedido->idPedidos}:</h4>";
+        echo '<pre>';
+        print_r([
+            'id' => $pedido->idPedidos,
+            'fecha' => $pedido->fechaPedido,
+            'total' => $pedido->totalPedido
+        ]);
+        echo '</pre>';
+        
+        // Ver detalles
+        $detalles = \DB::table('detalleproductos')
+            ->where('idPedido', $pedido->idPedidos)
+            ->get();
+        
+        echo '<h5>Detalles: ' . $detalles->count() . '</h5>';
+        if ($detalles->count() > 0) {
+            echo '<table border="1">';
+            echo '<tr><th>ID Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr>';
+            foreach ($detalles as $detalle) {
+                echo '<tr>';
+                echo '<td>' . $detalle->idProductos . '</td>';
+                echo '<td>' . $detalle->cantidadDetalleProducto . '</td>';
+                echo '<td>$' . number_format($detalle->valorUnitarioDetalleProducto, 2) . '</td>';
+                echo '<td>$' . number_format($detalle->totalPagarDetalleProducto, 2) . '</td>';
+                echo '</tr>';
+            }
+            echo '</table>';
+        } else {
+            echo '<p style="color: red;">⚠️ NO HAY DETALLES REGISTRADOS</p>';
+        }
+        echo '<hr>';
+    }
+});
 // =============================================================================
 // RUTAS DE DIAGNÓSTICO (para desarrollo)
 // =============================================================================
@@ -654,4 +778,105 @@ Route::get('/debug-routes', function() {
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
+});
+// Ruta temporal 
+Route::get('/test-checkout-redirect', function() {
+    // Simula un usuario
+    session()->put('user_id', 1);
+    session()->put('user_type', 2);
+    session()->put('user_name', 'Cliente Test');
+    
+    // Simula un carrito
+    session()->put('cart', [
+        1 => [
+            'nombre' => 'Producto Test',
+            'precio' => 100,
+            'cantidad' => 2,
+            'categoria' => 'Test'
+        ]
+    ]);
+    
+    return redirect()->route('pedidos.checkout');
+});
+
+// Ruta 1: Verificar sesión actual
+Route::get('/debug-sesion-completa', function() {
+    echo '<h3>Sesión completa:</h3>';
+    echo '<pre>';
+    print_r(session()->all());
+    echo '</pre>';
+    
+    echo '<h3>Usuario en BD:</h3>';
+    if (session()->has('user_id')) {
+        $usuario = \App\Models\Usuario::find(session('user_id'));
+        if ($usuario) {
+            echo '<pre>';
+            print_r([
+                'id' => $usuario->idUsuario,
+                'nombre' => $usuario->nombre,
+                'email' => $usuario->email,
+                'documento' => $usuario->documento,
+                'idRol' => $usuario->idRol,
+                'telefono' => $usuario->telefono,
+                'direccion' => $usuario->direccion
+            ]);
+            echo '</pre>';
+        } else {
+            echo 'Usuario NO encontrado con ID: ' . session('user_id');
+        }
+    } else {
+        echo 'No hay user_id en sesión';
+    }
+    
+    echo '<h3>Carrito:</h3>';
+    echo '<pre>';
+    print_r(session('cart', []));
+    echo '</pre>';
+});
+
+// Ruta 2: Forzar checkout exitoso
+Route::get('/test-checkout-forzado', function() {
+    // Limpiar sesión primero
+    session()->flush();
+    
+    // Crear usuario de prueba si no existe
+    $usuario = \App\Models\Usuario::where('email', 'cliente@test.com')->first();
+    if (!$usuario) {
+        $usuario = \App\Models\Usuario::create([
+            'nombre' => 'Cliente Test',
+            'email' => 'cliente@test.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('test123'),
+            'idRol' => 2,
+            'documento' => '1234567890',
+            'telefono' => '3001234567',
+            'direccion' => 'Calle Test #123',
+            'estado' => 'activo'
+        ]);
+    }
+    
+    // Establecer sesión
+    session()->put('user_id', $usuario->idUsuario);
+    session()->put('user_type', $usuario->idRol);
+    session()->put('user_name', $usuario->nombre);
+    session()->put('user_email', $usuario->email);
+    
+    // Crear carrito de prueba
+    session()->put('cart', [
+        1 => [
+            'id' => 1,
+            'nombre' => 'Producto Test 1',
+            'precio' => 10000,
+            'cantidad' => 2,
+            'categoria' => 'Test'
+        ],
+        2 => [
+            'id' => 2,
+            'nombre' => 'Producto Test 2',
+            'precio' => 20000,
+            'cantidad' => 1,
+            'categoria' => 'Test'
+        ]
+    ]);
+    
+    return redirect()->route('pedidos.checkout');
 });

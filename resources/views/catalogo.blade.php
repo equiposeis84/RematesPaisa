@@ -25,17 +25,18 @@
                             </a>
                         </li>
                         
+                        <!-- ENLACE PARA ABRIR EL MODAL DEL CARRITO -->
                         <li class="sidebar-fixed">
-                            <a href="{{ route('usuario.carrito') }}"> 
+                            <a href="#" onclick="openCartModal(); return false;"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-cart-shopping"></i> </span>Mi Carrito 
                             </a>
                         </li>
                         
                         <li class="sidebar-fixed">
                             @if(session()->has('user_id') && session('user_type') != 1)
-                                <a href="{{ route('usuario.pedidos') }}"> 
-                                    <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
-                                </a>
+                              <a href="{{ route('usuario.mis-pedidos') }}"> 
+    <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
+</a>
                             @else
                                 <a href="{{ route('login') }}" class="text-warning"> 
                                     <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
@@ -449,7 +450,7 @@
         </main>
     </div>
 
-    <!-- Modal de confirmación -->
+    <!-- Modal de confirmación al añadir producto -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -462,149 +463,617 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir comprando</button>
-                    <a href="#" onclick="location.reload()" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" onclick="openCartModal()">
                         <i class="fas fa-shopping-cart"></i> Ver Carrito
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Cargar carrito al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCart();
-        });
+    // Configuración global
+    const config = {
+        csrfToken: '{{ csrf_token() }}',
+        addToCartUrl: '/catalogo/add',
+        getCartUrl: '/catalogo/cart/get',
+        updateCartUrl: '/catalogo/cart/update',
+        removeCartUrl: '/catalogo/cart/remove',
+        clearCartUrl: '/catalogo/cart/clear'
+    };
 
-        // Incrementar cantidad
-        function incrementQuantity(productId) {
-            const input = document.getElementById(`quantity-${productId}`);
-            const max = parseInt(input.max);
-            if (input.value < max) {
-                input.value = parseInt(input.value) + 1;
-            }
+    // Cargar carrito al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Catálogo cargado - iniciando carrito');
+        loadCartSidebar();
+    });
+
+    // Incrementar cantidad
+    function incrementQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        const max = parseInt(input.max);
+        if (input.value < max) {
+            input.value = parseInt(input.value) + 1;
         }
+    }
 
-        // Decrementar cantidad
-        function decrementQuantity(productId) {
-            const input = document.getElementById(`quantity-${productId}`);
-            if (input.value > 1) {
-                input.value = parseInt(input.value) - 1;
-            }
+    // Decrementar cantidad
+    function decrementQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        if (input.value > 1) {
+            input.value = parseInt(input.value) - 1;
         }
+    }
 
-        // Añadir al carrito
-        function addToCart(productId) {
-            const quantity = document.getElementById(`quantity-${productId}`).value;
-            
-            fetch('{{ route("catalogo.add") }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    idProducto: productId,
-                    cantidad: quantity
-                })
+    // Añadir al carrito
+    function addToCart(productId) {
+        const quantity = document.getElementById(`quantity-${productId}`).value;
+        console.log(`Añadiendo producto ${productId}, cantidad: ${quantity}`);
+        
+        fetch(config.addToCartUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                idProducto: productId,
+                cantidad: quantity
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Actualizar UI
-                    updateCartUI(data);
-                    
-                    // Mostrar modal de éxito
-                    const modal = new bootstrap.Modal(document.getElementById('cartModal'));
-                    document.getElementById('cartModalBody').innerHTML = `
-                        <div class="text-center">
-                            <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
-                            <h5>¡Producto añadido!</h5>
-                            <p>${data.message}</p>
-                            <p class="mb-0"><strong>${data.producto.nombre}</strong> x${data.producto.cantidad}</p>
-                        </div>
-                    `;
-                    modal.show();
-                } else {
-                    alert(data.message || 'Error al añadir al carrito');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al añadir al carrito');
-            });
-        }
-
-        // Cargar carrito
-        function loadCart() {
-            fetch('{{ route("catalogo.cart.get") }}', {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateCartUI(data);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        // Actualizar UI del carrito
-        function updateCartUI(data) {
-            // Actualizar sidebar del carrito
-            if (data.carrito && Object.keys(data.carrito).length > 0) {
-                let cartHtml = '<ul class="list-group list-group-flush">';
-                let total = 0;
-                let itemCount = 0;
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            if (data.success) {
+                // Actualizar sidebar
+                updateCartSidebarUI(data);
                 
-                Object.values(data.carrito).forEach(item => {
-                    if (item.id) { // Solo items válidos (no metadata)
-                        cartHtml += `
-                            <li class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <small class="d-block">${item.nombre}</small>
-                                        <small class="text-muted">${item.cantidad} x $${item.precio.toFixed(2)}</small>
-                                    </div>
-                                    <span class="badge bg-primary">$${item.subtotal.toFixed(2)}</span>
-                                </div>
-                            </li>
-                        `;
-                        total += item.subtotal;
-                        itemCount++;
-                    }
-                });
+                // Mostrar modal de éxito
+                showSuccessModal(data);
                 
-                cartHtml += `
-                    <li class="list-group-item bg-light">
-                        <div class="d-flex justify-content-between">
-                            <strong>Total (${itemCount} productos):</strong>
-                            <strong class="text-success">$${total.toFixed(2)}</strong>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#" onclick="location.reload()" class="btn btn-success w-100">
-                            <i class="fas fa-shopping-cart"></i> Ver Carrito
-                        </a>
-                    </li>
-                `;
-                
-                document.getElementById('cart-sidebar').innerHTML = cartHtml;
+                // Actualizar botón del modal si está abierto
+                if (document.getElementById('cartModalFull').classList.contains('show')) {
+                    loadCartModal();
+                }
             } else {
-                document.getElementById('cart-sidebar').innerHTML = `
-                    <div class="text-center py-4">
-                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Tu carrito está vacío</p>
-                        <p class="text-muted small">Añade productos desde el catálogo</p>
+                alert(data.message || 'Error al añadir al carrito');
+            }
+        })
+        .catch(error => {
+            console.error('Error completo:', error);
+            alert('Error de conexión. Intenta nuevamente.');
+        });
+    }
+
+    // Cargar sidebar del carrito
+    function loadCartSidebar() {
+        fetch(config.getCartUrl, {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Carrito cargado:', data);
+            if (data.success) {
+                updateCartSidebarUI(data);
+            }
+        })
+        .catch(error => console.error('Error cargando carrito:', error));
+    }
+
+    // Cargar modal completo del carrito
+    function loadCartModal() {
+        const modalBody = document.getElementById('cartModalFullBody');
+        if (!modalBody) {
+            console.error('No se encontró el modal del carrito');
+            return;
+        }
+        
+        modalBody.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3">Cargando tu carrito...</p>
+            </div>
+        `;
+        
+        fetch(config.getCartUrl, {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                renderCartModal(data);
+            } else {
+                modalBody.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Error al cargar el carrito
                     </div>
                 `;
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            modalBody.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> Error de conexión
+                </div>
+            `;
+        });
+    }
+
+    // Renderizar contenido del modal del carrito
+    function renderCartModal(data) {
+        const modalBody = document.getElementById('cartModalFullBody');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        
+        if (!modalBody) return;
+        
+        if (data.carrito && Object.keys(data.carrito).length > 0) {
+            let html = `
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Precio</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Subtotal</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let total = 0;
+            let itemCount = 0;
+            
+            Object.values(data.carrito).forEach(item => {
+                if (item.id) {
+                    const subtotal = item.precio * item.cantidad;
+                    total += subtotal;
+                    itemCount += item.cantidad;
+                    
+                    html += `
+                        <tr id="modal-item-${item.id}">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-box text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <strong>${item.nombre}</strong><br>
+                                        <small class="text-muted">${item.categoria || 'General'}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <span class="text-danger">$${parseFloat(item.precio).toFixed(2)}</span>
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="input-group input-group-sm mx-auto" style="width: 120px;">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="updateCartItem(${item.id}, -1, 'modal')">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" 
+                                           class="form-control text-center" 
+                                           id="modal-quantity-${item.id}"
+                                           value="${item.cantidad}" 
+                                           min="1" 
+                                           max="${item.stock || 99}"
+                                           onchange="updateCartItemInput(${item.id}, this.value)">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="updateCartItem(${item.id}, 1, 'modal')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <strong>$${parseFloat(subtotal).toFixed(2)}</strong>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button class="btn btn-outline-danger btn-sm" onclick="removeCartItem(${item.id}, 'modal')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Resumen del pedido</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td>Productos:</td>
+                                        <td class="text-end">${itemCount} items</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subtotal:</td>
+                                        <td class="text-end">$${total.toFixed(2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Envío:</td>
+                                        <td class="text-end text-success">Gratis</td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <th>Total:</th>
+                                        <th class="text-end text-success">$${total.toFixed(2)}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-danger" onclick="clearCartModal()">
+                                        <i class="fas fa-trash-alt"></i> Vaciar Carrito
+                                    </button>
+                                    <a href="{{ route('catalogo') }}" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-store"></i> Seguir Comprando
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modalBody.innerHTML = html;
+            if (checkoutBtn) checkoutBtn.disabled = false;
+        } else {
+            modalBody.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">Tu carrito está vacío</h4>
+                    <p class="text-muted mb-4">No has agregado ningún producto al carrito.</p>
+                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="fas fa-store"></i> Explorar Catálogo
+                    </button>
+                </div>
+            `;
+            if (checkoutBtn) checkoutBtn.disabled = true;
         }
+    }
+
+    // Actualizar sidebar del carrito
+    function updateCartSidebarUI(data) {
+        const cartSidebar = document.getElementById('cart-sidebar');
+        if (!cartSidebar) return;
+        
+        if (data.carrito && Object.keys(data.carrito).length > 0) {
+            let cartHtml = '<ul class="list-group list-group-flush">';
+            let total = 0;
+            let itemCount = 0;
+            
+            Object.values(data.carrito).forEach(item => {
+                if (item.id) {
+                    cartHtml += `
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="d-block">${item.nombre}</small>
+                                    <small class="text-muted">${item.cantidad} x $${parseFloat(item.precio).toFixed(2)}</small>
+                                </div>
+                                <span class="badge bg-primary">$${parseFloat(item.subtotal).toFixed(2)}</span>
+                            </div>
+                        </li>
+                    `;
+                    total += parseFloat(item.subtotal);
+                    itemCount += parseInt(item.cantidad);
+                }
+            });
+
+            // CORRECCIÓN: CIERRA CORRECTAMENTE EL HTML
+            cartHtml += `
+                <li class="list-group-item bg-light">
+                    <div class="d-flex justify-content-between">
+                        <strong>Total (${itemCount} items):</strong>
+                        <strong class="text-success">$${total.toFixed(2)}</strong>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-success w-100" onclick="openCartModal()">
+                        <i class="fas fa-shopping-cart"></i> Ver Carrito Completo
+                    </button>
+                </li>
+            </ul>`;
+            
+            cartSidebar.innerHTML = cartHtml;
+        } else {
+            cartSidebar.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Tu carrito está vacío</p>
+                    <p class="text-muted small">Añade productos desde el catálogo</p>
+                </div>
+            `;
+        }
+    }
+
+    // Mostrar modal de éxito
+    function showSuccessModal(data) {
+        const modalElement = document.getElementById('cartModal');
+        if (!modalElement) return;
+        
+        const modalBody = document.getElementById('cartModalBody');
+        if (modalBody) {
+            modalBody.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                    <h5>¡Producto añadido!</h5>
+                    <p>${data.message}</p>
+                    <p class="mb-0"><strong>${data.producto.nombre}</strong> x${data.producto.cantidad}</p>
+                    <div class="mt-3">
+                        <button class="btn btn-outline-primary btn-sm" onclick="openCartModal()">
+                            <i class="fas fa-shopping-cart"></i> Ver Carrito
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+
+    // Abrir modal del carrito
+    function openCartModal() {
+        console.log('Abriendo modal del carrito');
+        
+        // Cerrar modal de éxito si está abierto
+        const successModal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+        if (successModal) successModal.hide();
+        
+        // Cargar y mostrar modal del carrito
+        loadCartModal();
+        const modalElement = document.getElementById('cartModalFull');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        } else {
+            console.error('No se encontró el modal del carrito con id cartModalFull');
+            alert('Error: No se puede abrir el carrito. Recarga la página.');
+        }
+    }
+
+    // Funciones para manejar el carrito en el modal
+    function updateCartItem(productId, change, type = 'modal') {
+        const input = document.getElementById(`${type}-quantity-${productId}`);
+        if (!input) return;
+        
+        let newQuantity = parseInt(input.value) + change;
+        const max = parseInt(input.max) || 99;
+        const min = 1;
+        
+        if (newQuantity < min) newQuantity = min;
+        if (newQuantity > max) newQuantity = max;
+        
+        input.value = newQuantity;
+        sendCartUpdate(productId, newQuantity);
+    }
+
+    function updateCartItemInput(productId, value) {
+        let newQuantity = parseInt(value);
+        const min = 1;
+        
+        if (isNaN(newQuantity) || newQuantity < min) {
+            newQuantity = min;
+            const input = document.getElementById(`modal-quantity-${productId}`);
+            if (input) input.value = newQuantity;
+        }
+        
+        sendCartUpdate(productId, newQuantity);
+    }
+
+    function sendCartUpdate(productId, quantity) {
+        fetch(config.updateCartUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                idProducto: productId,
+                cantidad: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadCartModal(); // Recargar modal
+                loadCartSidebar(); // Actualizar sidebar
+            } else {
+                alert(data.message || 'Error al actualizar');
+                loadCartModal(); // Recargar para sincronizar
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión');
+        });
+    }
+
+    function removeCartItem(productId, type = 'modal') {
+        if (!confirm('¿Eliminar este producto del carrito?')) return;
+        
+        fetch(config.removeCartUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                idProducto: productId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadCartModal();
+                loadCartSidebar();
+            } else {
+                alert(data.message || 'Error al eliminar');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión');
+        });
+    }
+            function closeCartModal() {
+            console.log('Cerrando modal del carrito...');
+            const modalElement = document.getElementById('cartModalFull');
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+            }
+            
+            // La redirección la hará el navegador automáticamente
+                                        }
+
+
+        function goToCheckout() {
+            // Cerrar modal
+            const modalElement = document.getElementById('cartModalFull');
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+            }
+            
+            // Redirigir a checkout
+            window.location.href = '{{ route("pedidos.checkout") }}';
+        }
+
+    function clearCartModal() {
+        if (!confirm('¿Vaciar todo el carrito? Esta acción no se puede deshacer.')) return;
+        
+        fetch(config.clearCartUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': config.csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadCartModal();
+                loadCartSidebar();
+            } else {
+                alert(data.message || 'Error al vaciar carrito');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión');
+        });
+    }
+
+    function proceedToCheckout() {
+    console.log('=== CHECKOUT: Iniciando ===');
+    console.log('Usuario logueado?', {{ session()->has('user_id') ? 'true' : 'false' }});
+    
+    // Verificar si el usuario está logueado
+    @if(session()->has('user_id'))
+        console.log('CHECKOUT: Usuario logueado, redirigiendo...');
+        
+        // Cerrar modal del carrito
+        try {
+            const cartModal = document.getElementById('cartModalFull');
+            if (cartModal) {
+                const modal = bootstrap.Modal.getInstance(cartModal);
+                if (modal) {
+                    modal.hide();
+                    console.log('CHECKOUT: Modal cerrado');
+                }
+            }
+        } catch (e) {
+            console.log('CHECKOUT: Error cerrando modal:', e);
+        }
+        
+        // Redirigir directamente a checkout
+        console.log('CHECKOUT: Redirigiendo a /checkout');
+        window.location.href = '/checkout';
+        
+    @else
+        console.log('CHECKOUT: Usuario NO logueado');
+        if (confirm('Para realizar un pedido necesitas iniciar sesión. ¿Deseas ir a la página de login?')) {
+            window.location.href = '{{ route("login") }}';
+        }
+    @endif
+    
+    return false; // Prevenir comportamiento por defecto
+}
     </script>
+
+    <!-- Modal del Carrito -->
+    <div class="modal fade" id="cartModalFull" tabindex="-1" aria-labelledby="cartModalFullLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="cartModalFullLabel">
+                        <i class="fas fa-shopping-cart"></i> Mi Carrito de Compras
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="cartModalFullBody">
+                    <!-- Contenido dinámico se cargará aquí -->
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-3">Cargando tu carrito...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                    <button class="btn btn-success" id="checkoutBtn" onclick="goToCheckout()">
+                        <i class="fas fa-credit-card"></i> Realizar pedido
+                        </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+// Depuración temporal
+console.log('Ruta pedidos.checkout:', '{{ route("pedidos.checkout") }}');
+console.log('Usuario logueado:', {{ session()->has('user_id') ? 'true' : 'false' }});
+
+// Verifica si el botón existe
+document.addEventListener('DOMContentLoaded', function() {
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    if (checkoutBtn) {
+        console.log('Botón checkout encontrado');
+        checkoutBtn.addEventListener('click', function(e) {
+            console.log('Click en botón checkout');
+            console.log('Href:', this.getAttribute('href'));
+        });
+    }
+});
+</script>
+
 </body>
-</html>s
+</html>
