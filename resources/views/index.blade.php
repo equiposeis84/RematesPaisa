@@ -20,21 +20,28 @@
                 <nav class="main-nav">
                     <ul>
                         <li class="sidebar-fixed">
-                            <a href="/catalogo"> 
+                            <a href="{{ route('catalogo') }}"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-store"></i> </span>Catálogo 
                             </a>
                         </li>
                         
                         <li class="sidebar-fixed">
-                            <a href="#"> 
+                            <a href="{{ route('usuario.carrito') }}"> 
                                 <span class="nav-icon"> <i class="fa-solid fa-cart-shopping"></i> </span>Mi Carrito 
                             </a>
                         </li>
                         
                         <li class="sidebar-fixed">
-                            <a href="#"> 
-                                <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
-                            </a>
+                            @if(session()->has('user_id') && session('user_type') != 1)
+                                <a href="{{ route('usuario.pedidos') }}"> 
+                                    <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="text-warning"> 
+                                    <span class="nav-icon"> <i class="fa-solid fa-clipboard-list"></i> </span>Mis Pedidos 
+                                    <small class="d-block text-muted">(Inicia sesión)</small>
+                                </a>
+                            @endif
                         </li>
                     </ul>
                 </nav>
@@ -49,15 +56,25 @@
                     @if(session()->has('user_id'))
                         <p><strong>{{ session('user_name') }}</strong></p>
                         <p style="color: #777; font-size: 12px;">{{ session('user_email') }}</p>
+                        <small class="badge bg-info">
+                            @if(session('user_type') == 1)
+                                Administrador
+                            @elseif(session('user_type') == 2)
+                                Cliente
+                            @elseif(session('user_type') == 3)
+                                Repartidor
+                            @endif
+                        </small>
                     @else
                         <p><strong>Invitado</strong></p>
+                        <p style="color: #777; font-size: 12px;">Explora nuestro catálogo</p>
                     @endif
                 </div>
 
                 <nav class="secondary-nav">
                     <ul>
                         <li>
-                            <a href="#">
+                            <a href="{{ route('usuario.ayuda.contacto') }}">
                                 <span class="nav-icon">
                                     <i class="fa-solid fa-circle-info"></i>
                                 </span>
