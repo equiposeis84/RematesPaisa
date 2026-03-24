@@ -1,0 +1,439 @@
+/* Variables de diseño */
+:root {
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --primary: #38bdf8;
+  --success: #10b981;
+  --danger: #f43f5e;
+  --text-main: #f8fafc;
+  --border: #334155;
+  --input-bg: #0f172a;
+}
+
+/* Reset y Estilos Base */
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Cabecera */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.main-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--primary);
+}
+
+/* Botones */
+.btn-add { background: var(--primary); color: #000; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4); }
+
+.btn-search { background: #64748b; border: none; padding: 0 1.5rem; border-radius: 6px; color: white; cursor: pointer; }
+.btn-reset { background: transparent; border: 1px solid var(--border); color: #94a3b8; padding: 0 1rem; border-radius: 6px; cursor: pointer; }
+
+/* Contenedor de Formulario / Buscador */
+.search-section { 
+  background: var(--card-bg); 
+  padding: 1.5rem; 
+  border-radius: 12px; 
+  margin-bottom: 2rem; 
+  border: 1px solid var(--border); 
+}
+
+.search-group { 
+  display: flex; 
+  gap: 10px; 
+}
+
+/* Inputs y Selects */
+input, select { 
+  padding: 0.8rem; 
+  border-radius: 6px; 
+  border: 1px solid var(--border); 
+  background: var(--input-bg); 
+  color: white; 
+  font-size: 0.9rem;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Tabla */
+.table-wrapper { 
+  background: var(--card-bg); 
+  border-radius: 12px; 
+  overflow: hidden; 
+  border: 1px solid var(--border); 
+}
+
+.styled-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  text-align: left; 
+}
+
+.styled-table th { 
+  background: rgba(0,0,0,0.2); 
+  padding: 1.2rem; 
+  color: var(--primary); 
+  border-bottom: 1px solid var(--border); 
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.styled-table td { 
+  padding: 1rem 1.2rem; 
+  border-bottom: 1px solid var(--border); 
+  color: var(--text-main);
+}
+
+.styled-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badge de Rol */
+.badge-rol { 
+  background: rgba(56, 189, 248, 0.1); 
+  color: var(--primary); 
+  padding: 4px 10px; 
+  border-radius: 6px; 
+  font-size: 0.85rem; 
+  border: 1px solid rgba(56, 189, 248, 0.3); 
+}
+
+/* Toggle de Estado (Activo/Inactivo) */
+.status-toggle { 
+  border: none; 
+  padding: 6px 15px; 
+  border-radius: 20px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: 0.3s; 
+  width: 100px;
+  text-align: center;
+}
+
+.status-toggle.is-active { 
+  background: rgba(16, 185, 129, 0.2); 
+  color: var(--success); 
+}
+
+.status-toggle.is-inactive { 
+  background: rgba(244, 63, 94, 0.2); 
+  color: var(--danger); 
+}
+
+.status-toggle:hover { 
+  filter: brightness(1.3); 
+}
+
+/* Acciones en Tabla */
+.actions-cell {
+  white-space: nowrap;
+}
+
+.btn-icon { 
+  background: none; 
+  border: none; 
+  font-size: 1.1rem; 
+  cursor: pointer; 
+  transition: 0.2s; 
+  margin: 0 5px; 
+}
+
+.btn-icon:hover { 
+  transform: scale(1.3); 
+}
+
+/* Modal */
+.modal-backdrop { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0,0,0,0.8); 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
+}
+
+.modal-box { 
+  background: var(--card-bg); 
+  width: 90%;
+  max-width: 500px; 
+  padding: 2rem; 
+  border-radius: 15px; 
+  border: 1px solid var(--border); 
+}
+
+.modal-box h2 {
+  margin-top: 0;
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.form-grid { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.2rem; 
+  margin: 1.5rem 0; 
+}
+
+.input-field { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 5px; 
+}
+
+.input-field label { 
+  font-size: 0.85rem; 
+  color: #94a3b8; 
+  font-weight: 500;
+}
+
+.modal-btns { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 1rem; 
+  margin-top: 1rem; 
+}
+
+.btn-cancel { 
+  background: transparent; 
+  color: white; 
+  border: 1px solid var(--border); 
+  padding: 0.8rem 1.5rem; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: 0.2s;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save { 
+  background: var(--success); 
+  color: white; 
+  border: none; 
+  padding: 0.8rem 1.5rem; 
+  border-radius: 8px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: 0.2s;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* Layout Principal con Sidebar */
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px; /* Ancho de la sidebar */
+  transition: margin-left 0.3s ease;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-header {
+  display: none;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  gap: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-title {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Nuevos Estilos - Tablas y Buscador */
+.top-action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-add-record {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-add-record:hover {
+  background: #45a049;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  min-width: 200px;
+  background: var(--input-bg);
+  color: var(--text-main);
+}
+
+.search-select {
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-main);
+}
+
+.btn-search-ok {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-action-edit {
+  background: #f39c12;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+  transition: 0.2s;
+}
+
+.btn-action-edit:hover { filter: brightness(1.1); }
+
+.btn-action-delete {
+  background: #e74c3c;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+  transition: 0.2s;
+}
+
+.btn-action-delete:hover { filter: brightness(1.1); }
+
+.pagination-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1rem;
+  padding: 10px;
+}
+
+.page-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.page-btn.active {
+  background: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+  .mobile-header {
+    display: flex;
+  }
+  .admin-container {
+    padding: 1rem;
+  }
+  .top-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
